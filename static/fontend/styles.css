@@ -1,0 +1,70 @@
+
+* {
+    box-sizing: border-box;
+  }
+
+
+.col_excel {
+  padding: 0px;
+    border:1px solid #ccc;
+    
+    width: 100px;
+  
+    /* chiều rộng tối đa khung viền là 100 nội dung text dài hơn sẽ tràn ra ngoài, overflow sẽ ẩn text tràn ra ngoài, text-overflow ký hiệu text tràn ra ngoài bằng dấu ...   */
+    /* max-width: 100px;
+    overflow: hidden;
+  text-overflow: ellipsis; */
+    height: 20px;
+    display:table-cell;
+    /* display: table-cell */
+    position: relative;
+
+}
+
+
+
+.row_excel {
+ 
+    display: table-row;
+  
+}
+
+
+.table_excel {
+  width: 1000px;
+
+   
+      /* tạo đường viền nét     */
+    border-collapse: collapse;
+    position: relative;
+}
+/* Outline khác với Border trong CSS. Outline được vẽ bên phải border của phần tử và có thể đè lên các nội dung khác. Ngoài ra, outline cũng không phải là một phần trong kích thước của phần tử. Độ rộng và chiều cao của phần tử không bị ảnh hưởng bởi độ rộng của outline. */
+
+.click {
+    
+    padding: 0px;
+    outline-style: solid;
+    outline-color: coral ;
+    outline-width: 2px;
+  background-color: moccasin;
+  position: relative;
+}
+
+
+
+.select {
+ 
+background-color: moccasin;
+}
+
+.input_focus {
+
+  outline-width: 0px;
+  border:0px ;
+background-color: moccasin;
+
+}
+
+
+
+
