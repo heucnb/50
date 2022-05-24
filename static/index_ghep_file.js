@@ -139,8 +139,10 @@
                         console.log('xuất hiện lại thẻ input và focus') ;
                       
                       
-                          a.current.children[row_vi_tri_add].children[col_vi_tri_add+1].innerHTML = " <input  style='width:inherit;' class = 'input_focus' type='text'  />"  ;
+                          a.current.children[row_vi_tri_add].children[col_vi_tri_add+1].innerHTML = " <input   type='text'  />"  ;
                           var input_ =  a.current.children[row_vi_tri_add].children[col_vi_tri_add+1].children[0] ;
+                          Object.assign(input_.style,css.input_focus) ;
+
                           input_.value = text_formular[row_vi_tri_add+i_array_2d][col_vi_tri_add] ;
 
                                // thay đổi độ rộng của input phù hợp với ký tự nhập vào
@@ -186,12 +188,15 @@
               //  xoá tô màu  vị trí trước đó: nếu vị trí trước đó = null hoặc không nằm trong khung nhìn thì xoá focus đang hiện diện ngược lại xoá tô màu
               // row_vi_tri_remove = 0  thì dầu tiên remove tô màu ; sau đó kích hoạt document.activeElement.blur(); 
              
-                if (row_vi_tri_remove === null || row_vi_tri_remove < 0 || row_vi_tri_remove > limit - 1 )   {  document.activeElement.blur();         } else {    a.current.children[row_vi_tri_remove].children[col_vi_tri_remove+1].classList.remove('click');a.current.children[row_vi_tri_remove].children[col_vi_tri_remove+1].blur(); }
+                if (row_vi_tri_remove === null || row_vi_tri_remove < 0 || row_vi_tri_remove > limit - 1 )   {  document.activeElement.blur();         } else { Object.assign(a.current.children[row_vi_tri_remove].children[col_vi_tri_remove+1].style, css.remove_click);   a.current.children[row_vi_tri_remove].children[col_vi_tri_remove+1].blur(); }
                if ( row_vi_tri_remove === 0 ||row_vi_tri_remove === limit - 1   )   {  document.activeElement.blur();         }
                 // tô màu vị trí mới  nếu vị trí trước đó = null hoặc không nằm trong khung nhìn thì set lại vị trí trước đó ngược lại  tô màu
               
                 if (row_vi_tri_add < 0 || row_vi_tri_add > limit - 1 )   {      vi_tri_o_truoc[0] = row_vi_tri_add ;   vi_tri_o_truoc[1] = col_vi_tri_add ;          }
-                else {   a.current.children[row_vi_tri_add].children[col_vi_tri_add+1].classList.add('click');
+                else {  
+                  
+                  Object.assign(a.current.children[row_vi_tri_add].children[col_vi_tri_add+1].style, css.click);
+         
                 vi_tri_o_truoc[0] = row_vi_tri_add ;
                 vi_tri_o_truoc[1] = col_vi_tri_add ;
 
@@ -444,8 +449,10 @@
       if (event.key != "Enter") {
         console.log("_onKeyDown--nhập dữ liệu")
         // khi ấn phím khác enter thì viết công thức hoặc dữ liệu vào ô đó (thiết lập ô đó ở trạng thái tính toán)
-        a.current.children[i].children[j+1].innerHTML = " <input  style='width:inherit;' class = 'input_focus'  type='text'  />" ;
+        a.current.children[i].children[j+1].innerHTML = " <input   type='text'  />" ;
         let input_ =  a.current.children[i].children[j+1].children[0];
+
+        Object.assign(input_.style,css.input_focus) ;
 
          // lúc này input nhận giá trị từ bàn phím hiện lên thẻ input 
 
@@ -515,7 +522,9 @@
                                 // xoá vùng chọn còn sót ở phần code 2. Chọn miền trên vị trí đầu tiên nhấn giữ chuột và nằm bên phải
                                 for (let index = row_begin; index >= row_end; index--) {
                                   for (let index_j = col_begin; index_j <= col_end; index_j++) {
-                                    a.current.children[index].children[index_j+1].classList.remove('select');
+                                    Object.assign(a.current.children[index].children[index_j+1].style , css.remove_select) ;
+
+                                  
                                   }
                                 }
 
@@ -523,7 +532,7 @@
 
                                   for (let index = row_begin; index <= row_end; index++) {
                                     for (let index_j = col_begin; index_j >= col_end; index_j--) {
-                                      a.current.children[index].children[index_j+1].classList.remove('select');
+                                      Object.assign(a.current.children[index].children[index_j+1].style , css.remove_select) ;
                                     }
                                   }
 
@@ -531,7 +540,7 @@
 
                                   for (let index = row_begin; index >= row_end; index--) {
                                     for (let index_j = col_begin; index_j >= col_end; index_j--) {
-                                      a.current.children[index].children[index_j+1].classList.remove('select');
+                                      Object.assign(a.current.children[index].children[index_j+1].style , css.remove_select) ;
                                     }
                                   }
 
@@ -551,21 +560,23 @@
           // đánh dấu vùng lựa chọn
           for (let index = row_begin; index <= row_end; index++) {
             for (let index_j = col_begin; index_j <= col_end; index_j++) {
-              a.current.children[index].children[index_j+1].classList.add('select');
+              Object.assign(a.current.children[index].children[index_j+1].style , css.select) ;
+              
+            
             }
           }
 
           // huỷ bỏ cột chọn thừa
           for (let index = row_begin; index <= row_xa_vi_tri_bat_dau_nhat; index++) {
             for (let index_j = col_end + 1 ; index_j <= col_xa_vi_tri_bat_dau_nhat; index_j++) {
-            a.current.children[index].children[index_j+1].classList.remove('select');
+              Object.assign(a.current.children[index].children[index_j+1].style , css.remove_select) ;
             }
           }
 
           // huỷ bỏ dòng chọn thừa
           for (let index = row_end + 1; index <= row_xa_vi_tri_bat_dau_nhat; index++) {
             for (let index_j = col_begin ; index_j <= j; index_j++) {
-            a.current.children[index].children[index_j+1].classList.remove('select');
+              Object.assign(a.current.children[index].children[index_j+1].style , css.remove_select) ;
             }
           }
 
@@ -594,14 +605,14 @@
             // đánh dấu vùng lựa chọn
             for (let index = row_begin; index >= row_end; index--) {
               for (let index_j = col_begin; index_j <= col_end; index_j++) {
-                a.current.children[index].children[index_j+1].classList.add('select');
+                Object.assign(a.current.children[index].children[index_j+1].style , css.select) ;
               }
             }
 
               // huỷ bỏ cột chọn thừa
           for (let index = row_begin; index >= row_xa_vi_tri_bat_dau_nhat; index--) {
             for (let index_j = col_end + 1 ; index_j <= col_xa_vi_tri_bat_dau_nhat; index_j++) {
-            a.current.children[index].children[index_j+1].classList.remove('select');
+              Object.assign(a.current.children[index].children[index_j+1].style , css.remove_select) ;
             }
           }
 
@@ -609,7 +620,7 @@
             // huỷ bỏ dòng chọn thừa
             for (let index = row_end - 1; index >= row_xa_vi_tri_bat_dau_nhat; index--) {
               for (let index_j = col_begin ; index_j <= j; index_j++) {
-              a.current.children[index].children[index_j+1].classList.remove('select');
+                Object.assign(a.current.children[index].children[index_j+1].style , css.remove_select) ;
               }
             }
 
@@ -632,7 +643,7 @@
               // đánh dấu vùng lựa chọn
           for (let index = row_begin; index <= row_end; index++) {
             for (let index_j = col_begin; index_j >= col_end; index_j--) {
-              a.current.children[index].children[index_j+1].classList.add('select');
+              Object.assign(a.current.children[index].children[index_j+1].style , css.select) ;
             }
           }
 
@@ -640,14 +651,14 @@
             // huỷ bỏ cột chọn thừa
             for (let index = row_begin; index <= row_xa_vi_tri_bat_dau_nhat; index++) {
               for (let index_j = col_end - 1 ; index_j >= col_xa_vi_tri_bat_dau_nhat; index_j--) {
-              a.current.children[index].children[index_j+1].classList.remove('select');
+                Object.assign(a.current.children[index].children[index_j+1].style , css.remove_select) ;
               }
             }
             
               // huỷ bỏ dòng chọn thừa
           for (let index = row_end + 1; index <= row_xa_vi_tri_bat_dau_nhat; index++) {
             for (let index_j = col_begin ; index_j >= j; index_j--) {
-            a.current.children[index].children[index_j+1].classList.remove('select');
+              Object.assign(a.current.children[index].children[index_j+1].style , css.remove_select) ;
             }
           }
 
@@ -675,14 +686,14 @@
             // đánh dấu vùng lựa chọn
             for (let index = row_begin; index >= row_end; index--) {
               for (let index_j = col_begin; index_j >= col_end; index_j--) {
-                a.current.children[index].children[index_j+1].classList.add('select');
+                Object.assign(a.current.children[index].children[index_j+1].style , css.select) ;
               }
             }
 
               // huỷ bỏ cột chọn thừa
           for (let index = row_begin; index >= row_xa_vi_tri_bat_dau_nhat; index--) {
             for (let index_j = col_end - 1 ; index_j >= col_xa_vi_tri_bat_dau_nhat; index_j--) {
-            a.current.children[index].children[index_j+1].classList.remove('select');
+              Object.assign(a.current.children[index].children[index_j+1].style , css.remove_select) ;
             }
           }
 
@@ -690,7 +701,7 @@
             // huỷ bỏ dòng chọn thừa
             for (let index = row_end - 1; index >= row_xa_vi_tri_bat_dau_nhat; index--) {
               for (let index_j = col_begin ; index_j >= j; index_j--) {
-              a.current.children[index].children[index_j+1].classList.remove('select');
+                Object.assign(a.current.children[index].children[index_j+1].style , css.remove_select) ;
               }
             }
 
@@ -736,11 +747,13 @@
                     
                       
                           console.log("_onDoubleClick");
-                        _this.innerHTML = " <input  style='width:inherit;' class = 'input_focus' type='text'  />" ;
+                        _this.innerHTML = " <input   type='text'  />" ;
                         xuat_hien_the_input = true ;
                     
 
                       let input_ =  _this.children[0];
+
+                      Object.assign(input_.style,css.input_focus) ;
                       
                       input_.value = text_formular[i+i_array_2d][j] ;
                   
@@ -804,7 +817,7 @@
         // huỷ bỏ miền chọn cũ
           for (let index = mien_select[0]; index <= mien_select[2]; index++) {
             for (let index_j = mien_select[1]; index_j <= mien_select[3]; index_j++) {
-            a.current.children[index].children[index_j+1].classList.remove('select');
+              Object.assign(a.current.children[index].children[index_j+1].style , css.remove_select) ;
             
             }
           }
@@ -1054,10 +1067,12 @@
 
                         // khi ấn phím khác enter thì viết công thức hoặc dữ liệu vào ô đó (thiết lập ô đó ở trạng thái tính toán)
                       
-                        a.current.children[i].children[j+1].innerHTML = " <input  style='width:inherit;' class = 'input_focus' type='text'  />" ;
+                        a.current.children[i].children[j+1].innerHTML = " <input   type='text'  />" ;
                        // biến này dùng để xác định ảnh hưởng tới scoll
                         xuat_hien_the_input = true ;  
                         var input_ =  a.current.children[i].children[j+1].children[0];
+
+                        Object.assign(input_.style,css.input_focus) ;
                         var input_formula = a_id_1.current;
                         // gán giá trị công thức cũ vào thẻ input. Sự kiện này sẽ diễn ra trước sự kiện thêm 1 ký tự khi ấn bàn phím
                         input_.value = text_formular[i + i_array_2d][j] ; 
@@ -1309,27 +1324,66 @@
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
+
+    function css_obj() {
+     
+      var width_table_excel = "1000px";
+      return {
+
+         textarea : {  padding: 0 ,   display: 'block', width : width_table_excel , rows : '4' },
+
+         table_excel : {
+          width: width_table_excel,
+          borderCollapse:"collapse",
+          position:"relative",
+          height : `${table_excel_height}px`, 
+          overflow: "auto"  },
+
+
+          row_excel : { display: "table-row" },
+
+          col_excel : { padding:"0px",border:"1px solid #ccc",width:"100px",height:"20px",display:"table-cell",position:"relative" },
+
+          click : { padding: "0px", outlineStyle: "solid", outlineColor: "coral", outlineWidth: "2px", backgroundColor: "moccasin", position: "relative" },
+          remove_click : { padding: "", outlineStyle: "", outlineColor: "", outlineWidth: "", backgroundColor: "", position: "" },
+
+          input_focus : {   width: "inherit",  outlineWidth: "0px", border: "0px", backgroundColor: "moccasin" },
+
+          select : { backgroundColor: "moccasin" },
+          remove_select : { backgroundColor: "" }
+
+
+      }
+    }
+
+    var css = css_obj();
+
+
+ 
+
       return (
 
         <div> 
           <div onClick={(event)=>{ copy(event) }} > copy </div>
-          <div> </div>  <textarea ref={ a_id_1  }  style={{  padding: 0 ,   display: 'block',   rows : '4' }}  > </textarea>
-    <div  className="table_excel "    style={{ height : `${table_excel_height}px`, overflow: "auto"  }}    onScroll={(event) => { _onScroll(event)    }}     >
+          <div> </div>  <textarea ref={ a_id_1  }  style={css.textarea}  > </textarea>
+          {/*  table_excel chứa khung scroll set ban đầu là 700 px */}
+    <div     style={css.table_excel}    onScroll={(event) => { _onScroll(event)    }}     >
+      {/* The div này dùng để thay đổi height */}
     <div id = 'id_1'    >   </div> 
-                
-                <div id = 'id_2' style={{ height : `${data_lenght}px` }}  ref={ a  }  >
+    {/* đây là table_excel trong khung scroll         */}
+     <div id = 'id_2' style={{ height : `${data_lenght}px` }}  ref={ a  }  >
       
 
 
     {array_2d_data_show_0.map((row, i) => {
       return (
 
-        <div className="row_excel "   >
+        <div  style={css.row_excel}    >
 
         
-      <div className="col_excel " onClick={()=>{  }} >{i }</div> {row.map((cell, j) => {   
+      <div style={css.col_excel}  onClick={()=>{  }} >{i }</div> {row.map((cell, j) => {   
       
-        return <div className="col_excel "   
+        return <div style={css.col_excel} 
     
         onMouseDown={(event)=>{var _this =  a.current.children[i].children[j+1]; return _onMouseDown(_this, i, j, event)}} 
     
