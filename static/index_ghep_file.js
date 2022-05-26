@@ -852,7 +852,7 @@
                                   if (vi_tri_o_truoc[0] == null || vi_tri_o_truoc[0] <0 || vi_tri_o_truoc[0] > limit - 1   )   {           } else {     a.current.children[vi_tri_o_truoc[0]].children[vi_tri_o_truoc[1]+1].innerHTML =array_2d_data[(vi_tri_o_truoc[0]+i_array_2d)][vi_tri_o_truoc[1]] ;  }
                             
                             
-                                    console.log("_onClick---công thức hoàn thành, tô màu");
+                                    console.log("_onClick---công thức hoàn thành = '', tô màu");
                                     // tô màu vào vị trí i,j
                                     key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],i ,j); // tô màu và focus
                             
@@ -1324,33 +1324,31 @@
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
-
+    var width_table_excel = 1000;
+    var width_textarea = 900 ;
     function css_obj() {
      
-      var width_table_excel = "1000px";
+     
+      
+     
       return {
 
-         textarea : {  padding: 0 ,   display: 'block', width : width_table_excel , rows : '4' },
+        textarea: {verticalAlign: "middle",  padding: 0, border: "1px solid #ccc", display: "inline-block", width: `${width_textarea}px` , height: "20px", resize: "none" },
 
-         table_excel : {
-          width: width_table_excel,
-          borderCollapse:"collapse",
-          position:"relative",
-          height : `${table_excel_height}px`, 
-          overflow: "auto"  },
+        table_excel: { width: `${width_table_excel}px`, borderCollapse: "collapse", position: "relative", height: `${table_excel_height}px`, overflow: "auto" },
 
 
-          row_excel : { display: "table-row" },
+        row_excel: { display: "table-row" },
 
-          col_excel : { padding:"0px",border:"1px solid #ccc",width:"100px",height:"20px",display:"table-cell",position:"relative" },
+        col_excel: { padding: "0px", border: "1px solid #ccc", width: "100px", height: "20px", display: "table-cell", position: "relative" },
 
-          click : { padding: "0px", outlineStyle: "solid", outlineColor: "coral", outlineWidth: "2px", backgroundColor: "moccasin", position: "relative" },
-          remove_click : { padding: "", outlineStyle: "", outlineColor: "", outlineWidth: "", backgroundColor: "", position: "" },
+        click: { padding: "0px", outlineStyle: "solid", outlineColor: "coral", outlineWidth: "2px", backgroundColor: "moccasin", position: "relative" },
+        remove_click: { padding: "", outlineStyle: "", outlineColor: "", outlineWidth: "", backgroundColor: "", position: "" },
 
-          input_focus : {   width: "inherit",  outlineWidth: "0px", border: "0px", backgroundColor: "moccasin" },
+        input_focus: { width: "inherit", outlineWidth: "0px", border: "0px", backgroundColor: "moccasin" },
 
-          select : { backgroundColor: "moccasin" },
-          remove_select : { backgroundColor: "" }
+        select: { backgroundColor: "moccasin" },
+        remove_select: { backgroundColor: "" }
 
 
       }
@@ -1364,14 +1362,22 @@
       return (
 
         <div> 
-          <div onClick={(event)=>{ copy(event) }} > copy </div>
-          <div> </div>  <textarea ref={ a_id_1  }  style={css.textarea}  > </textarea>
+          <div>
+          <button onClick={(event)=>{ copy(event) }} > copy </button>
+          </div>
+
+          <div  style={{ paddingTop : "5px", paddingBottom :" 5px"}} >
+          <div   style={{verticalAlign: "middle",  height:  `20px` , width : `${width_table_excel - width_textarea}px`, display: "inline-block" ,  border: "1px solid #ccc"}} >ggg </div>  <textarea ref={ a_id_1  }  style={css.textarea}  > </textarea>
+
+          </div>
+         
+       
           {/*  table_excel chứa khung scroll set ban đầu là 700 px */}
     <div     style={css.table_excel}    onScroll={(event) => { _onScroll(event)    }}     >
       {/* The div này dùng để thay đổi height */}
     <div id = 'id_1'    >   </div> 
     {/* đây là table_excel trong khung scroll         */}
-     <div id = 'id_2' style={{ height : `${data_lenght}px` }}  ref={ a  }  >
+     <div id = 'id_2' style={{ height : `${data_lenght}px`  }}  ref={ a  }  >
       
 
 
