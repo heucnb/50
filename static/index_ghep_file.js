@@ -1332,8 +1332,8 @@
       
      
       return {
-
-        textarea: {verticalAlign: "middle",  padding: 0, border: "1px solid #ccc", display: "inline-block", width: `${width_textarea}px` , height: "20px", resize: "none" },
+        //verticalAlign: "top" căn theo cạnh top khối của element cha, nếu trong cha có nhiều anh em thì căn tiếp theo top khối của anh em trước nó
+        textarea: {verticalAlign: "top",  padding: 0, border: "1px solid #ccc", display: "inline-block", width: `${width_textarea}px` , height: "50px", resize: "none" },
         //overflow: "auto" : Khi chiều cao của box không đủ chứa text, thì thanh scroll sẽ tự động hiển thị ; Khi sử dụng thành phần này sẽ xuất hiện thanh scroll dọc
         table_excel: {  borderCollapse: "collapse",  height: `${table_excel_height}px`, overflow: "auto" },
 
@@ -1342,7 +1342,7 @@
 
         col_excel: {   border: "1px ridge #ccc", width: "85px", height: "20px", display: "table-cell" },
 
-        click: {boxShadow: "4px 4px 5px  Grey", outlineStyle: "ridge", outlineColor: "coral", outlineWidth: "3px", backgroundColor: "moccasin" },
+        click: {boxShadow: "4px 4px 5px  Grey", outlineStyle: "ridge", outlineColor: "coral", outlineWidth: "5px", backgroundColor: "moccasin" },
         remove_click: { boxShadow: "",outlineStyle: "", outlineColor: "", outlineWidth: "", backgroundColor: "" },
 
         input_focus: { width: "inherit", outlineWidth: "0px", border: "0px", backgroundColor: "moccasin" },
@@ -1366,9 +1366,10 @@
           <button onClick={(event)=>{ copy(event) }} > copy </button>
           </div>
 
-          <div  style={{ paddingTop : "5px", paddingBottom :" 5px"}} >
-          <div   style={{verticalAlign: "middle",  height:  `20px` , width : `${width_table_excel - width_textarea}px`, display: "inline-block" ,  border: "1px solid #ccc"}} >ggg </div>  <textarea ref={ a_id_1  }  style={css.textarea}  > </textarea>
-
+          <div  style={{ paddingLeft : "5px", paddingTop : "5px", paddingBottom :" 5px",  height:  `60px`, backgroundColor: "#bdcebe" }} >
+          {/* verticalAlign: "middle" căn giữa text thật hoặc ảo */}
+          <div   style={{marginLeft : "5px",marginTop : "10px",verticalAlign: "top", backgroundColor: "white", height:  `30px` , padding:"5px", width : `100px`, display: "inline-block" ,  border: "1px solid #ccc"}} >ADJK65ggg </div>  <textarea ref={ a_id_1  }  style={css.textarea}  > </textarea>
+      
           </div>
          
        
@@ -1377,7 +1378,7 @@
       {/* The div này dùng để thay đổi height */}
     <div id = 'id_1'    >   </div> 
     {/* đây là table_excel trong khung scroll         */}
-     <div id = 'id_2' style={{ height : `${data_lenght}px`  }}  ref={ a  }  >
+     <div id = 'id_2' style={{ height : `${data_lenght }px` , paddingTop : "5px", }}  ref={ a  }  >
       
 
 

@@ -23,13 +23,19 @@ app.use(express.json());
     });
     file_name = file_name.split(",");
     file_name = file_name.slice(1);
-
+var model = [];
 app.get("/", function (req, res) { var file = process.argv[2]; if (file == "") { file = "index" ; } if (file != "") { file = file + ".html"; } fs.readFile(file, function (err, data) { res.writeHead(200, { "Content-Type": "text/html" }); res.write(data); return res.end(); }); });
-// truy cập vào các url thực hiện function là các file .js trong backend
+
 for (let index = 0; index < file_name.length; index++) {
   console.log(file_name[index]);
- // ở đây có hàm res.send rồi fuction sau đó chỉ cần return value trả về thôi
-  app.get(file_name[index],async function (req, res) {  var model = require("./backend" + req._parsedUrl.pathname + ".js"); res.send(await model(req, res, con)); });
+
+ // ở đây có hàm res.send rồi fuction sau đó chỉ cần return value trả về thôi+
+ 
+ model.push( require("./backend" + file_name[index] + ".js"));
+  console.log(model[index]); 
+  
+ app.all(file_name[index], function (req, res) {    model[index](req, res, con); });
+
 }
 
 //console.log(process.env);
