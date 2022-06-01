@@ -16,6 +16,7 @@
   
   
     var vi_tri_o_truoc = [null,null] ;
+    var vi_tri_click_in_array_2d_data =[null,null];
     var  key_formular = [] ;
     var  formular = [];
     var cong_thuc_chua_hoan_thanh = "";
@@ -29,6 +30,7 @@
 
       var a =  useRef(null) ;
       var a_id_1 =  useRef(null);
+      var a_id_2 =  useRef(null);
       
       ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     function run_function_when_input_focus(input_, i,j,i_array_2d) {
@@ -853,6 +855,11 @@
                             
                             
                                     console.log("_onClick---công thức hoàn thành = '', tô màu");
+                                    // set địa chỉ ô click
+
+                                    vi_tri_click_in_array_2d_data[0] = i + i_array_2d ;
+                                    vi_tri_click_in_array_2d_data[1] = j;
+                                    a_id_2.current.innerHTML = vi_tri_click_in_array_2d_data ;
                                     // tô màu vào vị trí i,j
                                     key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],i ,j); // tô màu và focus
                             
@@ -1320,7 +1327,32 @@
 
 
 
-  //
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    function thanh_dia_chi_onkeydown(event) {
+      console.log(vi_tri_click_in_array_2d_data);
+      setTimeout(() => { 
+
+        text_formular[vi_tri_click_in_array_2d_data[0]][vi_tri_click_in_array_2d_data[1]] = a_id_1.current.value ;
+        console.log( text_formular[vi_tri_click_in_array_2d_data[0]][vi_tri_click_in_array_2d_data[1]]);
+            // thay đổi độ rộng của input phù hợp với ký tự nhập vào trước khi ấn phím
+            var length_ = ((a_id_1.current.value.length + 1) * 8) ;
+        
+            if ( length_ >= 100) {
+              a.current.children[vi_tri_click_in_array_2d_data[0]].children[vi_tri_click_in_array_2d_data[1]+1].children[0].style.width =  length_ + 'px';
+            };
+
+            vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = vi_tri_con_tro_khi_di_chuyen_trong_double_click_input + 1 ;
+ 
+console.log(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input);
+        a.current.children[vi_tri_click_in_array_2d_data[0]].children[vi_tri_click_in_array_2d_data[1]+1].children[0].value = a_id_1.current.value;
+
+      }, 0);
+     
+      
+
+      
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1334,6 +1366,7 @@
       return {
         //verticalAlign: "top" căn theo cạnh top khối của element cha, nếu trong cha có nhiều anh em thì căn tiếp theo top khối của anh em trước nó
         textarea: {verticalAlign: "top",  padding: 0, border: "1px solid #ccc", display: "inline-block", width: `${width_textarea}px` , height: "50px", resize: "none" },
+        thanh_dia_chi : {marginLeft : "5px",marginTop : "10px",verticalAlign: "top", backgroundColor: "white", height:  `30px` , padding:"5px", width : `100px`, display: "inline-block" ,  border: "1px solid #ccc"},
         //overflow: "auto" : Khi chiều cao của box không đủ chứa text, thì thanh scroll sẽ tự động hiển thị ; Khi sử dụng thành phần này sẽ xuất hiện thanh scroll dọc
         table_excel: {  borderCollapse: "collapse",  height: `${table_excel_height}px`, overflow: "auto" },
 
@@ -1368,7 +1401,7 @@
 
           <div  style={{ paddingLeft : "5px", paddingTop : "5px", paddingBottom :" 5px",  height:  `60px`, backgroundColor: "#bdcebe" }} >
           {/* verticalAlign: "middle" căn giữa text thật hoặc ảo */}
-          <div   style={{marginLeft : "5px",marginTop : "10px",verticalAlign: "top", backgroundColor: "white", height:  `30px` , padding:"5px", width : `100px`, display: "inline-block" ,  border: "1px solid #ccc"}} >ADJK65ggg </div>  <textarea ref={ a_id_1  }  style={css.textarea}  > </textarea>
+          <div ref={ a_id_2  }  style={css.thanh_dia_chi} >ADJK65ggg </div>  <textarea ref={ a_id_1  }  style={css.textarea}  onKeyDown={(event)=>{thanh_dia_chi_onkeydown()}}   onMouseDown={(event)=> {event.persist(); setTimeout(() => {vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = event.target.selectionStart ; console.log(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input);}, 0); }} > </textarea>
       
           </div>
          

@@ -1,7 +1,7 @@
 
 
 
-module.exports = async function (req, res_) {
+module.exports =  function (req, res_) {
  
      var res = res_[0];
      var con = res_[1];

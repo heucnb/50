@@ -1,5 +1,5 @@
 
-module.exports = async function (req, res, con) {
+module.exports =  function (req, res, con) {
  
    
   
