@@ -298,6 +298,7 @@
                   const lastItem = formular[formular.length - 1] ;
                   // tính 1 công thức cuối cùng
                   lastItem();
+                  console.log(formular.toString());
                   // hiện thị giá trị đã tính toán lên trang web bảng tính nếu giá trị tính toán sau khi scroll nằm trong khung nhìn
                   if ( (i <= limit - 1 )&( i >= 0) ) {
                                                       
@@ -319,6 +320,7 @@
                 // nếu người dùng nhập số  vào input thì hàm + text  sẽ chuyển ký tự khác số thành số. Vd: có nhiều phím cách "  59" sẽ chuyển thành 59, "  .2" sẽ chuyển thành 2 
                   if (isNaN(Number(text)) == false) {
                     array_2d_data[i+i_array_2d][j] = + text;
+                    console.log( "array_2d_data["+(i+i_array_2d)+"]["+j+"]       "    +    array_2d_data[i+i_array_2d][j]);
                     // nếu người dùng không nhập gì thì isNaN(Number(text))  sẽ trả về false khi đó ta gán array_2d_data[i+i_array_2d][j] = '' ;
                     if (text==="") {  array_2d_data[i+i_array_2d][j] = ""}
                       // hiện thị giá trị người dùng viết lên trang web bảng tính nếu giá trị tính toán sau khi scroll nằm trong khung nhìn
@@ -335,6 +337,19 @@
                                       key_formular.splice(index_, 1);
                                   
                                         } 
+
+                        // tính toán lại tất cả các công thức đã viết
+                        formular.forEach((element) => {console.log(element); element(); }) ;
+                        // hiện thị giá trị đã tính toán lên trang web bảng tính
+                        //element[0] là giá trị i+i_array_2d được lưu nhưng đó là giá trị trước khi scroll. i_array_2d bây giờ là giá trị sau khi scroll.
+                        //
+                      key_formular.forEach((element) => { 
+                                                        if (  ((element[0] -i_array_2d) <= limit -1 ) && ((element[0] -i_array_2d) >= 0 )   ) {
+                                                        
+                                                          a.current.children[(element[0] -i_array_2d)].children[element[1]+1].innerHTML = array_2d_data[element[0]][element[1]]  ;
+                                                        }
+                                                        
+                                                        });                    
 
                   vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = undefined ;   
                   cong_thuc_chua_hoan_thanh = "" ;
@@ -358,6 +373,21 @@
                              key_formular.splice(index_, 1);
                          
                                } 
+
+
+                   
+                      // tính toán lại tất cả các công thức đã viết
+                      formular.forEach((element) => {console.log(element); element(); }) ;
+                      // hiện thị giá trị đã tính toán lên trang web bảng tính
+                      //element[0] là giá trị i+i_array_2d được lưu nhưng đó là giá trị trước khi scroll. i_array_2d bây giờ là giá trị sau khi scroll.
+                      //
+                    key_formular.forEach((element) => { 
+                                                      if (  ((element[0] -i_array_2d) <= limit -1 ) && ((element[0] -i_array_2d) >= 0 )   ) {
+                                                      
+                                                        a.current.children[(element[0] -i_array_2d)].children[element[1]+1].innerHTML = array_2d_data[element[0]][element[1]]  ;
+                                                      }
+                                                      
+                                                      });              
 
                   vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = undefined ;     
                   cong_thuc_chua_hoan_thanh = "" ;
@@ -1399,7 +1429,7 @@ console.log(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input);
           </div>
          
        
-          {/*  table_excel chứa khung scroll set ban đầu là 700 px */}
+          {/*  table_excel chứa khung scroll set ban đầu là 700 px  */}
     <div     style={css.table_excel}    onScroll={(event) => { _onScroll(event)    }}     >
       {/* The div này dùng để thay đổi height */}
     <div id = 'id_1'    >   </div> 
