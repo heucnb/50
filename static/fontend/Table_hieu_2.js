@@ -80,7 +80,9 @@
                     key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],i +1 ,j); // tô màu và focus
                   
                     onKeyDown = false ; 
-                    onKeyDown_1_element = false;
+                    // phải setTimeout vì ta cần tắt lắng nghe sự kiện keyboard từ element cha.  Khi setTimeout thì onKeyDown_1_element trước đó = true nên element cha sẽ không lắng nghe
+                    setTimeout(() => { onKeyDown_1_element = false;}, 0);
+                    
                     onclick_tinh_toan = false ; 
                     
                     }
@@ -89,7 +91,8 @@
                       a.current.children[i].children[j+1].innerHTML = "fuction is not defined" ;
                       key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],i +1 ,j); // tô màu và focus
                       onKeyDown = false ; 
-                      onKeyDown_1_element = false;
+                       // phải setTimeout vì ta cần tắt lắng nghe sự kiện keyboard từ element cha.  Khi setTimeout thì onKeyDown_1_element trước đó = true nên element cha sẽ không lắng nghe
+                      setTimeout(() => { onKeyDown_1_element = false;}, 0);
                       onclick_tinh_toan = false ;  
                       };
           
@@ -110,12 +113,12 @@
               //  xoá tô màu  vị trí trước đó: nếu vị trí trước đó = null hoặc không nằm trong khung nhìn thì xoá focus đang hiện diện ngược lại xoá tô màu
               // row_vi_tri_remove = 0  thì dầu tiên remove tô màu ; sau đó kích hoạt document.activeElement.blur(); 
              
-              if (row_vi_tri_remove === null || row_vi_tri_remove < 0 || row_vi_tri_remove > limit - 1 )   {  document.activeElement.blur();         } else {    a.current.children[row_vi_tri_remove].children[col_vi_tri_remove+1].classList.remove('click'); }
+              if (row_vi_tri_remove === null || row_vi_tri_remove < 0 || row_vi_tri_remove > limit - 1 )   {  document.activeElement.blur();         } else {    Object.assign(a.current.children[row_vi_tri_remove].children[col_vi_tri_remove+1].style, css.remove_click); }
               if ( row_vi_tri_remove === 0 ||row_vi_tri_remove === limit - 1   )   {  document.activeElement.blur();         }
               if (row_vi_tri_add < 0 || row_vi_tri_add > limit - 1 )   {      vi_tri_o_truoc[0] = row_vi_tri_add ;   vi_tri_o_truoc[1] = col_vi_tri_add ;          }
               else {   
                         // tô màu
-                        a.current.children[row_vi_tri_add].children[col_vi_tri_add+1].classList.add('click');
+                        Object.assign( a.current.children[row_vi_tri_add].children[col_vi_tri_add+1].style, css.click);
                         vi_tri_o_truoc[0] = row_vi_tri_add ;
                         vi_tri_o_truoc[1] = col_vi_tri_add ;
 
@@ -203,6 +206,8 @@
                 a.current.children[row_vi_tri_add].children[col_vi_tri_add+1].setAttribute('tabindex', -1);
                 a.current.children[row_vi_tri_add].children[col_vi_tri_add+1].focus({preventScroll:true}) ;
                 }
+
+               
                 
         
                 xuat_hien_the_input = false ; 
@@ -215,6 +220,8 @@
     function tinh_toan(i,j,z) {
       console.log('tính toán----------')
       console.log('tính toán           '+ vi_tri_con_tro_khi_di_chuyen_trong_double_click_input)
+
+      a_id_1.current.value = "";
        let i_array_2d =parseInt((a.current.children[0].children[0].innerHTML)); 
      
       
@@ -1379,8 +1386,7 @@ console.log(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input);
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
-    var width_table_excel = 1000;
-    var width_textarea = 900 ;
+   
     function css() {
      
      
@@ -1388,8 +1394,8 @@ console.log(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input);
      
       return {
         //verticalAlign: "top" căn theo cạnh top khối của element cha, nếu trong cha có nhiều anh em thì căn tiếp theo top khối của anh em trước nó
-        textarea: {verticalAlign: "top",  padding: 0, border: "1px solid #ccc", display: "inline-block", width: `${width_textarea}px` , height: "50px", resize: "none" },
-        thanh_dia_chi : {marginLeft : "5px",marginTop : "10px",verticalAlign: "top", backgroundColor: "white", height:  `30px` , padding:"5px", width : `100px`, display: "inline-block" ,  border: "1px solid #ccc"},
+        textarea: {verticalAlign: "top",  marginLeft : "5px", marginRight : "5px", border: "1px solid #ccc", flexGrow: 1, width: `50px` , height: "50px", resize: "none" },
+        thanh_dia_chi : {marginLeft : "5px",marginTop : "10px",verticalAlign: "top", backgroundColor: "white", height:  `30px` , padding:"5px", width : `50px`,flexGrow: 0 ,  border: "1px solid #ccc"},
         //overflow: "auto" : Khi chiều cao của box không đủ chứa text, thì thanh scroll sẽ tự động hiển thị ; Khi sử dụng thành phần này sẽ xuất hiện thanh scroll dọc
         table_excel: {  borderCollapse: "collapse",  height: `${table_excel_height}px`, overflow: "auto" },
 
@@ -1422,7 +1428,7 @@ console.log(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input);
           <button onClick={(event)=>{ copy(event) }} > copy </button>
           </div>
 
-          <div  style={{ paddingLeft : "5px", paddingTop : "5px", paddingBottom :" 5px",  height:  `60px`, backgroundColor: "#bdcebe" }} >
+          <div  style={{ paddingLeft : "5px", paddingTop : "5px", paddingBottom :" 5px",  backgroundColor: "#bdcebe" ,   display: "flex"}} >
           {/* verticalAlign: "middle" căn giữa text thật hoặc ảo */}
           <div ref={ a_id_2  }  style={css.thanh_dia_chi} >ADJK65ggg </div>  <textarea ref={ a_id_1  }  style={css.textarea}  onKeyDown={(event)=>{thanh_dia_chi_onkeydown()}}   onMouseDown={(event)=> {event.persist(); setTimeout(() => {vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = event.target.selectionStart ; console.log(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input);}, 0); }} > </textarea>
       
