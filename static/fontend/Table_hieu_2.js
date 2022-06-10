@@ -539,6 +539,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
         a.current.children[i].children[j+1].innerHTML = " <input   type='text'  />" ;
         let input_ =  a.current.children[i].children[j+1].children[0];
 
+        xuat_hien_the_input = true ;
+
         Object.assign(input_.style,css.input_focus) ;
 
          // lúc này input nhận giá trị từ bàn phím hiện lên thẻ input 
@@ -1468,42 +1470,55 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
                 text_formular[vi_tri_click_in_array_2d_data[0]][vi_tri_click_in_array_2d_data[1]] = thanh_dia_chi_0.current.value ;
                 console.log( text_formular[vi_tri_click_in_array_2d_data[0]][vi_tri_click_in_array_2d_data[1]]);
-                    // thay đổi độ rộng của input phù hợp với ký tự nhập vào trước khi ấn phím
+                   
+
+                    vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = thanh_dia_chi_0.current.value.length ; 
+              
+                     
+                    console.log(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input);
+                    // nếu vị trí click khi có công thức thêm vào array_2d[][] không nằm trong khung nhìn thì không làm gì ngược lại viết vào khung nhìn
+
+                    if ( (i_array_2d < vi_tri_click_in_array_2d_data[0] - limit - 1  )||( i_array_2d > vi_tri_click_in_array_2d_data[0] + limit - 1) ) {
+
+                    }
+                    else{
+
+                       // thay đổi độ rộng của input phù hợp với ký tự nhập vào trước khi ấn phím
                     
                     var parent_input = a.current.children[vi_tri_click_in_array_2d_data[2]].children[vi_tri_click_in_array_2d_data[3]+1] ;
                     var input_ = parent_input.children[0] ;
                     var length_ = ((thanh_dia_chi_0.current.value.length + 1) * 8) ;
 
 
-                    vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = thanh_dia_chi_0.current.value.length ; 
-              
-                     
-                    console.log(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input);
+                      if (input_ !== undefined) { if ( length_ >= 100) { input_.style.width =  length_ + 'px'; }; input_.value = thanh_dia_chi_0.current.value; }
 
-                    if (input_ !== undefined) { if ( length_ >= 100) { input_.style.width =  length_ + 'px'; }; input_.value = thanh_dia_chi_0.current.value; }
-
-                    if (input_ === undefined) { 
-                      
-                  
-                                    // khi ấn phím khác enter thì viết công thức hoặc dữ liệu vào ô đó (thiết lập ô đó ở trạng thái tính toán)
-                                    parent_input.innerHTML = " <input   type='text'  />" ;
-                                let input_ =  parent_input.children[0];
-                          // biến này dùng để xác định ảnh hưởng tới scoll
-                          xuat_hien_the_input = true ;  
-                            
-                          if ( length_ >= 100) {
-                            input_.style.width =  length_ + 'px';
-                          };
-                                // trước gán sự kiện keydown cho input thì ta phải tắt lắng nghe sự kiện onkedown cho 1 element table cha của input 
-                                
-                                onKeyDown_1_element = true ;
-                                input_.value = thanh_dia_chi_0.current.value;
-                                run_function_when_input_focus (input_,vi_tri_click_in_array_2d_data[2],vi_tri_click_in_array_2d_data[3],i_array_2d);
-
-                                    
-                                setTimeout(() => {  thanh_dia_chi_0.current.focus({preventScroll:true}) ;}, 0);
+                      if (input_ === undefined) { 
+                        
                     
+                                      // khi ấn phím khác enter thì viết công thức hoặc dữ liệu vào ô đó (thiết lập ô đó ở trạng thái tính toán)
+                                      parent_input.innerHTML = " <input   type='text'  />" ;
+                                  let input_ =  parent_input.children[0];
+                            // biến này dùng để xác định ảnh hưởng tới scoll
+                            xuat_hien_the_input = true ;  
+                              
+                            if ( length_ >= 100) {
+                              input_.style.width =  length_ + 'px';
+                            };
+                                  // trước gán sự kiện keydown cho input thì ta phải tắt lắng nghe sự kiện onkedown cho 1 element table cha của input 
+                                  
+                                  onKeyDown_1_element = true ;
+                                  input_.value = thanh_dia_chi_0.current.value;
+                                  run_function_when_input_focus (input_,vi_tri_click_in_array_2d_data[2],vi_tri_click_in_array_2d_data[3],i_array_2d);
+  
+                                      
+                                  setTimeout(() => {  thanh_dia_chi_0.current.focus({preventScroll:true}) ;}, 0);
+                      
+                      }
+
+
                     }
+
+                   
 
                   }, 0);
             
@@ -1525,17 +1540,35 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                      onKeyDown_1_element = false;
                      onclick_tinh_toan = false ; 
 
-              if ( (vi_tri_click_in_array_2d_data[2] > limit - 1 )||( vi_tri_click_in_array_2d_data[2] < 0) ) {
+              if ( (i_array_2d < vi_tri_click_in_array_2d_data[0] - limit - 1  )||( i_array_2d > vi_tri_click_in_array_2d_data[0] + limit - 1) ) {
 
        
-                // table_excel.current.scroll(0,vi_tri_click_in_array_2d_data[0]*45)
+                table_excel.current.scroll(0,(vi_tri_click_in_array_2d_data[0]*45 -675))
+                 thanh_dia_chi_0_on_keydown = false ;
+
+                 tinh_toan(vi_tri_click_in_array_2d_data[0] - i_array_2d,vi_tri_click_in_array_2d_data[1],"cong_thuc_chua_hoan_thanh");
+
+                 let vi_tri_cuon =parseInt((a.current.children[0].children[0].innerHTML)); 
+                let vi_tri_to_mau = vi_tri_click_in_array_2d_data[0] - vi_tri_cuon ;
+                
+                 key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_to_mau,vi_tri_o_truoc[1]); // tô màu và focus
+
+                 
+                 
+                        // set địa chỉ ô click  sau hành động trên
+                        dia_chi_o_click(vi_tri_click_in_array_2d_data[0] +1 ,vi_tri_click_in_array_2d_data[1] ,vi_tri_click_in_array_2d_data[2] +1  ,vi_tri_click_in_array_2d_data[3] ) ;
+                      
+                        xuat_hien_the_input = false ;   
+                        onKeyDown = false ; 
+                        onKeyDown_1_element = false;
+                        onclick_tinh_toan = false ; 
         
                
           
                
               }
 
-              thanh_dia_chi_0_on_keydown = false ;
+             
             }
       
     }
@@ -1552,7 +1585,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
       if ( (vi_tri_click_in_array_2d_data[2] > limit - 1 )||( vi_tri_click_in_array_2d_data[2] < 0) ) {
 
        
-        table_excel.current.scroll(0,vi_tri_click_in_array_2d_data[0]*45)
+        table_excel.current.scroll(0,(vi_tri_click_in_array_2d_data[0]*45 -675))
 
         setTimeout(() => {  thanh_dia_chi_0.current.focus({preventScroll:true}) ;}, 0);
   
