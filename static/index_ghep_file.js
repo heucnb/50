@@ -1547,7 +1547,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                      onKeyDown_1_element = false;
                      onclick_tinh_toan = false ; 
 
-              if ( (i_array_2d < vi_tri_click_in_array_2d_data[0] - limit - 1  )||( i_array_2d > vi_tri_click_in_array_2d_data[0] + limit - 1) ) {
+              if ( (i_array_2d <= vi_tri_click_in_array_2d_data[0] - limit - 1  )||( i_array_2d >= vi_tri_click_in_array_2d_data[0]) ) {
 
        
                 table_excel.current.scroll(0,(vi_tri_click_in_array_2d_data[0]*45 -675))
