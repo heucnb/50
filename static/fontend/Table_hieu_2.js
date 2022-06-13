@@ -1,8 +1,8 @@
 
   // *** thẻ input và button khi click sẽ làm mất sự kiện tiêu điểm của focus, thẻ div thì không. Do đó ta phải setTimeout để lấy lại tiêu điểm sau.
 
-  var array_2d_data = new Array(10000).fill(null).map((i)=> i = new Array(10).fill(null)) ;
-  var  text_formular = new Array(10000).fill(null).map((i)=> i = new Array(10).fill(null)) ;
+  var array_2d_data = new Array(10000).fill(null).map((i)=> i = new Array(50).fill(null)) ;
+  var  text_formular = new Array(10000).fill(null).map((i)=> i = new Array(50).fill(null)) ;
 
   
   function Table_hieu_2(props) {
@@ -23,6 +23,7 @@
   var table_excel =  useRef(null) ;
       var a =  useRef(null) ;
       var div_change_height =  useRef(null);
+      var div_change_width =  useRef(null);
       var thanh_dia_chi_0 =  useRef(null);
       var thanh_dia_chi_1 =  useRef(null);
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1346,10 +1347,15 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
   // hoặc để chiều dài bar_scroll + scrollTop bé hơn scrollHeight (data.lenght  10000 trở lên thì được)
   let table_excel_height = 700 ;
   let limit = 34 ;
-  var  array_2d_data_show_0 = array_2d_data.slice(0,limit)    ;
+  let limit_col = 10 ;
+
+  var  array_2d_data_show = array_2d_data.slice(0,limit)   ;
+ var array_2d_data_show_0 = array_2d_data_show.map((item, index)=>{    return  item.slice(0, limit_col)}) ;
+ 
   let click_scroll_dichuyen = 45 ;
 
   let data_lenght = (10000 ) *click_scroll_dichuyen ; 
+  let data_col_lenght = (50 ) *click_scroll_dichuyen ; 
 
   function _onScroll(event) {
     let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML)); 
@@ -1613,13 +1619,16 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
         textarea: {verticalAlign: "top",  marginLeft : "5px", marginRight : "5px", border: "1px solid #ccc", flexGrow: 1, width: `50px` , height: "50px", resize: "none" },
         thanh_dia_chi : {marginLeft : "5px",marginTop : "10px",verticalAlign: "top", backgroundColor: "white", height:  `30px` , padding:"5px", width : `50px`,flexGrow: 0 ,  border: "1px solid #ccc"},
         //overflow: "auto" : Khi chiều cao của box không đủ chứa text, thì thanh scroll sẽ tự động hiển thị ; Khi sử dụng thành phần này sẽ xuất hiện thanh scroll dọc
-        table_excel: {  borderCollapse: "collapse",  height: `${table_excel_height}px`, overflow: "auto" },
+        table_excel: {  borderCollapse: "collapse",  height: `${table_excel_height}px`, width : "850px",  overflowY: "auto",  overflowX: "auto"},
 
-        bar_reference : {  backgroundColor: "#d8dcd6", borderBottomStyle: "none" }  ,
-        x :  {width: "auto"} ,
+        bar_reference_row : {  backgroundColor: "#d8dcd6", borderBottomStyle: "none", textAlign: "center" ,        border: "1px ridge #ccc", minWidth: "85px", height: "20px", display: "table-cell" }  ,
+
+        bar_reference_col : { width: "auto" , textAlign: "center",  paddingLeft : "4px" , paddingRight : "4px",  backgroundColor: "#d8dcd6", borderBottomStyle: "none", textAlign: "center" ,        border: "1px ridge #ccc",  height: "20px", display: "table-cell" }  ,
+
+      
         row_excel: { display: "table-row" },
 
-        col_excel: {   border: "1px ridge #ccc", width: "85px", height: "20px", display: "table-cell" },
+        col_excel: {   border: "1px ridge #ccc", minWidth: "85px", height: "20px", display: "table-cell" },
 
         click: {boxShadow: "4px 4px 5px  Grey", outlineStyle: "ridge", outlineColor: "coral", outlineWidth: "5px", backgroundColor: "moccasin" },
         remove_click: { boxShadow: "",outlineStyle: "", outlineColor: "", outlineWidth: "", backgroundColor: "" },
@@ -1658,39 +1667,39 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     <div ref={ div_change_height  }    >   </div> 
     {/* đây là table_excel trong khung scroll         */}
    
-     <div  style={{ height : `${data_lenght }px` , paddingTop : "5px", }}  ref={ a  }  >
-      
-     <div  > <div style={ {...css.col_excel ,...css.bar_reference, ...setTimeout(() => {css.x }, 0) }} ></div> {array_2d_data_show_0[0].map((cell, j) => { return <div style={{...css.col_excel ,...css.bar_reference }} >{j }</div>})}  </div> 
-  
-    {array_2d_data_show_0.map((row, i) => {
-      return (
+    <div ref={ div_change_width  }    >   </div>           <div  style={{ height : `${data_lenght }px` ,width : `${data_col_lenght }px`, paddingTop : "5px", }}  ref={ a  }  >
+                  
+                                                                        <div style={  css.row_excel}  > <div style={ css.bar_reference_col} ></div> {array_2d_data_show_0[0].map((cell, j) => { return <div style={css.bar_reference_row} >{j }</div>})}  </div> 
+                                                                      
+                                                                        {array_2d_data_show_0.map((row, i) => {
+                                                                          return (
 
-        <div  style={  css.row_excel}    >
+                                                                            <div  style={  css.row_excel}    >
 
-        
-      <div style={ {...css.col_excel, ...css.bar_reference, ...css.x}  }   >{i }</div> {row.map((cell, j) => {   
+                                                                            
+                                                                          <div style={ css.bar_reference_col }   >{i }</div> {row.map((cell, j) => {   
 
-return <div style={css.col_excel} 
-    
-onMouseDown={(event)=>{var _this =  a.current.children[i + 1].children[j+1]; return _onMouseDown(_this, i, j, event)}} 
+                                                                    return <div style={css.col_excel} 
+                                                                        
+                                                                    onMouseDown={(event)=>{var _this =  a.current.children[i + 1].children[j+1]; return _onMouseDown(_this, i, j, event)}} 
 
-onMouseEnter={(event)=>{ _onMouseEnter(event,i,j)}  } 
-// biến onKeyDown mặc định là false
-onKeyDown={(event)=>{ if(onKeyDown){}else{_onKeyDown(event,i,j)}  }}
+                                                                    onMouseEnter={(event)=>{ _onMouseEnter(event,i,j)}  } 
+                                                                    // biến onKeyDown mặc định là false
+                                                                    onKeyDown={(event)=>{ if(onKeyDown){}else{_onKeyDown(event,i,j)}  }}
 
 
->   </div>
-           })}
+                                                                    >   </div>
+                                                                              })}
 
-      
-        </div>
+                                                                          
+                                                                            </div>
 
-      
-      
+                                                                          
+                                                                          
 
-      );
-    })}  
-    </div>   
+                                                                          );
+                                                                        })}  
+                                                              </div>   
     </div>
         </div> 
           
