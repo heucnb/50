@@ -8,8 +8,8 @@
   </div> ); };
   // *** thẻ input và button khi click sẽ làm mất sự kiện tiêu điểm của focus, thẻ div thì không. Do đó ta phải setTimeout để lấy lại tiêu điểm sau.
 
-  var array_2d_data = new Array(10000).fill(null).map((i)=> i = new Array(50).fill(null)) ;
-  var  text_formular = new Array(10000).fill(null).map((i)=> i = new Array(50).fill(null)) ;
+  var array_2d_data = new Array(10000).fill(null).map((i)=> i = new Array(500).fill(null)) ;
+  var  text_formular = new Array(10000).fill(null).map((i)=> i = new Array(500).fill(null)) ;
 
   
   function Table_hieu_2(props) {
@@ -29,8 +29,8 @@
   var vi_tri_cong_thuc_them_vao ;
   var table_excel =  useRef(null) ;
       var a =  useRef(null) ;
-      var div_change_height =  useRef(null);
-      var div_change_width =  useRef(null);
+     
+   
       var thanh_dia_chi_0 =  useRef(null);
       var thanh_dia_chi_1 =  useRef(null);
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1353,8 +1353,9 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
   // cố định scrollHeight bằng mã if ( Math.round(event.target.scrollTop) >= data_lenght - 100*20 )
   // hoặc để chiều dài bar_scroll + scrollTop bé hơn scrollHeight (data.lenght  10000 trở lên thì được)
   let table_excel_height = 700 ;
+  let table_excel_width = 900 ;
   let limit = 34 ;
-  let limit_col = 10 ;
+  let limit_col = 20 ;
 
   var  array_2d_data_show = array_2d_data.slice(0,limit)   ;
  var array_2d_data_show_0 = array_2d_data_show.map((item, index)=>{    return  item.slice(0, limit_col)}) ;
@@ -1362,9 +1363,11 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
   let click_scroll_dichuyen = 45 ;
 
   let data_lenght = (10000 ) *click_scroll_dichuyen ; 
-  let data_col_lenght = (50 ) *click_scroll_dichuyen ; 
+  let data_col_lenght = (500 ) *click_scroll_dichuyen ; 
 
   function _onScroll(event) {
+    // table_excel.current.style.width = "900px";
+   
     let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML)); 
               // scrollHeight chiều cao của cả thanh scroll
                   // scrollTop khoảng cách từ top 0 đến vị trí hiện tại
@@ -1375,23 +1378,43 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
               var di_chuyen   ;
             // dừng scroll tại vị trí muốn
-              if (Math.ceil(  (event.target.scrollTop ) )<=445500) {
-                di_chuyen = Math.ceil(  (event.target.scrollTop ) ); 
+              if ( (event.target.scrollTop ) <=(data_lenght - 4500)) {
+                di_chuyen =   (event.target.scrollTop ) ; 
               }
               else
               {
-                event.target.scrollTo(0, 445500) ;
-                di_chuyen = 445500;
+                event.target.scrollTo(0, (data_lenght - 4500)) ;
+                di_chuyen = (data_lenght - 4500);
               }
 
-              console.log( 'di_chuyen----------------------------------------------' +  di_chuyen)
+              var di_chuyen_col =  Math.ceil(  (event.target.scrollLeft ) ) ;
+
+                 // dừng scroll tại vị trí muốn tthanh cuộn ngang
+                 if ( (event.target.scrollLeft ) <=(data_col_lenght - 450)) {
+                  di_chuyen_col =   (event.target.scrollLeft ) ; 
+                }
+                else
+                {
+                  event.target.scrollLeft = (data_col_lenght - 450) ;
+                  di_chuyen_col = (data_col_lenght - 450);
+                }
+                console.log( event.target.scrollTop)
+                console.log( event.target.scrollLeft)
+
+              console.log( 'di_chuyen----------------------------------------------' +  di_chuyen + "----" + di_chuyen_col)
               // vị trí cắt là  a.current.children[0 + 1].children[0].innerHTML lúc sau khi render UI xong
               let vi_tri_cat =  Math.round(di_chuyen / click_scroll_dichuyen) ; 
+              let vi_tri_cat_col =  Math.round(di_chuyen_col / click_scroll_dichuyen) ; 
 
 
-        
-                        div_change_height.current.style.height = di_chuyen+'px';
+
+
+                        a.current.style.paddingTop =  di_chuyen+'px';
                         a.current.style.height =(data_lenght - di_chuyen) +'px';
+                        a.current.style.paddingLeft = (di_chuyen_col  ) +'px';
+
+                          a.current.style.width =(data_col_lenght - di_chuyen_col) +'px'; 
+
                     //  vi_tri_truoc_di_chuyen là  a.current.children[0 + 1].children[0].innerHTML trước khi scroll
                       let  vi_tri_truoc_di_chuyen =  a.current.children[0 + 1].children[0].innerHTML ; // là vị trí cắt trước đó
                       console.log( 'vi_tri_o_truoc--vị tri thẻ input ở khung nhìn trước    ' +  vi_tri_o_truoc)
@@ -1420,7 +1443,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                         for (let index = 0; index <= (limit - 1); index++) {
                         
                           a.current.children[index + 1].children[0].innerHTML = index + vi_tri_cat;
-                          for (let index_j = 0; index_j <=9 ; index_j++) {
+                          for (let index_j = 0; index_j <=(limit_col - 1) ; index_j++) {
                           
                             a.current.children[index + 1].children[index_j+1].innerHTML = array_2d_data[index +vi_tri_cat][index_j ];
                           }
@@ -1438,9 +1461,11 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                         for (let index = 0; index <= (limit - 1); index++) {
                       
                           a.current.children[index + 1].children[0].innerHTML = index + vi_tri_cat;
-                          for (let index_j = 0; index_j <=9 ; index_j++) {
+                         
+                          for (let index_j = 0; index_j <=(limit_col - 1) ; index_j++) {
+                           if (index === 0) { a.current.children[0].children[index_j+1].innerHTML = index_j + vi_tri_cat_col; }
                           
-                            a.current.children[index + 1].children[index_j+1].innerHTML = array_2d_data[index +vi_tri_cat][index_j ];
+                            a.current.children[index + 1].children[index_j+1].innerHTML = array_2d_data[index +vi_tri_cat][index_j +vi_tri_cat_col];
                           }
                         }  
 
@@ -1626,7 +1651,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
         textarea: {verticalAlign: "top",  marginLeft : "5px", marginRight : "5px", border: "1px solid #ccc", flexGrow: 1, width: `50px` , height: "50px", resize: "none" },
         thanh_dia_chi : {marginLeft : "5px",marginTop : "10px",verticalAlign: "top", backgroundColor: "white", height:  `30px` , padding:"5px", width : `50px`,flexGrow: 0 ,  border: "1px solid #ccc"},
         //overflow: "auto" : Khi chiều cao của box không đủ chứa text, thì thanh scroll sẽ tự động hiển thị ; Khi sử dụng thành phần này sẽ xuất hiện thanh scroll dọc
-        table_excel: {  borderCollapse: "collapse",  height: `${table_excel_height}px`, width : "850px",  overflowY: "auto",  overflowX: "auto"},
+        table_excel: {  borderCollapse: "collapse",  height: `${table_excel_height}px`, width :  `${table_excel_width}px`,  overflowY: "auto",  overflowX: "auto"},
 
         bar_reference_row : {  backgroundColor: "#d8dcd6", borderBottomStyle: "none", textAlign: "center" ,        border: "1px ridge #ccc", minWidth: "85px", height: "20px", display: "table-cell" }  ,
 
@@ -1670,43 +1695,38 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
        
           {/*  table_excel chứa khung scroll set ban đầu là 700 px  */}
     <div ref={ table_excel  }   style={css.table_excel}    onScroll={(event) => { _onScroll(event)    }}     >
-      {/* The div này dùng để thay đổi height */}
-    <div ref={ div_change_height  }    >   </div> 
-    {/* đây là table_excel trong khung scroll         */}
    
-    <div ref={ div_change_width  }    >   </div>           <div  style={{ height : `${data_lenght }px` ,width : `${data_col_lenght }px`, paddingTop : "5px", }}  ref={ a  }  >
-                  
-                                                                        <div style={  css.row_excel}  > <div style={ css.bar_reference_col} ></div> {array_2d_data_show_0[0].map((cell, j) => { return <div style={css.bar_reference_row} >{j }</div>})}  </div> 
-                                                                      
-                                                                        {array_2d_data_show_0.map((row, i) => {
-                                                                          return (
+  
 
-                                                                            <div  style={  css.row_excel}    >
+       <div  style={{ height : `${data_lenght }px` ,width : `${data_col_lenght }px`,  }}  ref={ a  }  >
+                          
+                          <div style={  css.row_excel}  > <div style={ css.bar_reference_col} ></div> {array_2d_data_show_0[0].map((cell, j) => { return <div style={css.bar_reference_row} >{j }</div>})}  </div> 
+                        
+                          {array_2d_data_show_0.map((row, i) => {
+                            return (
 
-                                                                            
-                                                                          <div style={ css.bar_reference_col }   >{i }</div> {row.map((cell, j) => {   
+                              <div  style={  css.row_excel}    >
 
-                                                                    return <div style={css.col_excel} 
-                                                                        
-                                                                    onMouseDown={(event)=>{var _this =  a.current.children[i + 1].children[j+1]; return _onMouseDown(_this, i, j, event)}} 
+                            <div style={ css.bar_reference_col }   >{i }</div> {row.map((cell, j) => {   
 
-                                                                    onMouseEnter={(event)=>{ _onMouseEnter(event,i,j)}  } 
-                                                                    // biến onKeyDown mặc định là false
-                                                                    onKeyDown={(event)=>{ if(onKeyDown){}else{_onKeyDown(event,i,j)}  }}
+                      return <div style={css.col_excel} 
+                          
+                      onMouseDown={(event)=>{var _this =  a.current.children[i + 1].children[j+1]; return _onMouseDown(_this, i, j, event)}} 
 
+                      onMouseEnter={(event)=>{ _onMouseEnter(event,i,j)}  } 
+                      // biến onKeyDown mặc định là false
+                      onKeyDown={(event)=>{ if(onKeyDown){}else{_onKeyDown(event,i,j)}  }}
+                      >   </div>
+                                })}
 
-                                                                    >   </div>
-                                                                              })}
+                              </div>
 
-                                                                          
-                                                                            </div>
-
-                                                                          
-                                                                          
-
-                                                                          );
-                                                                        })}  
-                                                              </div>   
+                            );
+                          })}  
+                </div>   
+ 
+   
+    
     </div>
         </div> 
           
