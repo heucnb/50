@@ -23,7 +23,7 @@
    var onKeyDown_1_element = false;
     var onKeyDown = false ;
     var onclick_tinh_toan = false ;
-    var error_ = false;
+   
   var thanh_dia_chi_0_on_keydown = false ;
   var cong_thuc_them_vao = [null,null,null] ;
   var vi_tri_cong_thuc_them_vao ;
@@ -104,11 +104,11 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
             if (event.keyCode === 13) { // key code of the keybord key
 
               console.log("-------------------input enter")
-                    if (error_ === false) {
+                   
                       
 
                     // khi ấn enter thì công thức chưa hoàn thành cũng tính
-                    tinh_toan(i,j,"cong_thuc_chua_hoan_thanh");
+                    tinh_toan(i,j,"xoa_ky_tu_cong_thuc_thua");
 
                     
                            // set địa chỉ ô click  sau hành động trên
@@ -121,19 +121,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                     thanh_dia_chi_0_on_keydown = false ;
                     onclick_tinh_toan = false ; 
                     
-                    }
-                    if (error_) {
-                      error_= false ;
-                      a.current.children[i+1].children[j+1].innerHTML = "fuction is not defined" ;
-
-                          // set địa chỉ ô click  sau hành động trên
-                          dia_chi_o_click(i +1+ i_array_2d,j,i +1 ,j) ;
-                      key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],i +1 ,j); // tô màu và focus
-                      onKeyDown = false ; 
-                      setTimeout(() => { onKeyDown_1_element = false ; }, 0);
-                      thanh_dia_chi_0_on_keydown = false ;
-                      onclick_tinh_toan = false ;  
-                      };
+                
+                  
           
             }
             
@@ -273,20 +262,60 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
       var text = text_formular[i+i_array_2d][j];  
       // chuyển text null bằng '' để slice không bị lỗi.
       if (text == null) { text = '' ; }
-        // nếu công thức chưa hoàn thành mà bấm enter thì hoàn thành công thức gần nhất ghi vào text
+
+        // khi bấm enter thì xoá ký tự công thức thừa gần focus nhất
         let text_den_vi_tri_con_tro = text.slice(0,vi_tri_con_tro_khi_di_chuyen_trong_double_click_input) ;
-    if (z=== "cong_thuc_chua_hoan_thanh") {
+    if (z=== "xoa_ky_tu_cong_thuc_thua") {
      
       console.log('text_den_vi_tri_con_tro           ' +text_den_vi_tri_con_tro)
 
-        if ((text_den_vi_tri_con_tro.slice(0,1)==="=" || text_den_vi_tri_con_tro.slice(0,1)==="+" )&&(    text_den_vi_tri_con_tro.slice(-1)==="+"  ||  text_den_vi_tri_con_tro.slice(-1)==="-"  ||  text_den_vi_tri_con_tro.slice(-1)==="*"  ||  text_den_vi_tri_con_tro.slice(-1)==="/"  || text_den_vi_tri_con_tro.slice(-1)===","    )     )
+        if ((text_den_vi_tri_con_tro.slice(0,1)==="=" || text_den_vi_tri_con_tro.slice(0,1)==="+" )&&(    text_den_vi_tri_con_tro.slice(-1)==="+"  ||  text_den_vi_tri_con_tro.slice(-1)==="-"  ||  text_den_vi_tri_con_tro.slice(-1)==="*"  ||  text_den_vi_tri_con_tro.slice(-1)==="/"    )     )
          {
-              while ((    text_den_vi_tri_con_tro.slice(-1)==="+"  ||  text_den_vi_tri_con_tro.slice(-1)==="-"  ||  text_den_vi_tri_con_tro.slice(-1)==="*"  ||  text_den_vi_tri_con_tro.slice(-1)==="/"  || text_den_vi_tri_con_tro.slice(-1)===","    ) ) 
+              while ((    text_den_vi_tri_con_tro.slice(-1)==="+"  ||  text_den_vi_tri_con_tro.slice(-1)==="-"  ||  text_den_vi_tri_con_tro.slice(-1)==="*"  ||  text_den_vi_tri_con_tro.slice(-1)==="/"     ) ) 
               {
                 text_den_vi_tri_con_tro = text_den_vi_tri_con_tro.slice(0,text_den_vi_tri_con_tro.length - 1) ;
               }
              
           }
+
+          
+        if ((text.slice(0,1)==="=" || text.slice(0,1)==="+" )&&(    text.slice(-1)==="+"  ||  text.slice(-1)==="-"  ||  text.slice(-1)==="*"  ||  text.slice(-1)==="/"    )     )
+        {
+             while ((    text.slice(-1)==="+"  ||  text.slice(-1)==="-"  ||  text.slice(-1)==="*"  ||  text.slice(-1)==="/"    ) ) 
+             {
+              text = text.slice(0,text.length - 1) ;
+             }
+            
+         }
+
+       
+      
+    }
+
+    if (z=== "xoa_ky_tu_cong_thuc_thua_mouse_down") {
+     
+      console.log('text_den_vi_tri_con_tro           ' +text_den_vi_tri_con_tro)
+
+        if ((text_den_vi_tri_con_tro.slice(0,1)==="=" || text_den_vi_tri_con_tro.slice(0,1)==="+" )&&(    text_den_vi_tri_con_tro.slice(-1)==="+"  ||  text_den_vi_tri_con_tro.slice(-1)==="-"  ||  text_den_vi_tri_con_tro.slice(-1)==="*"  ||  text_den_vi_tri_con_tro.slice(-1)==="/"     )     )
+         {
+              while ((    text_den_vi_tri_con_tro.slice(-2)==="++"  ||  text_den_vi_tri_con_tro.slice(-2)==="--"  ||  text_den_vi_tri_con_tro.slice(-2)==="**"  ||  text_den_vi_tri_con_tro.slice(-2)==="//"    ) ) 
+            
+              {
+                text_den_vi_tri_con_tro = text_den_vi_tri_con_tro.slice(0,text_den_vi_tri_con_tro.length - 1) ;
+              }
+             
+          }
+
+          
+        if ((text.slice(0,1)==="=" || text.slice(0,1)==="+" )&&(    text.slice(-1)==="+"  ||  text.slice(-1)==="-"  ||  text.slice(-1)==="*"  ||  text.slice(-1)==="/"     )     )
+        {
+             while ((    text.slice(-2)==="++"  ||  text.slice(-2)==="--"  ||  text.slice(-2)==="**"  ||  text.slice(-2)==="//"     ) ) 
+           
+             {
+              text = text.slice(0,text.length - 1) ;
+             }
+            
+         }
 
        
       
@@ -309,22 +338,74 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
           setTimeout(() => {  thanh_dia_chi_0.current.value = "";}, 0);
 
         console.log('lưu công thức viết vào mảng formular ')
-    
+        var kiem_tra_loi ;
         try {
           // Code có thể gặp lỗi nào đó
+          
           eval(text)
+
+          
           
         } catch (error) {
-          // Code xử lý khi lỗi xảy ra
+          // // Code xử lý khi lỗi xảy ra
+          // console.log('công thức nhập vào bị lỗi')
+          // vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = undefined ;   
+          // cong_thuc_chua_hoan_thanh = "" ;
+          // array_2d_data[i+i_array_2d][j] = "fuction is not defined" ;
+          // return  error_  = true ;
+
           console.log('công thức nhập vào bị lỗi')
-          vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = undefined ;   
-          cong_thuc_chua_hoan_thanh = "" ;
-          array_2d_data[i+i_array_2d][j] = "fuction is not defined" ;
-          return  error_  = true ;
+          kiem_tra_loi  = true ;
+          console.log(kiem_tra_loi);
+            // kiểm tra xem trong mảng key_formular có tồn tại vị trí i, j được lưu chưa. Nếu có thay đổi công thức ở vị trí đó.
+  var index_; 
+  var kiem_tra = key_formular.some((e,index)=>{ index_ =  index ; return e[0] === (i+i_array_2d) && e[1] === j  });  
+    if (kiem_tra ) {  
+      console.log( "khac nhau" ) ;
+  
+          formular[index_]  = eval("(function(){return "+  "array_2d_data["+(i+i_array_2d)+"]["+j+"]" +" = " + "fuction is not defined" +  ";})")   
+          // tính toán lại tất cả các công thức đã viết
+          formular.forEach((element) => {console.log(element); element(); }) ;
+          // hiện thị giá trị đã tính toán lên trang web bảng tính
+          //element[0] là giá trị i+i_array_2d được lưu nhưng đó là giá trị trước khi scroll. i_array_2d bây giờ là giá trị sau khi scroll.
+          //
+        key_formular.forEach((element) => { 
+                                          if (  ((element[0] -i_array_2d) <= limit -1 ) && ((element[0] -i_array_2d) >= 0 )   ) {
+                                          
+                                            a.current.children[(element[0] + 1 -i_array_2d)].children[element[1]+1].innerHTML = array_2d_data[element[0]][element[1]]  ;
+                                          }
+                                          
+                                          });
+       vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = undefined ;   
+        cong_thuc_chua_hoan_thanh = "" ;
+
+        } 
+    else {  
+      console.log( "tinh 1 cong thuc----------------" ) ;
+    // gán địa chỉ thay đổi công thức vào key_formular
+      key_formular.push([i+i_array_2d,j]) ; formular.push(eval("(function(){return "+  "array_2d_data["+(i+i_array_2d)+"]["+j+"]" +" = " + "'fuction is not defined'" +  ";})")  ) 
+      
+      const lastItem = formular[formular.length - 1] ;
+      // tính 1 công thức cuối cùng
+      lastItem();
+      console.log(formular.toString());
+      // hiện thị giá trị đã tính toán lên trang web bảng tính nếu giá trị tính toán sau khi scroll nằm trong khung nhìn
+      if ( (i <= limit - 1 )&( i >= 0) ) {
+                                          
+        a.current.children[i +1].children[j+1].innerHTML = array_2d_data[i+i_array_2d][j] ; 
+      }
+     
+      vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = undefined ;   
+      cong_thuc_chua_hoan_thanh = "" ;
+    
+    }
+
+          
         
         }
-    
-      
+
+
+          if (kiem_tra_loi === undefined) {
               // kiểm tra xem trong mảng key_formular có tồn tại vị trí i, j được lưu chưa. Nếu có thay đổi công thức ở vị trí đó.
               var index_; 
               var kiem_tra = key_formular.some((e,index)=>{ index_ =  index ; return e[0] === (i+i_array_2d) && e[1] === j  });  
@@ -367,6 +448,11 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                   cong_thuc_chua_hoan_thanh = "" ;
                 
                 }
+            
+          }
+    
+      
+            
               
         };
     
@@ -498,11 +584,11 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
         if (cong_thuc_chua_hoan_thanh !== "") {
           console.log("onKeyDown-----enter-- tính toán") ;
 
-          if (error_ === false) {
+         
                       
 
             // khi ấn enter thì công thức chưa hoàn thành cũng tính
-            tinh_toan(i,j,"cong_thuc_chua_hoan_thanh");
+            tinh_toan(i,j,"xoa_ky_tu_cong_thuc_thua");
                  // set địa chỉ ô click  sau hành động trên
                  dia_chi_o_click(i +1+ i_array_2d,j,i +1 ,j) ;
             key_enter(i,j,i+1,j); // tô màu và focus
@@ -511,19 +597,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
             onKeyDown_1_element = false;
             onclick_tinh_toan = false ; 
             
-            }
-            if (error_) {
-              error_= false ;
-              a.current.children[i + 1].children[j+1].innerHTML = "fuction is not defined" ;
-
-                 // set địa chỉ ô click  sau hành động trên
-                 dia_chi_o_click(i +1+ i_array_2d,j,i +1 ,j) ;
-              key_enter(i,j,i+1,j); // tô màu và focus
-              xuat_hien_the_input = false ;   
-              onKeyDown = false ; 
-              onKeyDown_1_element = false;
-              onclick_tinh_toan = false ;  
-              };
+          
+         
 
 
 
@@ -548,7 +623,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
         let input_ =  a.current.children[i +1 ].children[j+1].children[0];
 
         xuat_hien_the_input = true ;
-
+        vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = 1 ;
         Object.assign(input_.style,css.input_focus) ;
 
          // lúc này input nhận giá trị từ bàn phím hiện lên thẻ input 
@@ -917,7 +992,9 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
       
       }
     
-      // 1 click  xuống mà ô trước  đó không xuất hiện thẻ input  chạy hàm (chỉ ckhi click vào ô input khi có double click hoặc enter mới không chạy gì còn khi click vào ô khác thì ô đó không có thẻ input nên sẽ chạy)
+      // 1 click  xuống thì chạy hàm tính toán
+      // tính toán nếu chạy xong thì tô màu
+      // trong khi tính toán nếu cong_thuc_chua_hoan_thanh khác ""  thì viết tiếp công thức
     
       if ( (_this.kiem_tra == 0 || _this.kiem_tra == undefined)&& typeof _this.children[0] != "object"  ) {
 
@@ -944,7 +1021,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                     // kiểm tra nếu ô trước đó chứa công thức hoặc công thức bị sửa thì phải tính toán. Ngược lại không phải tính toán.
                     console.log("_onClick---tinh_toan");
 
-                            tinh_toan(vi_tri_o_truoc[0],vi_tri_o_truoc[1]);
+                            tinh_toan(vi_tri_o_truoc[0],vi_tri_o_truoc[1], "xoa_ky_tu_cong_thuc_thua_mouse_down");
                                 
                                 onKeyDown = false ; 
                                 onclick_tinh_toan = false ;
@@ -955,7 +1032,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     
                     if (cong_thuc_chua_hoan_thanh === "") {
               
-                      if (!error_) {
+                     
                         // điền giá trị sau khi tính toán xong bên trên xong vào. Nếu không phải tính toán thì điền giá trị lưu ở bộ nhớ trước đó vào.
                                   // khi scroll nếu vi_tri_o_truoc[0] < 0  hoặc  > limit - 1  tức là không nằm trong khung nhìn thì không cần gán giá trị vào ô đó nữa ngược lại  tô màu
                                 
@@ -968,19 +1045,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                                     // tô màu vào vị trí i,j
                                     key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],i ,j); // tô màu và focus
                             
-                        };  
+                      
     
-                      if (error_) {
-                        // kiểm tra công thức ô trước đó lỗi thì báo lỗi
-                        error_= false ; 
-                        a.current.children[vi_tri_o_truoc[0] + 1].children[vi_tri_o_truoc[1]+1].innerHTML = "fuction is not defined" ; 
-
-                             // set địa chỉ ô click  sau hành động trên
-                             dia_chi_o_click(i + i_array_2d,j,i  ,j) ;
-                        key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],i,j); // tô màu và focus
-
-
-                        };
     
                       
                         
@@ -1157,11 +1223,11 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                         if (cong_thuc_chua_hoan_thanh !== "") {
                           console.log("onMouseDown_onKeyDown-----enter-- tính toán") ;
 
-                          if (error_ === false) {
+                        
                       
 
                             // khi ấn enter thì công thức chưa hoàn thành cũng tính
-                            tinh_toan(i,j,"cong_thuc_chua_hoan_thanh");
+                            tinh_toan(i,j,"xoa_ky_tu_cong_thuc_thua");
 
                            // set địa chỉ ô click  sau hành động trên
                            dia_chi_o_click(i +1+ i_array_2d,j,i +1 ,j) ;
@@ -1172,19 +1238,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                             onKeyDown_1_element = false;
                             onclick_tinh_toan = false ; 
                             
-                            }
-                            if (error_) {
-                              error_= false ;
-                              a.current.children[i + 1].children[j+1].innerHTML = "fuction is not defined" ;
-                              
-                           // set địa chỉ ô click  sau hành động trên
-                           dia_chi_o_click(i +1+ i_array_2d,j,i +1 ,j) ;
-                              key_enter(i,j,i+1,j); // tô màu và focus
-                              xuat_hien_the_input = false ;   
-                              onKeyDown = false ; 
-                              onKeyDown_1_element = false;
-                              onclick_tinh_toan = false ;  
-                              };
+                          
+                         
                 
                 
                 
@@ -1564,27 +1619,17 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
             }
 
             if (event.keyCode === 13) {
-              thanh_dia_chi_0_on_keydown = false ;
-
-              tinh_toan(vi_tri_click_in_array_2d_data[0] - i_array_2d,vi_tri_click_in_array_2d_data[1],"cong_thuc_chua_hoan_thanh");
-              key_enter(vi_tri_click_in_array_2d_data[2],vi_tri_click_in_array_2d_data[3],vi_tri_click_in_array_2d_data[2]+1,vi_tri_click_in_array_2d_data[3]); // tô màu và focus
-              console.log('ô tô màu'+ (vi_tri_click_in_array_2d_data[2]+1 )+ "," + vi_tri_click_in_array_2d_data[3] );
               
-                     // set địa chỉ ô click  sau hành động trên
-                     dia_chi_o_click(vi_tri_click_in_array_2d_data[0] +1 ,vi_tri_click_in_array_2d_data[1] ,vi_tri_click_in_array_2d_data[2] +1  ,vi_tri_click_in_array_2d_data[3] ) ;
-                   
-                     xuat_hien_the_input = false ;   
-                     onKeyDown = false ; 
-                     onKeyDown_1_element = false;
-                     onclick_tinh_toan = false ; 
+
+               // khi enter nếu vịtrí ô viết công thức không nằm trong khung nhìn thì di chuyển đến đó sau đó tính toán      
 
               if ( (i_array_2d <= vi_tri_click_in_array_2d_data[0] - limit - 1  )||( i_array_2d >= vi_tri_click_in_array_2d_data[0]) ) {
 
-       
+                console.log('tinhs toans 2');
                 table_excel.current.scroll(0,(vi_tri_click_in_array_2d_data[0]*45 -675))
                  thanh_dia_chi_0_on_keydown = false ;
 
-                 tinh_toan(vi_tri_click_in_array_2d_data[0] - i_array_2d,vi_tri_click_in_array_2d_data[1],"cong_thuc_chua_hoan_thanh");
+                 tinh_toan(vi_tri_click_in_array_2d_data[0] - i_array_2d,vi_tri_click_in_array_2d_data[1],"xoa_ky_tu_cong_thuc_thua");
 
                  let vi_tri_cuon =parseInt((a.current.children[0 + 1].children[0].innerHTML)); 
                 let vi_tri_to_mau = vi_tri_click_in_array_2d_data[0] - vi_tri_cuon ;
@@ -1605,6 +1650,31 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
           
                
               }
+              else{
+
+                thanh_dia_chi_0_on_keydown = false ;
+              console.log('tinhs toans 1');
+              
+
+              tinh_toan(vi_tri_click_in_array_2d_data[0] - i_array_2d,vi_tri_click_in_array_2d_data[1],"xoa_ky_tu_cong_thuc_thua");
+    
+              key_enter(vi_tri_click_in_array_2d_data[2],vi_tri_click_in_array_2d_data[3],vi_tri_click_in_array_2d_data[2]+1,vi_tri_click_in_array_2d_data[3]); // tô màu và focus
+              console.log('ô tô màu'+ (vi_tri_click_in_array_2d_data[2]+1 )+ "," + vi_tri_click_in_array_2d_data[3] );
+              
+                     // set địa chỉ ô click  sau hành động trên
+                     dia_chi_o_click(vi_tri_click_in_array_2d_data[0] +1 ,vi_tri_click_in_array_2d_data[1] ,vi_tri_click_in_array_2d_data[2] +1  ,vi_tri_click_in_array_2d_data[3] ) ;
+                   
+                     xuat_hien_the_input = false ;   
+                     onKeyDown = false ; 
+                     onKeyDown_1_element = false;
+                     onclick_tinh_toan = false ; 
+
+
+
+              }
+
+
+              
 
              
             }
