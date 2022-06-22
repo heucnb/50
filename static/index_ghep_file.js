@@ -95,6 +95,9 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                     // sau đó gán giá trị khi nhấn lên input_formula
                 setTimeout(() => {  text_formular[i + i_array_2d][j] = input_.value ;  console.log('text_formular--'+  text_formular[i + i_array_2d][j]); input_formula.value =  text_formular[i + i_array_2d][j] ; input_formula.vi_tri = [i + i_array_2d,j] ;  }, 0);
           
+                
+                      
+                
                
             }
               
@@ -143,9 +146,9 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
               //  xoá tô màu  vị trí trước đó: nếu vị trí trước đó = null hoặc không nằm trong khung nhìn thì xoá focus đang hiện diện ngược lại xoá tô màu
               // row_vi_tri_remove = 0  thì dầu tiên remove tô màu ; sau đó kích hoạt document.activeElement.blur(); 
              
-              if (row_vi_tri_remove === null || row_vi_tri_remove < 0 || row_vi_tri_remove > limit - 1 )   {  document.activeElement.blur();         } else {    Object.assign(a.current.children[row_vi_tri_remove + 1].children[col_vi_tri_remove+1].style, css.remove_click); }
-              if ( row_vi_tri_remove === 0 ||row_vi_tri_remove === limit - 1   )   {  document.activeElement.blur();         }
-              if (row_vi_tri_add < 0 || row_vi_tri_add > limit - 1 )   {      vi_tri_o_truoc[0] = row_vi_tri_add ;   vi_tri_o_truoc[1] = col_vi_tri_add ;          }
+              if (row_vi_tri_remove === null || row_vi_tri_remove < 0 || row_vi_tri_remove > limit_view - 1 )   {  document.activeElement.blur();         } else {    Object.assign(a.current.children[row_vi_tri_remove + 1].children[col_vi_tri_remove+1].style, css.remove_click); }
+              if ( row_vi_tri_remove === 0 ||row_vi_tri_remove === limit_view - 1   )   {  document.activeElement.blur();         }
+              if (row_vi_tri_add < 0 || row_vi_tri_add > limit_view - 1 )   {      vi_tri_o_truoc[0] = row_vi_tri_add ;   vi_tri_o_truoc[1] = col_vi_tri_add ;          }
               else {   
                         // tô màu
                         Object.assign( a.current.children[row_vi_tri_add + 1].children[col_vi_tri_add+1].style, css.click);
@@ -193,6 +196,9 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
 
                             run_function_when_input_focus (input_,row_vi_tri_add,col_vi_tri_add,i_array_2d);
+
+                                 // set địa chỉ ô click  sau hành động trên
+                           dia_chi_o_click(row_vi_tri_add + i_array_2d,col_vi_tri_add,row_vi_tri_add  ,col_vi_tri_add) ;
                            
                           },0)
 
@@ -219,11 +225,11 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
               //  xoá tô màu  vị trí trước đó: nếu vị trí trước đó = null hoặc không nằm trong khung nhìn thì xoá focus đang hiện diện ngược lại xoá tô màu
               // row_vi_tri_remove = 0  thì dầu tiên remove tô màu ; sau đó kích hoạt document.activeElement.blur(); 
              
-                if (row_vi_tri_remove === null || row_vi_tri_remove < 0 || row_vi_tri_remove > limit - 1 )   {  document.activeElement.blur();         } else { Object.assign(a.current.children[row_vi_tri_remove +1 ].children[col_vi_tri_remove+1].style, css.remove_click);   a.current.children[row_vi_tri_remove +1 ].children[col_vi_tri_remove+1].blur(); }
-               if ( row_vi_tri_remove === 0 ||row_vi_tri_remove === limit - 1   )   {  document.activeElement.blur();         }
+                if (row_vi_tri_remove === null || row_vi_tri_remove < 0 || row_vi_tri_remove > limit_view - 1 )   {  document.activeElement.blur();         } else { Object.assign(a.current.children[row_vi_tri_remove +1 ].children[col_vi_tri_remove+1].style, css.remove_click);   a.current.children[row_vi_tri_remove +1 ].children[col_vi_tri_remove+1].blur(); }
+               if ( row_vi_tri_remove === 0 ||row_vi_tri_remove === limit_view - 1   )   {  document.activeElement.blur();         }
                 // tô màu vị trí mới  nếu vị trí trước đó = null hoặc không nằm trong khung nhìn thì set lại vị trí trước đó ngược lại  tô màu
               
-                if (row_vi_tri_add < 0 || row_vi_tri_add > limit - 1 )   {      vi_tri_o_truoc[0] = row_vi_tri_add ;   vi_tri_o_truoc[1] = col_vi_tri_add ;          }
+                if (row_vi_tri_add < 0 || row_vi_tri_add > limit_view - 1 )   {      vi_tri_o_truoc[0] = row_vi_tri_add ;   vi_tri_o_truoc[1] = col_vi_tri_add ;          }
                 else {  
                   
                   Object.assign(a.current.children[row_vi_tri_add + 1].children[col_vi_tri_add+1].style, css.click);
@@ -370,7 +376,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
           //element[0] là giá trị i+i_array_2d được lưu nhưng đó là giá trị trước khi scroll. i_array_2d bây giờ là giá trị sau khi scroll.
           //
         key_formular.forEach((element) => { 
-                                          if (  ((element[0] -i_array_2d) <= limit -1 ) && ((element[0] -i_array_2d) >= 0 )   ) {
+                                          if (  ((element[0] -i_array_2d) <= limit_view -1 ) && ((element[0] -i_array_2d) >= 0 )   ) {
                                           
                                             a.current.children[(element[0] + 1 -i_array_2d)].children[element[1]+1].innerHTML = array_2d_data[element[0]][element[1]]  ;
                                           }
@@ -390,7 +396,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
       lastItem();
       console.log(formular.toString());
       // hiện thị giá trị đã tính toán lên trang web bảng tính nếu giá trị tính toán sau khi scroll nằm trong khung nhìn
-      if ( (i <= limit - 1 )&( i >= 0) ) {
+      if ( (i <= limit_view - 1 )&( i >= 0) ) {
                                           
         a.current.children[i +1].children[j+1].innerHTML = array_2d_data[i+i_array_2d][j] ; 
       }
@@ -419,7 +425,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                       //element[0] là giá trị i+i_array_2d được lưu nhưng đó là giá trị trước khi scroll. i_array_2d bây giờ là giá trị sau khi scroll.
                       //
                     key_formular.forEach((element) => { 
-                                                      if (  ((element[0] -i_array_2d) <= limit -1 ) && ((element[0] -i_array_2d) >= 0 )   ) {
+                                                      if (  ((element[0] -i_array_2d) <= limit_view -1 ) && ((element[0] -i_array_2d) >= 0 )   ) {
                                                       
                                                         a.current.children[(element[0] + 1 -i_array_2d)].children[element[1]+1].innerHTML = array_2d_data[element[0]][element[1]]  ;
                                                       }
@@ -439,7 +445,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                   lastItem();
                   console.log(formular.toString());
                   // hiện thị giá trị đã tính toán lên trang web bảng tính nếu giá trị tính toán sau khi scroll nằm trong khung nhìn
-                  if ( (i <= limit - 1 )&( i >= 0) ) {
+                  if ( (i <= limit_view - 1 )&( i >= 0) ) {
                                                       
                     a.current.children[i +1].children[j+1].innerHTML = array_2d_data[i+i_array_2d][j] ; 
                   }
@@ -471,7 +477,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                     // nếu người dùng không nhập gì thì isNaN(Number(text))  sẽ trả về false khi đó ta gán array_2d_data[i+i_array_2d][j] = '' ;
                     if (text==="") {  array_2d_data[i+i_array_2d][j] = ""}
                       // hiện thị giá trị người dùng viết lên trang web bảng tính nếu giá trị tính toán sau khi scroll nằm trong khung nhìn
-                    if ( (i <= limit - 1 )&( i >= 0) ) { a.current.children[i +1 ].children[j+1].innerHTML = text ; }
+                    if ( (i <= limit_view - 1 )&( i >= 0) ) { a.current.children[i +1 ].children[j+1].innerHTML = text ; }
 
 
                     // kiểm tra xem trong mảng key_formular có tồn tại vị trí i, j được lưu chưa. Nếu có xoá vị trí đó trong mảng formular và key_formular
@@ -491,7 +497,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                         //element[0] là giá trị i+i_array_2d được lưu nhưng đó là giá trị trước khi scroll. i_array_2d bây giờ là giá trị sau khi scroll.
                         //
                       key_formular.forEach((element) => { 
-                                                        if (  ((element[0] -i_array_2d) <= limit -1 ) && ((element[0] -i_array_2d) >= 0 )   ) {
+                                                        if (  ((element[0] -i_array_2d) <= limit_view -1 ) && ((element[0] -i_array_2d) >= 0 )   ) {
                                                         
                                                           a.current.children[(element[0] +1  -i_array_2d)].children[element[1]+1].innerHTML = array_2d_data[element[0]][element[1]]  ;
                                                         }
@@ -507,7 +513,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                   if (isNaN(Number(text)) == true) {
                     array_2d_data[i+i_array_2d][j] = text;
                   // hiện thị giá trị người dùng viết lên trang web bảng tính nếu giá trị tính toán sau khi scroll nằm trong khung nhìn
-                  if ( (i <= limit - 1 )&( i >= 0) ) { a.current.children[i +1 ].children[j+1].innerHTML = text ; }
+                  if ( (i <= limit_view - 1 )&( i >= 0) ) { a.current.children[i +1 ].children[j+1].innerHTML = text ; }
 
                   // kiểm tra xem trong mảng key_formular có tồn tại vị trí i, j được lưu chưa. Nếu có xoá vị trí đó trong mảng formular và key_formular  
 
@@ -529,7 +535,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                       //element[0] là giá trị i+i_array_2d được lưu nhưng đó là giá trị trước khi scroll. i_array_2d bây giờ là giá trị sau khi scroll.
                       //
                     key_formular.forEach((element) => { 
-                                                      if (  ((element[0] -i_array_2d) <= limit -1 ) && ((element[0] -i_array_2d) >= 0 )   ) {
+                                                      if (  ((element[0] -i_array_2d) <= limit_view -1 ) && ((element[0] -i_array_2d) >= 0 )   ) {
                                                       
                                                         a.current.children[(element[0] +1  -i_array_2d)].children[element[1]+1].innerHTML = array_2d_data[element[0]][element[1]]  ;
                                                       }
@@ -1036,7 +1042,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                         // điền giá trị sau khi tính toán xong bên trên xong vào. Nếu không phải tính toán thì điền giá trị lưu ở bộ nhớ trước đó vào.
                                   // khi scroll nếu vi_tri_o_truoc[0] < 0  hoặc  > limit - 1  tức là không nằm trong khung nhìn thì không cần gán giá trị vào ô đó nữa ngược lại  tô màu
                                 
-                                  if (vi_tri_o_truoc[0] == null || vi_tri_o_truoc[0] <0 || vi_tri_o_truoc[0] > limit - 1   )   {           } else {     a.current.children[vi_tri_o_truoc[0] + 1].children[vi_tri_o_truoc[1]+1].innerHTML =array_2d_data[(vi_tri_o_truoc[0]+i_array_2d)][vi_tri_o_truoc[1]] ;  }
+                                  if (vi_tri_o_truoc[0] == null || vi_tri_o_truoc[0] <0 || vi_tri_o_truoc[0] > limit_view - 1   )   {           } else {     a.current.children[vi_tri_o_truoc[0] + 1].children[vi_tri_o_truoc[1]+1].innerHTML =array_2d_data[(vi_tri_o_truoc[0]+i_array_2d)][vi_tri_o_truoc[1]] ;  }
                             
                             
                                     console.log("_onClick---công thức hoàn thành = '', tô màu");
@@ -1096,7 +1102,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                        // khi scroll nếu input trước đó nằm trong khung nhìn thì viết tiếp công thức vào input đó
                         // nếu input trước đó không nằm trong khung nhìn thì viết rồi lưu công thức vào mảng text_formular
                         // sau đó hiện công thức đó lên thanh formular để người dùng viết tiếp.
-                        if ( (r <= limit - 1 )&( r >= 0) ) {
+                        if ( (r <= limit_view - 1 )&( r >= 0) ) {
                               
                           var input_truoc_do = a.current.children[r + 1].children[c+1].children[0]; 
 
@@ -1420,8 +1426,12 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
   let data_lenght = (10000 ) *click_scroll_dichuyen ; 
   let data_col_lenght = (500 ) *click_scroll_dichuyen ; 
 
+
+  let limit_view  = 0 ;
+  setTimeout(() => { var sum  = 0; while (sum < table_excel_height) { limit_view++; sum = a.current.children[limit_view].offsetHeight + sum ; } limit_view = limit_view - 3 ; console.log(limit_view); }, 0);
+
   function _onScroll(event) {
-    // table_excel.current.style.width = "900px";
+   
    
     let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML)); 
               // scrollHeight chiều cao của cả thanh scroll
@@ -1495,7 +1505,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                    
                       
                         // cập nhật lại dữ liệu khi scroll -- bước1
-                        for (let index = 0; index <= (limit - 1); index++) {
+                        for (let index = 0; index <= (limit_view - 1); index++) {
                         
                           a.current.children[index + 1].children[0].innerHTML = index + vi_tri_cat;
                           for (let index_j = 0; index_j <=(limit_col - 1) ; index_j++) {
@@ -1513,7 +1523,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
                       
                         // cập nhật lại dữ liệu khi scroll -- bước1
-                        for (let index = 0; index <= (limit - 1); index++) {
+                        for (let index = 0; index <= (limit_view - 1); index++) {
                       
                           a.current.children[index + 1].children[0].innerHTML = index + vi_tri_cat;
                          
@@ -1553,6 +1563,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     function thanh_dia_chi_onkeydown(event) {
+      console.log("thanh_dia_chi_onkeydown");
               let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML)); 
               onclick_tinh_toan = true ;
               thanh_dia_chi_0_on_keydown = true ;
@@ -1571,7 +1582,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                     console.log(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input);
                     // nếu vị trí click khi có công thức thêm vào array_2d[][] không nằm trong khung nhìn thì không làm gì ngược lại viết vào khung nhìn
 
-                    if ( (i_array_2d < vi_tri_click_in_array_2d_data[0] - limit - 1  )||( i_array_2d > vi_tri_click_in_array_2d_data[0] + limit - 1) ) {
+                    if ( (i_array_2d <= vi_tri_click_in_array_2d_data[0] - limit_view   )||( i_array_2d >= vi_tri_click_in_array_2d_data[0]) ) {
 
                     }
                     else{
@@ -1623,7 +1634,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
                // khi enter nếu vịtrí ô viết công thức không nằm trong khung nhìn thì di chuyển đến đó sau đó tính toán      
 
-              if ( (i_array_2d <= vi_tri_click_in_array_2d_data[0] - limit - 1  )||( i_array_2d >= vi_tri_click_in_array_2d_data[0]) ) {
+              if ( (i_array_2d <= vi_tri_click_in_array_2d_data[0] - limit_view   )||( i_array_2d >= vi_tri_click_in_array_2d_data[0]) ) {
 
                 console.log('tinhs toans 2');
                 table_excel.current.scroll(0,(vi_tri_click_in_array_2d_data[0]*45 -675))
@@ -1690,7 +1701,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
       // khi ấn chuột trái vào thanh địa chỉ nếu vị trí tô màu không nằm trong khung nhìn thì cuộn để vị trí tô màu nằm trong khung nhìn
 
       // khi xuất hiện thẻ input sau đó cuộn scroll thì vi_tri_click_in_array_2d_data[2] không thay đổi do đó hàm dưới có if === false nên không chạy
-      if ( (vi_tri_click_in_array_2d_data[2] > limit - 1 )||( vi_tri_click_in_array_2d_data[2] < 0) ) {
+      if ( (vi_tri_click_in_array_2d_data[2] > limit_view  )||( vi_tri_click_in_array_2d_data[2] < 0) ) {
 
        
         table_excel.current.scroll(0,(vi_tri_click_in_array_2d_data[0]*45 -675))
