@@ -34,10 +34,33 @@
       var thanh_dia_chi_0 =  useRef(null);
       var thanh_dia_chi_1 =  useRef(null);
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      var limit_view  = 0 ;
+      var limit_col_view  = 0 ;
       useEffect(() => {
 
-        vi_tri_click_in_array_2d_data = [0,0,0,0] ;
-        key_enter(0,0,0,0); // tô màu và focus
+     
+
+        
+  
+  var sum  = 0; while (sum < table_excel_height) { limit_view++; sum = a.current.children[limit_view].offsetHeight + sum ; } limit_view = limit_view - 1 ; console.log(limit_view); 
+
+ 
+  
+  var sum  = 0;
+  while (sum < table_excel_width) 
+  {
+   limit_col_view++;
+     sum = a.current.children[0].children[limit_col_view].offsetWidth + sum ; 
+   }
+   limit_col_view = limit_col_view - 1 ;
+     console.log(limit_col_view); 
+
+
+
+
+     vi_tri_click_in_array_2d_data = [0,0,0,0] ;
+     key_enter(0,0,0,0); // tô màu và focus
+
        
       }, []);
 
@@ -143,14 +166,34 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
       function change_input_scroll(row_vi_tri_remove,col_vi_tri_remove, row_vi_tri_add, col_vi_tri_add) {
 
         let i_array_2d =parseInt((a.current.children[0+1].children[0].innerHTML)); 
-              //  xoá tô màu  vị trí trước đó: nếu vị trí trước đó = null hoặc không nằm trong khung nhìn thì xoá focus đang hiện diện ngược lại xoá tô màu
-              // row_vi_tri_remove = 0  thì dầu tiên remove tô màu ; sau đó kích hoạt document.activeElement.blur(); 
+        let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML)); 
+
+              //  xoá tô màu  vị trí trước đó: nếu vị trí trước đó  không nằm trong khung nhìn thì xoá focus đang hiện diện ngược lại xoá tô màu
+           
              
-              if (row_vi_tri_remove === null || row_vi_tri_remove < 0 || row_vi_tri_remove > limit_view - 1 )   {  document.activeElement.blur();         } else {    Object.assign(a.current.children[row_vi_tri_remove + 1].children[col_vi_tri_remove+1].style, css.remove_click); }
-              if ( row_vi_tri_remove === 0 ||row_vi_tri_remove === limit_view - 1   )   {  document.activeElement.blur();         }
-              if (row_vi_tri_add < 0 || row_vi_tri_add > limit_view - 1 )   {      vi_tri_o_truoc[0] = row_vi_tri_add ;   vi_tri_o_truoc[1] = col_vi_tri_add ;          }
+              if (row_vi_tri_remove < 0 || row_vi_tri_remove > limit_view - 1       ||  col_vi_tri_remove < 0 || col_vi_tri_remove > limit_col_view - 1) 
+                {        } 
+              else {  
+                  Object.assign(a.current.children[row_vi_tri_remove + 1].children[col_vi_tri_remove+1].style, css.remove_click); 
+                  a.current.children[row_vi_tri_remove +1 ].children[col_vi_tri_remove+1].blur(); 
+                }
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
+              // tô màu
+             
+              if (row_vi_tri_add < 0 || row_vi_tri_add > limit_view - 1         ||  col_vi_tri_add < 0 || col_vi_tri_add > limit_col_view - 1)   {      vi_tri_o_truoc[0] = row_vi_tri_add ;   vi_tri_o_truoc[1] = col_vi_tri_add ;          }
               else {   
-                        // tô màu
+                       
                         Object.assign( a.current.children[row_vi_tri_add + 1].children[col_vi_tri_add+1].style, css.click);
                         vi_tri_o_truoc[0] = row_vi_tri_add ;
                         vi_tri_o_truoc[1] = col_vi_tri_add ;
@@ -198,7 +241,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                             run_function_when_input_focus (input_,row_vi_tri_add,col_vi_tri_add,i_array_2d);
 
                                  // set địa chỉ ô click  sau hành động trên
-                           dia_chi_o_click(row_vi_tri_add + i_array_2d,col_vi_tri_add,row_vi_tri_add  ,col_vi_tri_add) ;
+                           dia_chi_o_click(row_vi_tri_add + i_array_2d,col_vi_tri_add + j_array_2d,row_vi_tri_add  ,col_vi_tri_add) ;
                            
                           },0)
 
@@ -221,15 +264,30 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
           // chuyển trạng thái onKeyDown_1_element = false; vì khi input trước đó xuất hiện onKeyDown_1_element là true do có chỗ settimeout
       onKeyDown_1_element = false;
       thanh_dia_chi_0_on_keydown = false ;
-          
+              //1.  xoá tô màu vị trí trước
               //  xoá tô màu  vị trí trước đó: nếu vị trí trước đó = null hoặc không nằm trong khung nhìn thì xoá focus đang hiện diện ngược lại xoá tô màu
-              // row_vi_tri_remove = 0  thì dầu tiên remove tô màu ; sau đó kích hoạt document.activeElement.blur(); 
+              // row_vi_tri_remove = 0  thì dầu tiên remove tô màu bằng cách chạy đoạn if else trên ; sau đó chạy đoạn if dưới kích hoạt document.activeElement.blur(); 
              
-                if (row_vi_tri_remove === null || row_vi_tri_remove < 0 || row_vi_tri_remove > limit_view - 1 )   {  document.activeElement.blur();         } else { Object.assign(a.current.children[row_vi_tri_remove +1 ].children[col_vi_tri_remove+1].style, css.remove_click);   a.current.children[row_vi_tri_remove +1 ].children[col_vi_tri_remove+1].blur(); }
-               if ( row_vi_tri_remove === 0 ||row_vi_tri_remove === limit_view - 1   )   {  document.activeElement.blur();         }
-                // tô màu vị trí mới  nếu vị trí trước đó = null hoặc không nằm trong khung nhìn thì set lại vị trí trước đó ngược lại  tô màu
+                if (row_vi_tri_remove < 0 || row_vi_tri_remove > limit_view - 1       ||  col_vi_tri_remove < 0 || col_vi_tri_remove > limit_col_view - 1  ) 
+                  {        }
+                 else {
+                   Object.assign(a.current.children[row_vi_tri_remove +1 ].children[col_vi_tri_remove+1].style, css.remove_click); 
+                     a.current.children[row_vi_tri_remove +1 ].children[col_vi_tri_remove+1].blur(); 
+                    }
+           
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               // 2.Tô màu vị trí mới
+               // tô màu vị trí mới  nếu vị trí trước đó = null hoặc không nằm trong khung nhìn thì set lại vị trí trước đó ngược lại  tô màu
               
-                if (row_vi_tri_add < 0 || row_vi_tri_add > limit_view - 1 )   {      vi_tri_o_truoc[0] = row_vi_tri_add ;   vi_tri_o_truoc[1] = col_vi_tri_add ;          }
+                if (row_vi_tri_add < 0 || row_vi_tri_add > limit_view - 1         ||  col_vi_tri_add < 0 || col_vi_tri_add > limit_col_view - 1)   {      vi_tri_o_truoc[0] = row_vi_tri_add ;   vi_tri_o_truoc[1] = col_vi_tri_add ;          }
                 else {  
                   
                   Object.assign(a.current.children[row_vi_tri_add + 1].children[col_vi_tri_add+1].style, css.click);
@@ -1427,9 +1485,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
   let data_col_lenght = (500 ) *click_scroll_dichuyen ; 
 
 
-  let limit_view  = 0 ;
-  setTimeout(() => { var sum  = 0; while (sum < table_excel_height) { limit_view++; sum = a.current.children[limit_view].offsetHeight + sum ; } limit_view = limit_view - 3 ; console.log(limit_view); }, 0);
-
+ 
+ 
   function _onScroll(event) {
    
    
@@ -1480,15 +1537,16 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
                           a.current.style.width =(data_col_lenght - di_chuyen_col) +'px'; 
 
-                    //  vi_tri_truoc_di_chuyen là  a.current.children[0 + 1].children[0].innerHTML trước khi scroll
-                      let  vi_tri_truoc_di_chuyen =  a.current.children[0 + 1].children[0].innerHTML ; // là vị trí cắt trước đó
-                      console.log( 'vi_tri_o_truoc--vị tri thẻ input ở khung nhìn trước    ' +  vi_tri_o_truoc)
-                      console.log("vi_tri_truoc_di_chuyen-- vị trí cắt trước đó    "+vi_tri_truoc_di_chuyen)
-                      console.log("vi_tri_cat    "+vi_tri_cat)
+                      let  vi_tri_cat_truoc_do =  a.current.children[0 + 1].children[0].innerHTML ; // là vị trí cắt trước đó
                   
-                      console.log("moi_lan_di_chuyen = vi_tri_cat - vi_tri_cat trước đó    "+(vi_tri_cat - vi_tri_truoc_di_chuyen))
                      
-                      console.log( 'vị tri thẻ input trong khung nhìn ************' + (vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_truoc_di_chuyen))  )
+                      console.log( 'vị tri row thẻ input trong khung nhìn          ' + (vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_cat_truoc_do))  )
+
+                   
+                  
+                     
+                      let  vi_tri_cat_truoc_do_col =  a.current.children[0 ].children[0 + 1].innerHTML ; // là vị trí cắt trước đó
+                      console.log( 'vị tri col thẻ input trong khung nhìn          ' + (vi_tri_o_truoc[1]-(vi_tri_cat_col - vi_tri_cat_truoc_do_col))  )
 
 
 
@@ -1508,13 +1566,13 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                         for (let index = 0; index <= (limit_view - 1); index++) {
                         
                           a.current.children[index + 1].children[0].innerHTML = index + vi_tri_cat;
-                          for (let index_j = 0; index_j <=(limit_col - 1) ; index_j++) {
+                          for (let index_j = 0; index_j <=(limit_col_view - 1) ; index_j++) {
                           
                             a.current.children[index + 1].children[index_j+1].innerHTML = array_2d_data[index +vi_tri_cat][index_j ];
                           }
                         }  
                         // 
-                      change_input_scroll(vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_truoc_di_chuyen),vi_tri_o_truoc[1]); 
+                      change_input_scroll(vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_cat_truoc_do),(vi_tri_o_truoc[1]-(vi_tri_cat_col - vi_tri_cat_truoc_do_col))); 
                             
 
                     }
@@ -1527,7 +1585,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                       
                           a.current.children[index + 1].children[0].innerHTML = index + vi_tri_cat;
                          
-                          for (let index_j = 0; index_j <=(limit_col - 1) ; index_j++) {
+                          for (let index_j = 0; index_j <=(limit_col_view - 1) ; index_j++) {
                            if (index === 0) { a.current.children[0].children[index_j+1].innerHTML = index_j + vi_tri_cat_col; }
                           
                             a.current.children[index + 1].children[index_j+1].innerHTML = array_2d_data[index +vi_tri_cat][index_j +vi_tri_cat_col];
@@ -1537,15 +1595,15 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
                         // nếu sau khi scroll vị trí tô màu update nằm trong khung nhìn thì tô màu lại ngược lại thì không tô màu lại
 
-                        console.log('key_enter:   '+vi_tri_o_truoc[0]+'__'+vi_tri_o_truoc[1]+'__'+(vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_truoc_di_chuyen))+'__'+vi_tri_o_truoc[1]) ;
+                        console.log('key_enter:   '+vi_tri_o_truoc[0]+'__'+vi_tri_o_truoc[1]+'__'+(vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_cat_truoc_do))+'__'+(vi_tri_o_truoc[1]-(vi_tri_cat_col - vi_tri_cat_truoc_do_col)) ) ;
                        
                        
                        
                             // set địa chỉ ô click  sau hành động trên
-                           dia_chi_o_click(vi_tri_o_truoc[0]+ i_array_2d,vi_tri_o_truoc[1],(vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_truoc_di_chuyen)) ,vi_tri_o_truoc[1]) ;
+                           dia_chi_o_click(vi_tri_o_truoc[0]+ i_array_2d,vi_tri_o_truoc[1],(vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_cat_truoc_do)) ,(vi_tri_o_truoc[1]-(vi_tri_cat_col - vi_tri_cat_truoc_do_col)) ) ;
                         console.log(vi_tri_click_in_array_2d_data);
                         console.log(vi_tri_o_truoc)
-                        key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_truoc_di_chuyen),vi_tri_o_truoc[1]);
+                        key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_cat_truoc_do),(vi_tri_o_truoc[1]-(vi_tri_cat_col - vi_tri_cat_truoc_do_col)) );
 
 
                 
