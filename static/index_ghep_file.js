@@ -1162,7 +1162,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                        // khi scroll nếu input trước đó nằm trong khung nhìn thì viết tiếp công thức vào input đó
                         // nếu input trước đó không nằm trong khung nhìn thì viết rồi lưu công thức vào mảng text_formular
                         // sau đó hiện công thức đó lên thanh formular để người dùng viết tiếp.
-                        if ( (r <= limit_view - 1 )&( r >= 0) ) {
+                        if ( (r <= limit_view - 1 )&( r >= 0) &&  (c <= limit_col_view - 1 )&&( c >= 0)) {
                               
                           var input_truoc_do = a.current.children[r + 1].children[c+1].children[0]; 
 
@@ -1570,7 +1570,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                         
                           a.current.children[index + 1].children[0].innerHTML = index + vi_tri_cat;
                           for (let index_j = 0; index_j <=(limit_col_view - 1) ; index_j++) {
-                          
+                            if (index === 0) { a.current.children[0].children[index_j+1].innerHTML = index_j + vi_tri_cat_col; }
                             a.current.children[index + 1].children[index_j+1].innerHTML = array_2d_data[index +vi_tri_cat][index_j + vi_tri_cat_col];
                           }
                         }  
@@ -1698,35 +1698,58 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
               if ( (i_array_2d <= vi_tri_click_in_array_2d_data[0] - limit_view   )||( i_array_2d >= vi_tri_click_in_array_2d_data[0])      ||(j_array_2d <= vi_tri_click_in_array_2d_data[1] - limit_col_view   )||( j_array_2d >= vi_tri_click_in_array_2d_data[1])  ) {
 
-                console.log('tinhs toans 2');
-                table_excel.current.scroll((j_array_2d*45),(vi_tri_click_in_array_2d_data[0]*45 -675))
-                 thanh_dia_chi_0_on_keydown = false ;
-
-                 tinh_toan(vi_tri_click_in_array_2d_data[0] - i_array_2d,vi_tri_click_in_array_2d_data[1] - j_array_2d,"xoa_ky_tu_cong_thuc_thua");
-
-                 let vi_tri_cuon =parseInt((a.current.children[0 + 1].children[0].innerHTML)); 
-                let vi_tri_to_mau = vi_tri_click_in_array_2d_data[0] - vi_tri_cuon ;
-                
-                 key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_to_mau,vi_tri_o_truoc[1]); // tô màu và focus
-
-                 
-                 
-                        // set địa chỉ ô click  sau hành động trên
-                        dia_chi_o_click(vi_tri_click_in_array_2d_data[0] +1 ,vi_tri_click_in_array_2d_data[1] ,vi_tri_click_in_array_2d_data[2] +1  ,vi_tri_click_in_array_2d_data[3] ) ;
+                          console.log('vịtrí ô viết công thức không nằm trong khung nhìn thì di chuyển đến đó sau đó tính toán');
                       
-                        xuat_hien_the_input = false ;   
-                        onKeyDown = false ; 
-                        onKeyDown_1_element = false;
-                        onclick_tinh_toan = false ; 
-        
-               
-          
+                          
+                          if (  ((i_array_2d <= vi_tri_click_in_array_2d_data[0] - limit_view   )||( i_array_2d >= vi_tri_click_in_array_2d_data[0]) )     && ((j_array_2d <= vi_tri_click_in_array_2d_data[1] - limit_col_view   )||( j_array_2d >= vi_tri_click_in_array_2d_data[1]) )  ) 
+                          {
+                            table_excel.current.scroll((vi_tri_click_in_array_2d_data[1]*45 -225),(vi_tri_click_in_array_2d_data[0]*45 -675))
+                         
+                          }
+                          else
+                          {
+                                if ( (i_array_2d <= vi_tri_click_in_array_2d_data[0] - limit_view   )||( i_array_2d >= vi_tri_click_in_array_2d_data[0]) ){
+                                  table_excel.current.scroll((j_array_2d*45),(vi_tri_click_in_array_2d_data[0]*45 -675))
+                               
+                                } 
+                                if (  (j_array_2d <= vi_tri_click_in_array_2d_data[1] - limit_col_view   )||( j_array_2d >= vi_tri_click_in_array_2d_data[1])){
+                                  table_excel.current.scroll((vi_tri_click_in_array_2d_data[1]*45 -225),(i_array_2d *45))
+                            
+
+                          }
+                        
+
+                          }
+
+
+                          
+                          thanh_dia_chi_0_on_keydown = false ;
+
+                          tinh_toan(vi_tri_click_in_array_2d_data[0] - i_array_2d,vi_tri_click_in_array_2d_data[1] - j_array_2d,"xoa_ky_tu_cong_thuc_thua");
+
+                          let vi_tri_cuon =parseInt((a.current.children[0 + 1].children[0].innerHTML)); 
+                          let vi_tri_to_mau = vi_tri_click_in_array_2d_data[0] - vi_tri_cuon ;
+                          
+                          key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_to_mau,vi_tri_o_truoc[1]); // tô màu và focus
+
+                          
+                          
+                                  // set địa chỉ ô click  sau hành động trên
+                                  dia_chi_o_click(vi_tri_click_in_array_2d_data[0] +1 ,vi_tri_click_in_array_2d_data[1] ,vi_tri_click_in_array_2d_data[2] +1  ,vi_tri_click_in_array_2d_data[3] ) ;
+                                
+                                  xuat_hien_the_input = false ;   
+                                  onKeyDown = false ; 
+                                  onKeyDown_1_element = false;
+                                  onclick_tinh_toan = false ; 
+                  
+                        
+                    
                
               }
               else{
 
                 thanh_dia_chi_0_on_keydown = false ;
-              console.log('tinhs toans 1');
+              console.log('vịtrí ô viết công thức nằm trong khung nhìn thì không cần di chuyển đến đó, sau đó tính toán');
               
 
               tinh_toan(vi_tri_click_in_array_2d_data[0] - i_array_2d,vi_tri_click_in_array_2d_data[1] - j_array_2d,"xoa_ky_tu_cong_thuc_thua");
