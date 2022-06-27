@@ -392,7 +392,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
      // ngược lại nếu vị trí con trỏ không đứng sau dấu + thì thì thực hiện các lệnh phía sau là tính toán và trả về kết quả
       console.log('text_den_vi_tri_con_tro----           ' +text_den_vi_tri_con_tro)
      
-      if ((text_den_vi_tri_con_tro.slice(0,1)==="=" || text_den_vi_tri_con_tro.slice(0,1)==="+" )&&(    text_den_vi_tri_con_tro.slice(-1)==="+"  ||  text_den_vi_tri_con_tro.slice(-1)==="-"  ||  text_den_vi_tri_con_tro.slice(-1)==="*"  ||  text_den_vi_tri_con_tro.slice(-1)==="/"  || text_den_vi_tri_con_tro.slice(-1)===","    )      ) { console.log(cong_thuc_chua_hoan_thanh);    return  cong_thuc_chua_hoan_thanh = [i,j,text] ; }
+      if ((text_den_vi_tri_con_tro.slice(0,1)==="=" || text_den_vi_tri_con_tro.slice(0,1)==="+" )&&(    /[\+|\-|\*|\/]/i.test("'"+text_den_vi_tri_con_tro.slice(-1)+"'") || /[\+|\-|\*|\/][\(]+/i.test("'"+text_den_vi_tri_con_tro.slice(-2)+"'")   )      ) 
+      { console.log(cong_thuc_chua_hoan_thanh);    return  cong_thuc_chua_hoan_thanh = [i,j,text] ; }
     
     
     
@@ -731,6 +732,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     var mien_select = [0,0,0,0];
+    var mien_select_quy_ve = [0,0,0,0];
     var row_begin  ; 
     var col_begin  ;
     var row_end = 0 ;
@@ -741,57 +743,43 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     // hàm chọn miền để sau đó copy giống excel
 
     function _onMouseEnter(event,i,j) {
+      console.log('_onMouseEnter');
+      
 
       // react thiết lập event.buttons bằng null : không điều khiển nút chuột để tăng hiệu suất. Để thiết lập event.buttons như javascript gốc cần chạy hàm event.persist();
       event.persist();
 
       //1. Chọn  miền dưới vị trí đầu tiên nhấn giữ chuột và nằm bên phải
-        if (event.buttons == 1&& row_begin <=i && col_begin <=j) {
+        if (event.buttons == 1) {
+
+
           //***  riêng vùng này phải xoá vùng chọn cuối cùng ở các vùng chọn khác vì các vùng đó không chạy code ở = i, = j
+          console.log("miền dưới phải");
           console.log(col_xa_vi_tri_bat_dau_nhat);
           console.log(row_xa_vi_tri_bat_dau_nhat);
     
-                                // xoá vùng chọn còn sót ở phần code 2. Chọn miền trên vị trí đầu tiên nhấn giữ chuột và nằm bên phải
-                                for (let index = row_begin; index >= row_end; index--) {
-                                  for (let index_j = col_begin; index_j <= col_end; index_j++) {
-                                    Object.assign(a.current.children[index +1 ].children[index_j+1].style , css.remove_select) ;
-
-                                  
-                                  }
-                                }
-
-                                  // xoá vùng chọn còn sót ở phần code //3. Chọn  miền dưới vị trí đầu tiên nhấn giữ chuột và nằm bên trái
-
-                                  for (let index = row_begin; index <= row_end; index++) {
-                                    for (let index_j = col_begin; index_j >= col_end; index_j--) {
-                                      Object.assign(a.current.children[index + 1].children[index_j+1].style , css.remove_select) ;
-                                    }
-                                  }
-
-                                  // xoá vùng chọn còn sót ở phần code //4. Chọn miền trên vị trí đầu tiên nhấn giữ chuột và nằm bên trái
-
-                                  for (let index = row_begin; index >= row_end; index--) {
-                                    for (let index_j = col_begin; index_j >= col_end; index_j--) {
-                                      Object.assign(a.current.children[index + 1].children[index_j+1].style , css.remove_select) ;
-                                    }
-                                  }
-
-
-
+                             
 
 
 
 
           mien_select[0] = row_begin ;
           mien_select[1] = col_begin ;
+          mien_select[2] = i ;
+          mien_select[3] = j ;
+
+          if (mien_select[0]<= mien_select[2]) { mien_select_quy_ve[0] = mien_select[0]; mien_select_quy_ve[2] = mien_select[2]}else{ mien_select_quy_ve[0] = mien_select[2]; mien_select_quy_ve[2] = mien_select[0] }
+          if (mien_select[1]<= mien_select[3]) { mien_select_quy_ve[1] = mien_select[1]; mien_select_quy_ve[3] = mien_select[3]}else{ mien_select_quy_ve[1] = mien_select[3]; mien_select_quy_ve[3] = mien_select[1] }
+          
           row_end = i ;
           col_end = j ;
-          if (col_xa_vi_tri_bat_dau_nhat <= j) { col_xa_vi_tri_bat_dau_nhat = j } ;
-          if (row_xa_vi_tri_bat_dau_nhat <= i) { row_xa_vi_tri_bat_dau_nhat = i } ;
-
+           if (col_xa_vi_tri_bat_dau_nhat <= mien_select_quy_ve[3]  && (mien_select[1]<= mien_select[3]) ) { col_xa_vi_tri_bat_dau_nhat = mien_select_quy_ve[3] } ;
+           if (col_xa_vi_tri_bat_dau_nhat <= mien_select_quy_ve[3]  && (mien_select[1]> mien_select[3]) ) { col_xa_vi_tri_bat_dau_nhat = mien_select_quy_ve[1] } ;
+           if (row_xa_vi_tri_bat_dau_nhat <= mien_select_quy_ve[2]  && (mien_select[0]<= mien_select[2])) { row_xa_vi_tri_bat_dau_nhat = mien_select_quy_ve[2] } ;
+           if (row_xa_vi_tri_bat_dau_nhat <= mien_select_quy_ve[2]  && (mien_select[0]> mien_select[2])) { row_xa_vi_tri_bat_dau_nhat = mien_select_quy_ve[0] } ;
           // đánh dấu vùng lựa chọn
-          for (let index = row_begin; index <= row_end; index++) {
-            for (let index_j = col_begin; index_j <= col_end; index_j++) {
+          for (let index = mien_select_quy_ve[0]; index <= mien_select_quy_ve[2]; index++) {
+            for (let index_j =  mien_select_quy_ve[1] ; index_j <=  mien_select_quy_ve[3] ; index_j++) {
               Object.assign(a.current.children[index +1 ].children[index_j+1].style , css.select) ;
               
             
@@ -799,157 +787,33 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
           }
 
           // huỷ bỏ cột chọn thừa
-          for (let index = row_begin; index <= row_xa_vi_tri_bat_dau_nhat; index++) {
-            for (let index_j = col_end + 1 ; index_j <= col_xa_vi_tri_bat_dau_nhat; index_j++) {
+          for (let index = mien_select_quy_ve[0]; index <= row_xa_vi_tri_bat_dau_nhat; index++) {
+            for (let index_j =  mien_select_quy_ve[3] + 1 ; index_j <= col_xa_vi_tri_bat_dau_nhat; index_j++) {
               Object.assign(a.current.children[index + 1].children[index_j+1].style , css.remove_select) ;
             }
           }
 
           // huỷ bỏ dòng chọn thừa
-          for (let index = row_end + 1; index <= row_xa_vi_tri_bat_dau_nhat; index++) {
-            for (let index_j = col_begin ; index_j <= j; index_j++) {
+          for (let index = mien_select_quy_ve[2] + 1; index <= row_xa_vi_tri_bat_dau_nhat; index++) {
+            for (let index_j = mien_select_quy_ve[1] ; index_j <= mien_select_quy_ve[3]; index_j++) {
               Object.assign(a.current.children[index + 1].children[index_j+1].style , css.remove_select) ;
             }
           }
 
           
 
+          col_xa_vi_tri_bat_dau_nhat = mien_select_quy_ve[3] ;
+          row_xa_vi_tri_bat_dau_nhat =  mien_select_quy_ve[2] ;
 
 
 
-
-          mien_select[2] = i ;
-          mien_select[3] = j ;
+         
 
 
         
         }
 
-        //2. Chọn miền trên vị trí đầu tiên nhấn giữ chuột và nằm bên phải
-        if (event.buttons == 1&& row_begin >i && col_begin <=j ) {
-          mien_select[0] = row_begin ;
-          mien_select[1] = col_begin ;
-          row_end = i ;
-          col_end = j ;
-          if (col_xa_vi_tri_bat_dau_nhat <= j) { col_xa_vi_tri_bat_dau_nhat = j } ;
-          if (row_xa_vi_tri_bat_dau_nhat > i || row_xa_vi_tri_bat_dau_nhat == null ) { row_xa_vi_tri_bat_dau_nhat = i } ;
-
-            // đánh dấu vùng lựa chọn
-            for (let index = row_begin; index >= row_end; index--) {
-              for (let index_j = col_begin; index_j <= col_end; index_j++) {
-                Object.assign(a.current.children[index + 1].children[index_j+1].style , css.select) ;
-              }
-            }
-
-              // huỷ bỏ cột chọn thừa
-          for (let index = row_begin; index >= row_xa_vi_tri_bat_dau_nhat; index--) {
-            for (let index_j = col_end + 1 ; index_j <= col_xa_vi_tri_bat_dau_nhat; index_j++) {
-              Object.assign(a.current.children[index +1 ].children[index_j+1].style , css.remove_select) ;
-            }
-          }
-
-
-            // huỷ bỏ dòng chọn thừa
-            for (let index = row_end - 1; index >= row_xa_vi_tri_bat_dau_nhat; index--) {
-              for (let index_j = col_begin ; index_j <= j; index_j++) {
-                Object.assign(a.current.children[index +1 ].children[index_j+1].style , css.remove_select) ;
-              }
-            }
-
-            mien_select[2] = i ;
-            mien_select[3] = j ;
-        
-
-        }
-
-
-          //3. Chọn  miền dưới vị trí đầu tiên nhấn giữ chuột và nằm bên trái
-          if (event.buttons == 1&& row_begin <=i && col_begin >j) {
-            mien_select[0] = row_begin ;
-            mien_select[1] = col_begin ;
-            row_end = i ;
-            col_end = j ;
-            if (col_xa_vi_tri_bat_dau_nhat > j || col_xa_vi_tri_bat_dau_nhat == null ) { col_xa_vi_tri_bat_dau_nhat = j } ;
-            if (row_xa_vi_tri_bat_dau_nhat <= i) { row_xa_vi_tri_bat_dau_nhat = i } ;
-
-              // đánh dấu vùng lựa chọn
-          for (let index = row_begin; index <= row_end; index++) {
-            for (let index_j = col_begin; index_j >= col_end; index_j--) {
-              Object.assign(a.current.children[index + 1].children[index_j+1].style , css.select) ;
-            }
-          }
-
-
-            // huỷ bỏ cột chọn thừa
-            for (let index = row_begin; index <= row_xa_vi_tri_bat_dau_nhat; index++) {
-              for (let index_j = col_end - 1 ; index_j >= col_xa_vi_tri_bat_dau_nhat; index_j--) {
-                Object.assign(a.current.children[index + 1].children[index_j+1].style , css.remove_select) ;
-              }
-            }
-            
-              // huỷ bỏ dòng chọn thừa
-          for (let index = row_end + 1; index <= row_xa_vi_tri_bat_dau_nhat; index++) {
-            for (let index_j = col_begin ; index_j >= j; index_j--) {
-              Object.assign(a.current.children[index + 1].children[index_j+1].style , css.remove_select) ;
-            }
-          }
-
-          mien_select[2] = i ;
-          mien_select[3] = j ;
-        
-    
-            
-    
-    
-          
-          }
-
-
-
-          //4. Chọn miền trên vị trí đầu tiên nhấn giữ chuột và nằm bên trái
-        if (event.buttons == 1&& row_begin >i && col_begin >j ) {
-          mien_select[0] = row_begin ;
-          mien_select[1] = col_begin ;
-          row_end = i ;
-          col_end = j ;
-          if (col_xa_vi_tri_bat_dau_nhat > j || col_xa_vi_tri_bat_dau_nhat == null ) { col_xa_vi_tri_bat_dau_nhat = j } ;
-          if (row_xa_vi_tri_bat_dau_nhat > i || row_xa_vi_tri_bat_dau_nhat == null ) { row_xa_vi_tri_bat_dau_nhat = i } ;
-
-            // đánh dấu vùng lựa chọn
-            for (let index = row_begin; index >= row_end; index--) {
-              for (let index_j = col_begin; index_j >= col_end; index_j--) {
-                Object.assign(a.current.children[index + 1].children[index_j+1].style , css.select) ;
-              }
-            }
-
-              // huỷ bỏ cột chọn thừa
-          for (let index = row_begin; index >= row_xa_vi_tri_bat_dau_nhat; index--) {
-            for (let index_j = col_end - 1 ; index_j >= col_xa_vi_tri_bat_dau_nhat; index_j--) {
-              Object.assign(a.current.children[index + 1].children[index_j+1].style , css.remove_select) ;
-            }
-          }
-
-
-            // huỷ bỏ dòng chọn thừa
-            for (let index = row_end - 1; index >= row_xa_vi_tri_bat_dau_nhat; index--) {
-              for (let index_j = col_begin ; index_j >= j; index_j--) {
-                Object.assign(a.current.children[index + 1].children[index_j+1].style , css.remove_select) ;
-              }
-            }
-
-
-          
-
-            mien_select[2] = i ;
-            mien_select[3] = j ;
-        
-
-        }
-
-
-
-
-
+       
 
 
 
@@ -1071,8 +935,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
                     row_begin =  i ; 
                     col_begin = j ;
-                    row_xa_vi_tri_bat_dau_nhat = 0;
-                    col_xa_vi_tri_bat_dau_nhat = 0 ;
+                    row_xa_vi_tri_bat_dau_nhat = i;
+                    col_xa_vi_tri_bat_dau_nhat = j ;
 
                   // thiết lập để  element div này không lắng nghe sự kiện onKeyDown  (khi dùng chuột ta sẽ khoá nhận bàn phím)
                   onKeyDown = false ;
