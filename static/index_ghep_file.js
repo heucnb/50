@@ -766,10 +766,20 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     // hàm chọn miền để sau đó copy giống excel
 
     function _onMouseEnter(event,i,j) {
-
-      if (turn_off_onMouseEnter === true) {key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],i ,j); return ;   }
       console.log('_onMouseEnter');
+
+      if (xuat_hien_the_input === true) { return ;   }
+
+      if (turn_off_onMouseEnter === true) {
+
+        var _this =  a.current.children[i + 1].children[j+1];
+        _onMouseDown(_this, i, j) ;
+     
+        console.log('turn_off_onMouseEnter = true');
       
+        return ;  
+       }
+    
 
       // react thiết lập event.buttons bằng null : không điều khiển nút chuột để tăng hiệu suất. Để thiết lập event.buttons như javascript gốc cần chạy hàm event.persist();
       event.persist();
@@ -822,9 +832,14 @@ css.canvas_.height = (y_r1c0 - y_r0c0 - 4) + 'px'  ;
 css.canvas_.top = y_r0c0-8 + 'px' ;
 
 css.canvas_.left = x_r0c0 -8 + 'px';
-
+// vẽ khung miền lựa chọn
 Object.assign(canvas_.current.style , css.canvas_) ;
+console.log(mien_select_quy_ve);
 
+
+// khi nhấn chuột trái và di chuyển trong box canvas_ thì ẩn canvas_ đi
+// lúc này bảng tính phía sau canvas_ sẽ không bị canvas_ che nữa
+// và nó sẽ lắng nghe sự kiện _onMouseEnter và vẽ lại khung miền lựa chọn mới
 canvas_.current.onmousemove = function(event){
   
   if (event.buttons == 1) {
@@ -834,6 +849,10 @@ canvas_.current.onmousemove = function(event){
 };
 
 
+// khi nhấn chuột vào khung canvas_  thì ẩn canvas_ đi
+// lúc này bảng tính phía sau canvas_ sẽ không bị canvas_ che nữa
+// và nó sẽ lắng nghe sự kiện _onMouseEnter nhưng lúc này ta thiết lập   turn_off_onMouseEnter = true
+// để chạy sự kiện giống như click chuột vào 1 ô trong bảng tính
 canvas_.current.onmousedown = function(event){
   
  
