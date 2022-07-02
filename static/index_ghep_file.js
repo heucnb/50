@@ -42,7 +42,10 @@
 
         
   
-  var sum  = 0; while (sum < table_excel_height) { limit_view++; sum = a.current.children[limit_view].offsetHeight + sum ; } limit_view = limit_view - 3 ; console.log(limit_view); 
+  var sum  = 0; while (sum < table_excel_height)
+   { limit_view++; sum = a.current.children[limit_view].offsetHeight + sum ; } 
+  limit_view = limit_view - 3 ;
+   console.log(limit_view); 
 
  
   
@@ -63,26 +66,6 @@
 
 
 
-    //  function draw() {
-    //   const canvas = document.getElementById('canvas');
-    //   if (canvas.getContext) {
-    //      const ctx = canvas.getContext('2d');
-    
-    //     ctx.beginPath();
-    //     ctx.arc(75, 75, 50, 0, Math.PI * 2, true); // Outer circle
-    //     ctx.stroke();
-    //     ctx.beginPath();
-    //     ctx.arc(75, 75, 35, 0, Math.PI, false);  // Mouth (clockwise)
-    //     ctx.stroke();
-    //     ctx.beginPath();
-    //     ctx.arc(60, 65, 5, 0, Math.PI * 2, true);  // Left eye
-    //     ctx.stroke();
-    //     ctx.beginPath();
-    //     ctx.arc(90, 65, 5, 0, Math.PI * 2, true);  // Right eye
-    //     ctx.stroke();
-    //   }
-    // }
-    // draw() ;
 
        
       }, []);
@@ -139,7 +122,10 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                 //**************** */ trong javscript thuần ghi giá trị từ bàn phím vào thẻ input sẽ diến ra sau việc lấy giá trị từ thẻ input vào biến.
                 // phải setTimeout ở đây vì phải đợi input lấy giá trị từ bàn phím mới gán vào text_formular
                     // sau đó gán giá trị khi nhấn lên input_formula
-                setTimeout(() => {  text_formular[i + i_array_2d][j + j_array_2d] = input_.value ;  console.log('text_formular--'+  text_formular[i + i_array_2d][j + j_array_2d]); input_formula.value =  text_formular[i + i_array_2d][j + j_array_2d] ; input_formula.vi_tri = [i + i_array_2d,j + j_array_2d] ;  }, 0);
+                setTimeout(() => {  text_formular[i + i_array_2d][j + j_array_2d] = input_.value ;
+                    console.log('text_formular--'+  text_formular[i + i_array_2d][j + j_array_2d]);
+                     input_formula.value =  text_formular[i + i_array_2d][j + j_array_2d] ;
+                      input_formula.vi_tri = [i + i_array_2d,j + j_array_2d] ;  }, 0);
           
                 
                       
@@ -214,7 +200,9 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
              
               // tô màu
              
-              if (row_vi_tri_add < 0 || row_vi_tri_add > limit_view - 1         ||  col_vi_tri_add < 0 || col_vi_tri_add > limit_col_view - 1)   {       console.log(vi_tri_click_in_array_2d_data);   vi_tri_o_truoc[0] = row_vi_tri_add ;   vi_tri_o_truoc[1] = col_vi_tri_add ;          }
+              if (row_vi_tri_add < 0 || row_vi_tri_add > limit_view - 1         ||  col_vi_tri_add < 0 || col_vi_tri_add > limit_col_view - 1)   {  
+                     console.log(vi_tri_click_in_array_2d_data);   vi_tri_o_truoc[0] = row_vi_tri_add ;   vi_tri_o_truoc[1] = col_vi_tri_add ;  
+                            }
               else {   
                        
                         Object.assign( a.current.children[row_vi_tri_add + 1].children[col_vi_tri_add+1].style, css.click);
@@ -252,7 +240,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                       
                 
                           // focus phải đặt trong  setTimeout vì nó phải đợi thẻ input value xuất hiện đã.
-                          //****** chú ý focus trong react sẽ render ra tiêu điểm hiển thị luôn rồi chạy tiếp hoạt động giống  console.log  */
+                          //****** chú ý focus trong react sẽ render ra tiêu điểm hiển thị luôn rồi chạy tiếp hoạt động giống  console. log  */
                           // do vậy nếu ở đoạn code này ta để a.current.children[row_vi_tri_add].children[col_vi_tri_add+1].children[0].focus({preventScroll:true});
                           // thì khi cuộn nhanh quá sẽ có lỗi focus :Uncaught TypeError: Cannot read properties of undefined (reading 'focus') at <anonymous>
                         //  var len = input_.value.length;
@@ -417,7 +405,10 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
       console.log('text_den_vi_tri_con_tro----           ' +text_den_vi_tri_con_tro)
      
       if ((text_den_vi_tri_con_tro.slice(0,1)==="=" || text_den_vi_tri_con_tro.slice(0,1)==="+" )&&(    /[\+|\-|\*|\/]/i.test("'"+text_den_vi_tri_con_tro.slice(-1)+"'") || /[\+|\-|\*|\/][\(]+/i.test("'"+text_den_vi_tri_con_tro.slice(-2)+"'")   )      ) 
-      { console.log(cong_thuc_chua_hoan_thanh);    return  cong_thuc_chua_hoan_thanh = [i,j,text] ; }
+      { 
+        console.log(cong_thuc_chua_hoan_thanh); 
+           return  cong_thuc_chua_hoan_thanh = [i,j,text] ;
+       }
     
     
     
@@ -452,7 +443,9 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
           formular[index_]  = eval("(function(){return "+  "array_2d_data["+(i+i_array_2d)+"]["+(j + j_array_2d)+"]" +" = " + "'"  + error.message + "'"  +  ";})")   
         
           // tính toán lại tất cả các công thức đã viết
-          formular.forEach((element) => {console.log(element); element(); }) ;
+          formular.forEach((element) => {
+            console.log(element);
+             element(); }) ;
           // hiện thị giá trị đã tính toán lên trang web bảng tính
           //element[0] là giá trị i+i_array_2d được lưu nhưng đó là giá trị trước khi scroll. i_array_2d bây giờ là giá trị sau khi scroll.
           //
@@ -502,7 +495,9 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
               
                       formular[index_]  = eval("(function(){return "+  "array_2d_data["+(i+i_array_2d)+"]["+(j + j_array_2d )+"]" +" = " + text.slice(1) +  ";})")   
                       // tính toán lại tất cả các công thức đã viết
-                      formular.forEach((element) => {console.log(element); element(); }) ;
+                      formular.forEach((element) => {
+                        console.log(element);
+                         element(); }) ;
                       // hiện thị giá trị đã tính toán lên trang web bảng tính
                       //element[0] là giá trị i+i_array_2d được lưu nhưng đó là giá trị trước khi scroll. i_array_2d bây giờ là giá trị sau khi scroll.
                       //
@@ -572,7 +567,9 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                                         } 
 
                         // tính toán lại tất cả các công thức đã viết
-                        formular.forEach((element) => {console.log(element); element(); }) ;
+                        formular.forEach((element) => {
+                          console.log(element); 
+                          element(); }) ;
                         // hiện thị giá trị đã tính toán lên trang web bảng tính
                         //element[0] là giá trị i+i_array_2d được lưu nhưng đó là giá trị trước khi scroll. i_array_2d bây giờ là giá trị sau khi scroll.
                         //
@@ -609,7 +606,9 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
                    
                       // tính toán lại tất cả các công thức đã viết
-                      formular.forEach((element) => {console.log(element); element(); }) ;
+                      formular.forEach((element) => {
+                        console.log(element);
+                         element(); }) ;
                       // hiện thị giá trị đã tính toán lên trang web bảng tính
                       //element[0] là giá trị i+i_array_2d được lưu nhưng đó là giá trị trước khi scroll. i_array_2d bây giờ là giá trị sau khi scroll.
                       //
@@ -724,7 +723,10 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
      
         
 
-        setTimeout(() => {  text_formular[i + i_array_2d][j + j_array_2d] = input_.value ;  console.log( text_formular[i + i_array_2d][j + j_array_2d]) ;  input_formula.value =  text_formular[i + i_array_2d][j + j_array_2d] ; input_formula.vi_tri = [i + i_array_2d,j + j_array_2d] ;  } , 0);
+        setTimeout(() => {  
+          text_formular[i + i_array_2d][j + j_array_2d] = input_.value ; 
+           console.log( text_formular[i + i_array_2d][j + j_array_2d]) ; 
+            input_formula.value =  text_formular[i + i_array_2d][j + j_array_2d] ; input_formula.vi_tri = [i + i_array_2d,j + j_array_2d] ;  } , 0);
         input_.focus({preventScroll:true});
 
 
@@ -759,26 +761,28 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     var mien_select_quy_ve = [0,0,0,0];
     var row_begin  ; 
     var col_begin  ;
-  
+    var scroll_them_1_cell = 45 ;
+ 
 
     var turn_off_onMouseEnter = false ;
 
     // hàm chọn miền để sau đó copy giống excel
 
     function _onMouseEnter(event,i,j) {
-      console.log('_onMouseEnter');
+     
 
       if (xuat_hien_the_input === true) { return ;   }
 
-      if (turn_off_onMouseEnter === true) {
+      if (turn_off_onMouseEnter === true)
+            {
 
-        var _this =  a.current.children[i + 1].children[j+1];
-        _onMouseDown(_this, i, j) ;
-     
-        console.log('turn_off_onMouseEnter = true');
-      
-        return ;  
-       }
+              var _this =  a.current.children[i + 1].children[j+1];
+              _onMouseDown(_this, i, j) ;
+          
+              console.log('turn_off_onMouseEnter = true');
+            
+              return ;  
+            }
     
 
       // react thiết lập event.buttons bằng null : không điều khiển nút chuột để tăng hiệu suất. Để thiết lập event.buttons như javascript gốc cần chạy hàm event.persist();
@@ -787,85 +791,113 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     
         if (event.buttons == 1) {
 
-
-       
-
-
-
           mien_select[0] = row_begin ;
           mien_select[1] = col_begin ;
           mien_select[2] = i ;
           mien_select[3] = j ;
-
           if (mien_select[0]<= mien_select[2]) { mien_select_quy_ve[0] = mien_select[0]; mien_select_quy_ve[2] = mien_select[2]}else{ mien_select_quy_ve[0] = mien_select[2]; mien_select_quy_ve[2] = mien_select[0] }
           if (mien_select[1]<= mien_select[3]) { mien_select_quy_ve[1] = mien_select[1]; mien_select_quy_ve[3] = mien_select[3]}else{ mien_select_quy_ve[1] = mien_select[3]; mien_select_quy_ve[3] = mien_select[1] }
           
-       
+          var x_r0c0 = a.current.children[mien_select_quy_ve[0] +1 ].children[mien_select_quy_ve[1]+1].getBoundingClientRect().x;
 
+
+          var x_r0c1 = a.current.children[mien_select_quy_ve[2] +1 ].children[mien_select_quy_ve[3]+1+1].getBoundingClientRect().x;
+
+
+
+          var y_r0c0 = a.current.children[mien_select_quy_ve[0] +1 ].children[mien_select_quy_ve[1]+1].getBoundingClientRect().y;
+
+          var y_r1c0 = a.current.children[mien_select_quy_ve[2] +1+1 ].children[mien_select_quy_ve[1]+1].getBoundingClientRect().y;  
+
+
+
+          css.canvas_.width =(x_r0c1 - x_r0c0 - 4) + 'px'  ;
+
+          css.canvas_.height = (y_r1c0 - y_r0c0 - 4) + 'px'  ;
+
+
+          css.canvas_.top = y_r0c0-8 + 'px' ;
+
+          css.canvas_.left = x_r0c0 -8 + 'px';
+          // vẽ khung miền lựa chọn
+          Object.assign(canvas_.current.style , css.canvas_) ;
+          console.log(mien_select_quy_ve);
+
+
+          // khi nhấn chuột trái và di chuyển trong box canvas_ thì ẩn canvas_ đi
+          // lúc này bảng tính phía sau canvas_ sẽ không bị canvas_ che nữa
+          // và nó sẽ lắng nghe sự kiện _onMouseEnter và vẽ lại khung miền lựa chọn mới
+          var y_end = a.current.children[i +1 ].getBoundingClientRect().y;
+          canvas_.current.onmousemove = function(e){
+            let Y = a.current.children[mien_select_quy_ve[2] +1 ].children[mien_select_quy_ve[3]+1].getBoundingClientRect().y ;
+            let X = a.current.children[mien_select_quy_ve[2] +1 ].children[mien_select_quy_ve[3]+1].getBoundingClientRect().x;
+            
           
+            let y = e.clientY ;
+            let x = e.clientX ;
+           
+            
+            if (e.buttons == 1 && ( x <= X || y <= Y )) {
 
-      
-       
+              if (( x <= X && y <= Y )) {
+                console.log('ve lai--- x, y');
+            
+                _onMouseEnter(event, mien_select_quy_ve[2]-1, mien_select_quy_ve[3]-1) ;
+              } else {
+                if (( x <= X  )) {
+                  console.log('ve lai ---  x');
+            
+                  _onMouseEnter(event, mien_select_quy_ve[2] , mien_select_quy_ve[3] -1 ) ;
 
-          
+                }
+
+                if (( y <= Y  )) {
+                  console.log('ve lai--- y');
+            
+                  _onMouseEnter(event, mien_select_quy_ve[2] - 1, mien_select_quy_ve[3]) ;
+
+                }
+
+                
+              }
+            
+              //Object.assign(canvas_.current.style , css.canvas_,{display : "none"}) ;
+            }
+            // if (y_r1c0 >= y_end ) { 
+           
+            //   scroll_them_1_cell = scroll_them_1_cell + 45 ;
+            //   table_excel.current.scrollTo(0,scroll_them_1_cell ) ;
+    
+            
+            // }
+
+          };
+
+
+          // khi nhấn chuột vào khung canvas_  thì ẩn canvas_ đi
+          // lúc này bảng tính phía sau canvas_ sẽ không bị canvas_ che nữa
+          // và nó sẽ lắng nghe sự kiện _onMouseEnter nhưng lúc này ta thiết lập   turn_off_onMouseEnter = true
+          // để chạy sự kiện giống như click chuột vào 1 ô trong bảng tính
          
+          canvas_.current.onmousedown = function(event){
+            
+          
+              Object.assign(canvas_.current.style ,{display : "none"}) ;
+              turn_off_onMouseEnter = true ;
+             
+
+          };
 
 
-var x_r0c0 = a.current.children[mien_select_quy_ve[0] +1 ].children[mien_select_quy_ve[1]+1].getBoundingClientRect().x;
-
-
-var x_r1c1 = a.current.children[mien_select_quy_ve[2] +1 ].children[mien_select_quy_ve[3]+1+1].getBoundingClientRect().x;
-
-
-
-var y_r0c0 = a.current.children[mien_select_quy_ve[0] +1 ].children[mien_select_quy_ve[1]+1].getBoundingClientRect().y;
-
-var y_r1c0 = a.current.children[mien_select_quy_ve[2] +1+1 ].children[mien_select_quy_ve[1]+1].getBoundingClientRect().y;  
-
-
-
-css.canvas_.width =(x_r1c1 - x_r0c0 - 4) + 'px'  ;
-
-css.canvas_.height = (y_r1c0 - y_r0c0 - 4) + 'px'  ;
-
-
-css.canvas_.top = y_r0c0-8 + 'px' ;
-
-css.canvas_.left = x_r0c0 -8 + 'px';
-// vẽ khung miền lựa chọn
-Object.assign(canvas_.current.style , css.canvas_) ;
-console.log(mien_select_quy_ve);
-
-
-// khi nhấn chuột trái và di chuyển trong box canvas_ thì ẩn canvas_ đi
-// lúc này bảng tính phía sau canvas_ sẽ không bị canvas_ che nữa
-// và nó sẽ lắng nghe sự kiện _onMouseEnter và vẽ lại khung miền lựa chọn mới
-canvas_.current.onmousemove = function(event){
+          
   
-  if (event.buttons == 1) {
-    Object.assign(canvas_.current.style , css.canvas_,{display : "none"}) ;
-  }
-
-};
 
 
-// khi nhấn chuột vào khung canvas_  thì ẩn canvas_ đi
-// lúc này bảng tính phía sau canvas_ sẽ không bị canvas_ che nữa
-// và nó sẽ lắng nghe sự kiện _onMouseEnter nhưng lúc này ta thiết lập   turn_off_onMouseEnter = true
-// để chạy sự kiện giống như click chuột vào 1 ô trong bảng tính
-canvas_.current.onmousedown = function(event){
-  
- 
-    Object.assign(canvas_.current.style ,{display : "none"}) ;
-    turn_off_onMouseEnter = true ;
-
-};
 
 
         }
 
-       
-
+     
 
 
     
@@ -947,7 +979,7 @@ canvas_.current.onmousedown = function(event){
 
 
                     //****Qúa trình chuyển từ Dom ảo react sang Dom ảo javascript thì focus thực thi ngay luôn trước khi input update value nên ta phải setTimeout */
-                    //***chú ý: code javascript chạy xong thì render UI mới chạy trừ   console.log ;    alert  cập nhật luôn sẽ làm code chạy rất chậm;    */
+                    //***chú ý: code javascript chạy xong thì render UI mới chạy trừ   console .log ;    alert  cập nhật luôn sẽ làm code chạy rất chậm;    */
               // gặp setTimeout có thời gian khác 0  thì quá trình render UI thực thi không đợi chạy hết code.
               //  // gặp setTimeout có thời gian = 0  thì quá trình render UI phải đợi chạy hết code xong mới thực thi.
               // không lạm dụng dùng setTimeout vì làm code chậm 
@@ -1706,7 +1738,9 @@ canvas_.current.onmousedown = function(event){
         setTimeout(() => {vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = event.target.selectionStart  ; 
   
          
-          console.log(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input);}, 0); 
+          console.log(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input);
+        
+        }, 0); 
 
     }
 
@@ -1741,7 +1775,7 @@ canvas_.current.onmousedown = function(event){
 
         select: { backgroundColor: "moccasin" },
         remove_select: { backgroundColor: "" },
-        canvas_ : {    height : `100px` , width : `100px`, position: "absolute", top: "300px", left: "400px", display : "inline-block",  border: "2px solid #00A170" }
+        canvas_ : { height : `100px` , width : `100px`, position: "absolute", top: "300px", left: "400px", display : "inline-block",  border: "2px solid #00A170" }
 
 
       }
@@ -1757,7 +1791,7 @@ canvas_.current.onmousedown = function(event){
         <div   style={{ position: "relative"}}  > 
          
           <div>
-          <button onClick={(event)=>{ copy(event) }} > copy </button>
+          <button onClick={(event)=>{ copy(event) }} > copy </button> <button onClick={(event)=>{  table_excel.current.scrollTo(0,90) ; }} > scroll </button>
           </div>
 
           <div  style={{ paddingLeft : "5px", paddingTop : "5px", paddingBottom :" 5px",  backgroundColor: "#bdcebe" ,   display: "flex"}} >
