@@ -839,8 +839,13 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
               } else {
                 if (( x <= X  )) {
                   console.log('ve lai ---  x');
+                  if (row_begin == mien_select_quy_ve[2] && col_begin == mien_select_quy_ve[3]) {
+                    _onMouseEnter(event, mien_select_quy_ve[2] , mien_select_quy_ve[3]  ) ;
+                  } else {
+                    _onMouseEnter(event, mien_select_quy_ve[2] , mien_select_quy_ve[3] -1 ) ;
+                  }
             
-                  _onMouseEnter(event, mien_select_quy_ve[2] , mien_select_quy_ve[3] -1 ) ;
+                  
 
                 }
 
