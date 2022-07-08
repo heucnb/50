@@ -23,7 +23,7 @@
   var table_excel =  useRef(null) ;
       var a =  useRef(null) ;
      var canvas_ = useRef(null) ;
-   
+     var Table_hieu_2 = useRef(null) ;
       var thanh_dia_chi_0 =  useRef(null);
       var thanh_dia_chi_1 =  useRef(null);
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,9 +31,9 @@
       var limit_col_view  = 0 ;
       useEffect(() => {
 
-     
+    document.body.style.margin  = "0px 0px 0px 0px" ;
 
-        
+   
   
   var sum  = 0; while (sum < table_excel_height)
    { limit_view++; sum = a.current.children[limit_view].offsetHeight + sum ; } 
@@ -761,7 +761,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
     // hàm chọn miền để sau đó copy giống excel
 
-    function _onMouseEnter(event,i,j,truyen_row_begin,truyen_col_begin ) {
+    function _onMouseEnter(event,i,j) {
   
      
 
@@ -811,14 +811,14 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
           css.canvas_.height = (y_r1c0 - y_r0c0 - 4) + 'px'  ;
 
 
-          css.canvas_.top = y_r0c0 -8 + 'px' ;
+          css.canvas_.top = y_r0c0 - Table_hieu_2.current.getBoundingClientRect().y + 'px' ;
 
-          css.canvas_.left = x_r0c0 -8 + 'px';
+          css.canvas_.left = x_r0c0 -  Table_hieu_2.current.getBoundingClientRect().x + 'px';
           // vẽ khung miền lựa chọn
           Object.assign(canvas_.current.style , css.canvas_) ;
-         
-          console.log('_onmousemove'+mien_select);
-       
+        
+          console.log(mien_select);
+     
 
           // khi nhấn chuột trái và di chuyển trong box canvas_ thì ẩn canvas_ đi
           // lúc này bảng tính phía sau canvas_ sẽ không bị canvas_ che nữa
@@ -830,29 +830,28 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
             
             let y = e.clientY ;
             let x = e.clientX ;
-            console.log("canvas"+mien_select);
+          
 
             if (row_begin <= mien_select[2] && col_begin <= mien_select[3]) {
-
+             
               // cell đo X, Y là cell cuối lựa chọn
                Y = a.current.children[mien_select[2] +1 ].children[mien_select[3]+1].getBoundingClientRect().y ;
                X = a.current.children[mien_select[2] +1 ].children[mien_select[3]+1 ].getBoundingClientRect().x;
              
-              //  console.log(x);
-              //  console.log(X);
           
-               if (e.buttons == 1 && ( x <= X  || y <= Y  )) {
+          
+               if (e.buttons == 1 && ( x <= X  && y <= Y  )) {
                 console.log('ve lai--- duoi phai');
-                console.log(mien_select);
-
-             ///   _onMouseEnter(event, mien_select[2]-1, mien_select[3]-1) ;
+               
+               
+             
 
                     if ((mien_select[3]=== col_begin)  ) {
-                      console.log('bàng');
+                    
                       _onMouseEnter(event, mien_select[2]-1, mien_select[3]) ;
                     } 
                     else if ((mien_select[2]=== row_begin)) {
-                      console.log('bàng_2');
+                      
                       _onMouseEnter(event, mien_select[2], mien_select[3] - 1) ;
                     } 
                     
@@ -862,19 +861,51 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                     }
               
                
+              }  else if (e.buttons == 1 && ( x <= X   )) {
+
+                console.log('ve lai--- duoi phai');
               
-             
-                // Object.assign(canvas_.current.style ,{display : "none"}) ;
-      
-               // ta không sử dụng {display : "none"} mà  gọi hàm  _onMouseEnter(event, i_update, j_update)
-               // vì để quá trình render UI mượt mà
-               // nếu dùng {display : "none"} thì mất dưới 1 ms để thực thi nhưng khi đó con chuột sẽ tiến vào  và  kích hoạt _onMouseEnter
-               // quá trình chờ để kích hoạt _onMouseEnter phụ thuộc tốc độ thao tác tay người dùng (8-1000 ms ) do quá trình render UI là lắng nghe callstask trống sau 16 ms
-               // nên dù thao tác nhanh 8 ms thì xác suất render UI {display : "none"} sau đó render _onMouseEnter tiếp cao 
-               // => quá trình render UI không mượt
                
+
+                if ((mien_select[3]=== col_begin)  ) {
                 
+                  _onMouseEnter(event, mien_select[2]-1, mien_select[3]) ;
+                } 
+                else if ((mien_select[2]=== row_begin)) {
+                  
+                  _onMouseEnter(event, mien_select[2], mien_select[3] - 1) ;
+                } 
+                
+                
+                else {
+                  _onMouseEnter(event, mien_select[2], mien_select[3]-1) ;
+                }
+
+
+
+              }else if (e.buttons == 1 && ( y <= Y  )) {
+
+                console.log('ve lai--- duoi phai');
+               
+               
+
+                if ((mien_select[3]=== col_begin)  ) {
+                  
+                  _onMouseEnter(event, mien_select[2]-1, mien_select[3]) ;
+                } 
+                else if ((mien_select[2]=== row_begin)) {
+                
+                  _onMouseEnter(event, mien_select[2], mien_select[3] - 1) ;
+                } 
+                
+                
+                else {
+                  _onMouseEnter(event, mien_select[2]-1, mien_select[3]) ;
+                }
+
               }
+
+
 
             }
             if (row_begin <= mien_select[2] && col_begin > mien_select[3]) {
@@ -883,27 +914,64 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
               X = a.current.children[mien_select[2] +1 ].children[mien_select[3]+1 +1].getBoundingClientRect().x;
          
 
-              // console.log(y);
-              // console.log(Y);
-              if (e.buttons == 1 && ( x >= X|| y <= Y )) {
-                console.log('ve lai--- duoi trai');
-                console.log(col_begin);
-                console.log(mien_select);
-        
-               // tới ô cách ô cuối theo đường chéo 1 ô
-              //   _onMouseEnter(event, mien_select[2]-1 , mien_select[3]+1 )  ;
+              
+              if (e.buttons == 1 && ( x >= X && y <= Y )) {
+                          console.log('ve lai--- duoi trai');
+                        
+                         
+              
+                        // tới ô cách ô cuối theo đường chéo 1 ô
+                      
 
-              if ((mien_select[2]=== row_begin)  ) {
-                console.log('bàng');
-                _onMouseEnter(event, mien_select[2], mien_select[3]+1) ;
-              } 
-             
-              else {
-                _onMouseEnter(event, mien_select[2]-1 , mien_select[3]+1 )  ;
+                        if ((mien_select[2]=== row_begin)  ) {
+                          
+                          _onMouseEnter(event, mien_select[2], mien_select[3]+1) ;
+                        } 
+                      
+                        else {
+                          _onMouseEnter(event, mien_select[2]-1 , mien_select[3]+1 )  ;
+                        }
+                    
+                              
+              }else if (e.buttons == 1 && (  x >= X   )) {
+
+                                    console.log('ve lai--- duoi trai');
+                                            
+                                  
+                        
+                                  // tới ô cách ô cuối theo đường chéo 1 ô
+                                
+
+                                  if ((mien_select[2]=== row_begin)  ) {
+                                   
+                                    _onMouseEnter(event, mien_select[2], mien_select[3]+1) ;
+                                  } 
+                                
+                                  else {
+                                    _onMouseEnter(event, mien_select[2] , mien_select[3]+1 )  ;
+                                  }
+
+
+              }else if (e.buttons == 1 && ( y <= Y  )) {
+
+                                  console.log('ve lai--- duoi trai');
+                                          
+                              
+                      
+                                // tới ô cách ô cuối theo đường chéo 1 ô
+                              
+
+                                if ((mien_select[2]=== row_begin)  ) {
+                                
+                                  _onMouseEnter(event, mien_select[2], mien_select[3]+1) ;
+                                } 
+                              
+                                else {
+                                  _onMouseEnter(event, mien_select[2]-1 , mien_select[3] )  ;
+                                }
+
+
               }
-           
-                     
-             }
               
             }
 
@@ -911,26 +979,59 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                    // cell đo X, Y là cell cuối lựa chọn cách 1 dòng
                Y = a.current.children[mien_select[2] +1 +1].children[mien_select[3]+1].getBoundingClientRect().y ;
                X = a.current.children[mien_select[2] +1 +1].children[mien_select[3]+1].getBoundingClientRect().x;
-              //  console.log(mien_select);
-              //   console.log(x);
-              // console.log(X);
-              if (e.buttons == 1 && ( x <= X|| y >= Y )) {
-                console.log('ve lai--- tren phai');
-                console.log(mien_select);
-        
-          // tới ô cách ô cuối theo đường chéo 1 ô
-          //  _onMouseEnter(event, mien_select[2] +1, mien_select[3] -1)  ;
+             
+              if (e.buttons == 1 && ( x <= X && y >= Y )) {
+                              console.log('ve lai--- tren phai');
+                             
+                      
+                        // tới ô cách ô cuối theo đường chéo 1 ô
+                      
 
-          if ((mien_select[3]=== col_begin)  ) {
-            console.log('bàng');
-            _onMouseEnter(event, mien_select[2], mien_select[3]-1) ;
-          } 
-          
-          else {
-            _onMouseEnter(event, mien_select[2] +1, mien_select[3] -1)  ;
-          }
+                        if ((mien_select[3]=== col_begin)  ) {
+                          
+                          _onMouseEnter(event, mien_select[2], mien_select[3]-1) ;
+                        } 
+                        
+                        else {
+                          _onMouseEnter(event, mien_select[2] +1, mien_select[3] -1)  ;
+                        }
            
                      
+             }else if (e.buttons == 1 && (  x <= X   )) {
+
+                          console.log('ve lai--- tren phai');
+                        
+                  
+                    // tới ô cách ô cuối theo đường chéo 1 ô
+                  
+
+                    if ((mien_select[3]=== col_begin)  ) {
+                   
+                      _onMouseEnter(event, mien_select[2], mien_select[3]-1) ;
+                    } 
+                    
+                    else {
+                      _onMouseEnter(event, mien_select[2] , mien_select[3] -1)  ;
+                    }
+
+
+             }else if (e.buttons == 1 && (  y >= Y   )) {
+
+                          console.log('ve lai--- tren phai');
+                       
+                    // tới ô cách ô cuối theo đường chéo 1 ô
+                  
+
+                    if ((mien_select[3]=== col_begin)  ) {
+                     
+                      _onMouseEnter(event, mien_select[2], mien_select[3]-1) ;
+                    } 
+                    
+                    else {
+                      _onMouseEnter(event, mien_select[2] +1, mien_select[3] )  ;
+                    }
+
+              
              }
               
             }
@@ -941,14 +1042,31 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
               Y = a.current.children[mien_select[2] +1 +1].children[mien_select[3]+1+1].getBoundingClientRect().y ;
               X = a.current.children[mien_select[2] +1 +1].children[mien_select[3]+1+1].getBoundingClientRect().x;
              
-             if (e.buttons == 1 && ( x >= X|| y >= Y )) {
-               console.log('ve lai--- tren trai');
-               console.log(mien_select);
-       
-         // tới ô cách ô cuối theo đường chéo 1 ô
-           _onMouseEnter(event, mien_select[2] +1, mien_select[3] +1)  ;
+             if (e.buttons == 1 && ( x >= X && y >= Y )) {
+                      console.log('ve lai--- tren trai');
+                
+              
+                // tới ô cách ô cuối theo đường chéo 1 ô
+                  _onMouseEnter(event, mien_select[2] +1, mien_select[3] +1)  ;
+
+
           
                     
+            }else if (e.buttons == 1 && (  x >= X   )) {
+
+                    console.log('ve lai--- tren trai');
+               
+            
+              // tới ô cách ô cuối theo đường chéo 1 ô
+                _onMouseEnter(event, mien_select[2] , mien_select[3] +1)  ;
+
+            }else if (e.buttons == 1 && ( y >= Y  )) {
+                        console.log('ve lai--- tren trai');
+                   
+                
+                  // tới ô cách ô cuối theo đường chéo 1 ô
+                    _onMouseEnter(event, mien_select[2] +1, mien_select[3] )  ;
+
             }
             }
 
@@ -975,6 +1093,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
           };
 
+    
 
           
   
@@ -1496,10 +1615,10 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
   // cố định scrollHeight thì mới scroll đến cuối được.
   // cố định scrollHeight bằng mã if ( Math.round(event.target.scrollTop) >= data_lenght - 100*20 )
   // hoặc để chiều dài bar_scroll + scrollTop bé hơn scrollHeight (data.lenght  10000 trở lên thì được)
-  let table_excel_height = 700 ;
-  let table_excel_width = 900 ;
-  let limit = 34 ;
-  let limit_col = 20 ;
+  let table_excel_height = window.innerHeight - 105 ;
+  let table_excel_width = window.innerWidth - 8 ;
+  let limit = 100 ;
+  let limit_col = 50 ;
 
   var  array_2d_data_show = array_2d_data.slice(0,limit)   ;
  var array_2d_data_show_0 = array_2d_data_show.map((item, index)=>{    return  item.slice(0, limit_col)}) ;
@@ -1875,7 +1994,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
       return (
       
-        <div   style={{ position: "relative"}}  > 
+        <div   ref={ Table_hieu_2  } style={{ position: "relative"}}  > 
          
           <div>
           <button onClick={(event)=>{ copy(event) }} > copy </button> <button onClick={(event)=>{  table_excel.current.scrollTo(0,90) ; }} > scroll </button>
