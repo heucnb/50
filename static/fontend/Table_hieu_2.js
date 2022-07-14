@@ -30,7 +30,7 @@
       var limit_view  = 0 ;
       var limit_col_view  = 0 ;
       useEffect(() => {
-
+     
     document.body.style.margin  = "0px 0px 0px 0px" ;
 
    
@@ -754,7 +754,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     var mien_select_quy_ve = [0,0,0,0];
     var row_begin  ; 
     var col_begin  ;
-    var scroll_them_1_cell = 45 ;
+   
  
 
     var turn_off_onMouseEnter = false ;
@@ -814,6 +814,15 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
           css.canvas_.top = y_r0c0 - Table_hieu_2.current.getBoundingClientRect().y + 'px' ;
 
           css.canvas_.left = x_r0c0 -  Table_hieu_2.current.getBoundingClientRect().x + 'px';
+
+       
+          if ( ( x_r0c0 -  Table_hieu_2.current.getBoundingClientRect().x)  +  (x_r0c1 - x_r0c0 - 4)  >= table_excel_width) {
+            css.canvas_.width =( table_excel_width - (x_r0c0 -  Table_hieu_2.current.getBoundingClientRect().x )-20 )+ 'px'  ;
+         
+
+          }
+
+
           // vẽ khung miền lựa chọn
           Object.assign(canvas_.current.style , css.canvas_) ;
         
@@ -830,7 +839,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
             
             let y = e.clientY ;
             let x = e.clientX ;
-          
+      
+
 
             if (row_begin <= mien_select[2] && col_begin <= mien_select[3]) {
              
@@ -1615,8 +1625,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
   // cố định scrollHeight thì mới scroll đến cuối được.
   // cố định scrollHeight bằng mã if ( Math.round(event.target.scrollTop) >= data_lenght - 100*20 )
   // hoặc để chiều dài bar_scroll + scrollTop bé hơn scrollHeight (data.lenght  10000 trở lên thì được)
-  let table_excel_height = window.innerHeight - 105 ;
-  let table_excel_width = window.innerWidth - 8 ;
+  let table_excel_height = window.innerHeight - 87.742 ;
+  let table_excel_width = window.innerWidth  ;
   let limit = 100 ;
   let limit_col = 50 ;
 
@@ -1654,7 +1664,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                 di_chuyen = (data_lenght - 4500);
               }
 
-              var di_chuyen_col =  Math.ceil(  (event.target.scrollLeft ) ) ;
+              var di_chuyen_col  ;
 
                  // dừng scroll tại vị trí muốn tthanh cuộn ngang
                  if ( (event.target.scrollLeft ) <=(data_col_lenght - 450)) {
@@ -1951,8 +1961,116 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////
+    var mouse_Y ;
+    var mouse_X ;
+    var myInterval ;
+ 
+  function _onMouseMove (event) {
 
-   
+    var table_excel_scrollTop = table_excel.current.scrollTop ;
+    var table_excel_scrollLeft = table_excel.current.scrollLeft ;
+  clearInterval(myInterval)
+  mouse_Y = event.clientY
+  mouse_X = event.clientX
+
+  let limit_view_row_end = a.current.children[ limit_view + 1 ].getBoundingClientRect().y
+  
+  let limit_view_col_end = a.current.children[0].children[ limit_col_view + 1 ].getBoundingClientRect().x
+
+  let view_row_begin = a.current.children[  1 ].getBoundingClientRect().y
+  let view_col_begin = a.current.children[1].children[   1 ].getBoundingClientRect().x
+
+
+  if (
+    event.buttons == 1 &&
+   (mouse_Y > limit_view_row_end &&
+    mouse_X > limit_view_col_end)
+  
+  ) {
+
+    myInterval = setInterval(() => {
+     
+      table_excel.current.scrollTo(table_excel_scrollLeft + 45 ,table_excel_scrollTop  + 45 )
+      table_excel_scrollTop += 45 ; 
+      table_excel_scrollLeft += 45 ;
+    } , 50)
+
+    document.onmouseup = function () {
+      clearInterval(myInterval)
+    }
+  } else if (event.buttons == 1 && mouse_Y > limit_view_row_end) {
+    myInterval = setInterval(() => {
+    
+      table_excel.current.scrollTop =  table_excel_scrollTop + 45;
+      table_excel_scrollTop += 45 ; 
+
+    } , 50)
+
+    document.onmouseup = function () {
+      clearInterval(myInterval)
+    }
+  } else if (event.buttons == 1 && mouse_X > limit_view_col_end) {
+    myInterval = setInterval(() => {
+    
+      table_excel.current.scrollLeft = table_excel_scrollLeft + 45;
+      table_excel_scrollLeft += 45 ;
+    } , 50)
+
+    document.onmouseup = function () {
+      clearInterval(myInterval)
+    }
+  }else if (
+    event.buttons == 1 &&
+   (mouse_Y < view_row_begin &&
+    mouse_X < view_col_begin)
+  
+  ) {
+
+    myInterval = setInterval(() => {
+     
+      table_excel.current.scrollTo(table_excel_scrollLeft - 45 ,   table_excel_scrollTop- 45 )
+      table_excel_scrollTop -= 45 ; 
+      table_excel_scrollLeft -= 45 ;
+    } , 50)
+
+    document.onmouseup = function () {
+      clearInterval(myInterval)
+    }
+  }else if (event.buttons == 1 && mouse_Y < view_row_begin) {
+    myInterval = setInterval(() => {
+    
+      table_excel.current.scrollTop = table_excel_scrollTop - 45;
+      table_excel_scrollTop -= 45 ; 
+    } , 50)
+
+    document.onmouseup = function () {
+      clearInterval(myInterval)
+    }
+  }else if (event.buttons == 1 && mouse_X < view_col_begin) {
+    myInterval = setInterval(() => {
+    
+      table_excel.current.scrollLeft = table_excel_scrollLeft - 45;
+      table_excel_scrollLeft -= 45 ;
+     
+    } , 50)
+
+    document.onmouseup = function () {
+      clearInterval(myInterval)
+    }
+  }
+
+
+
+}
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    // phải thêm sự kiện _onMouseOut  ở đây vì sự kiện _onMouseMove khi di chuyển chuột vói tốc độ nhanh quá sẽ không bắt kịp do vậy thêm _onMouseOut để bắt 1 lần nữa.
+    function _onMouseOut(event) { 
+      _onMouseMove(event) ;
+    }
+
+   ////////////////////////////////////////////////////////////////////////////////////////////////////////
     function css() {
      
      
@@ -1991,10 +2109,13 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
 
  
-
+// bắt sự kiện onMouseMove  và onMouseOut ở đây chứ không để ở table_excel vì có ưu điểm
+// sự kiện cha lắng nghe onMouseMove  không bị thẻ con canvas che mất nên toạ độ nhận được chính xác và nhạy (nhanh) hơn để ở table_excel
+// để ở table_excel bị canvas che mất nên ra khỏi canvas mới nhận toạ độ và kích hoạt lắng nghe sự kiện nên chậm. Khi người dùng dùng chuột với tốc độ cực kỳ nhanh nó sẽ khồng lắng nghe kịp
+// ta thêm sụ kiện onMouseOut để bắt tiếp 1 lần nữa => di chuyển chuột siêu nhanh vẫn lắng nghe kịp
       return (
       
-        <div   ref={ Table_hieu_2  } style={{ position: "relative"}}  > 
+        <div   onMouseMove ={(event) => { _onMouseMove(event)    }} onMouseOut ={(event) => { _onMouseOut(event)    }}  ref={ Table_hieu_2  } style={{  position: "relative"}}  > 
          
           <div>
           <button onClick={(event)=>{ copy(event) }} > copy </button> <button onClick={(event)=>{  table_excel.current.scrollTo(0,90) ; }} > scroll </button>
@@ -2007,9 +2128,9 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
           </div>
          
        
-          {/*  table_excel chứa khung scroll set ban đầu là 700 px  */}
+        
           <canvas  ref={ canvas_  }   style={{display : "none"}}    ></canvas>  
-    <div ref={ table_excel  }   style={css.table_excel}    onScroll={(event) => { _onScroll(event)    }}     >
+    <div ref={ table_excel  }   style={css.table_excel}    onScroll={(event) => { _onScroll(event)    }}   >
    
   
 
