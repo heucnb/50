@@ -1954,14 +1954,24 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
   
   function _onMouseMove (event) {
     event.persist();
+  
+  document.onmouseup = function () {
+    clearInterval(myInterval)
+  }
+
+
+  document.onmousemove = function (event_window ) {
+    console.log('ccccccccccccccccccccccccccc');
+   // document.getElementById('hh').innerHTML =  mouse_Y ;
     let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML));  
     let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML)); 
-   
+
+
     var table_excel_scrollTop = table_excel.current.scrollTop ;
     var table_excel_scrollLeft = table_excel.current.scrollLeft ;
   clearInterval(myInterval)
-  mouse_Y = event.clientY
-  mouse_X = event.clientX
+  mouse_Y = event_window.clientY
+  mouse_X = event_window.clientX
 
   let limit_view_row_end = a.current.children[ limit_view + 1 ].getBoundingClientRect().y
   
@@ -1973,7 +1983,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
      
 
   if (
-    event.buttons == 1 &&
+    event_window.buttons == 1 &&
    (mouse_Y > limit_view_row_end &&
     mouse_X > limit_view_col_end)
   
@@ -1984,31 +1994,31 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
       table_excel.current.scrollTo(table_excel_scrollLeft + 45 ,table_excel_scrollTop  + 45 )
       table_excel_scrollTop += 45 ; 
       table_excel_scrollLeft += 45 ;
-    } , 10)
+    } , 50)
 
   
-  } else if (event.buttons == 1 && mouse_Y > limit_view_row_end) {
+  } else if (event_window.buttons == 1 && mouse_Y > limit_view_row_end) {
     myInterval = setInterval(() => {
     
       table_excel.current.scrollTop =  table_excel_scrollTop + 45;
       table_excel_scrollTop += 45 ; 
 
-    } , 10)
+    } , 50)
 
   
 
    
 
-  } else if (event.buttons == 1 && mouse_X > limit_view_col_end) {
+  } else if (event_window.buttons == 1 && mouse_X > limit_view_col_end) {
     myInterval = setInterval(() => {
     
       table_excel.current.scrollLeft = table_excel_scrollLeft + 45;
       table_excel_scrollLeft += 45 ;
-    } , 10)
+    } , 50)
 
   
   }else if (
-    event.buttons == 1 &&
+    event_window.buttons == 1 &&
    (mouse_Y < view_row_begin &&
     mouse_X < view_col_begin)
   
@@ -2019,46 +2029,38 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
       table_excel.current.scrollTo(table_excel_scrollLeft - 45 ,   table_excel_scrollTop- 45 )
       table_excel_scrollTop -= 45 ; 
       table_excel_scrollLeft -= 45 ;
-    } , 10)
+    } , 50)
 
    
-  }else if (event.buttons == 1 && mouse_Y < view_row_begin) {
+  }else if (event_window.buttons == 1 && mouse_Y < view_row_begin) {
     myInterval = setInterval(() => {
     
       table_excel.current.scrollTop = table_excel_scrollTop - 45;
       table_excel_scrollTop -= 45 ; 
-    } , 10)
+    } , 50)
 
   
-  }else if (event.buttons == 1 && mouse_X < view_col_begin) {
+  }else if (event_window.buttons == 1 && mouse_X < view_col_begin) {
     myInterval = setInterval(() => {
     
       table_excel.current.scrollLeft = table_excel_scrollLeft - 45;
       table_excel_scrollLeft -= 45 ;
      
-    } , 10)
+    } , 50)
 
    
   }
 
 
 
-  document.onmouseup = function () {
-    clearInterval(myInterval)
-  }
 
 
-  document.onmousemove = function (event_window) {
-    console.log('ccccccccccccccccccccccccccc');
-    let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML));  
-    let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML)); 
 
 
-    
    
        
-        if (((event_window.clientX < (view_col_begin  - 1 )  )&& event_window.clientY > view_row_begin && event_window.clientY < limit_view_row_end )  ) {
-                    var  elem = document.elementFromPoint(1, event_window.clientY);
+        if (((mouse_X < (view_col_begin  - 1 )  )&& mouse_Y > view_row_begin && mouse_Y < limit_view_row_end )  ) {
+                    var  elem = document.elementFromPoint(1, mouse_Y);
                     if (elem.dataset.bar === 'bar') {
                       var elem_i = parseInt(elem.innerHTML,10) - i_array_2d ;
               
@@ -2068,8 +2070,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
           }
 
 
-          if (((event_window.clientX> (table_excel.current.getBoundingClientRect().x +  table_excel.current.clientWidth) )&& event_window.clientY > view_row_begin && event_window.clientY < limit_view_row_end )  ) {
-            var  elem = document.elementFromPoint(1, event_window.clientY);
+          if (((mouse_X> (table_excel.current.getBoundingClientRect().x +  table_excel.current.clientWidth) )&& mouse_Y > view_row_begin && mouse_Y < limit_view_row_end )  ) {
+            var  elem = document.elementFromPoint(1, mouse_Y);
           
                if (elem.dataset.bar === 'bar') {
                 var elem_i = parseInt(elem.innerHTML,10) - i_array_2d ;
@@ -2077,28 +2079,37 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                 var elem_end = document.elementFromPoint(limit_view_col_end + 5, view_row_begin - 5); 
                 
                 var elem_j = parseInt(elem_end.innerHTML,10) - j_array_2d ;
-                
-                // console.log(elem_i);
-                // console.log(elem_j);
+              
                     if (event_window.buttons == 1) { _onMouseEnter(event, elem_i, elem_j) ; }
                }
 
          }
 
 
-         if ((event_window.clientX > (view_col_begin  + 1 )  )&& (event_window.clientX < (table_excel.current.getBoundingClientRect().x +  table_excel.current.clientWidth) ) && event_window.clientY > limit_view_row_end ) {
+         if ((mouse_X > (view_col_begin  + 1 )  )&& (mouse_X < (table_excel.current.getBoundingClientRect().x +  table_excel.current.clientWidth) ) && mouse_Y > limit_view_row_end ) {
           var  elem = document.elementFromPoint(1, limit_view_row_end);
-          var elem_end = document.elementFromPoint(event_window.clientX, view_row_begin - 5); 
+          var elem_end = document.elementFromPoint(mouse_X, view_row_begin - 5); 
              if (elem.dataset.bar === 'bar' && elem_end.dataset.bar === 'bar') {
               var elem_i = parseInt(elem.innerHTML,10) - i_array_2d ;
               var elem_j = parseInt(elem_end.innerHTML,10) - j_array_2d ;
-              console.log('yyyyyyyyyyyyyyyyyyyyyyyyy');
-              console.log(elem);
-              console.log(elem_end);
+              
                   if (event_window.buttons == 1) { _onMouseEnter(event, elem_i, elem_j) ; }
              }
 
        }
+
+
+       if ((mouse_X > (view_col_begin  + 1 )  )&& (mouse_X < (table_excel.current.getBoundingClientRect().x +  table_excel.current.clientWidth) ) && mouse_Y < view_row_begin -1 ) {
+      
+        var elem_end = document.elementFromPoint(mouse_X, view_row_begin - 5); 
+           if (elem_end.dataset.bar === 'bar') {
+          
+            var elem_j = parseInt(elem_end.innerHTML,10) - j_array_2d ;
+            
+                if (event_window.buttons == 1) { _onMouseEnter(event, 0, elem_j) ; }
+           }
+
+     }
 
 
 
@@ -2190,7 +2201,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
         <div   onMouseMove ={(event) => { _onMouseMove(event)    }} onMouseOut ={(event) => { _onMouseOut(event)    }}  ref={ Table_hieu_2  } style={{  position: "relative"}}  > 
          
           <div>
-          <button onClick={(event)=>{ copy(event) }} > copy </button> <button onClick={(event)=>{  table_excel.current.scrollTo(0,90) ; }} > scroll </button>
+          <button onClick={(event)=>{ copy(event) }} > copy </button> <button id ='hh' onClick={(event)=>{  table_excel.current.scrollTo(0,90) ; }} > scroll </button>
           </div>
 
           <div  style={{ paddingLeft : "5px", paddingTop : "5px", paddingBottom :" 5px",  backgroundColor: "#bdcebe" ,   display: "flex"}} >
