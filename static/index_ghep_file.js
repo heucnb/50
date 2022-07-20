@@ -34,37 +34,21 @@
       var thanh_dia_chi_0 =  useRef(null);
       var thanh_dia_chi_1 =  useRef(null);
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      var limit_view  = 0 ;
-      var limit_col_view  = 0 ;
+      var limit_view   ;
+      var limit_col_view  ;
       useEffect(() => {
      
-    document.body.style.margin  = "0px 0px 0px 0px" ;
+        document.body.style.margin  = "0px 0px 0px 0px" ;
 
-   
-  
-  var sum  = 0; while (sum < table_excel_height)
-   { limit_view++; sum = a.current.children[limit_view].offsetHeight + sum ; } 
-  limit_view = limit_view - 3 ;
-   console.log(limit_view); 
+        var  elem_j = document.elementFromPoint(table_excel.current.getBoundingClientRect().x +  table_excel.current.clientWidth - 2, table_excel.current.getBoundingClientRect().y +2);
+        limit_col_view = parseInt(elem_j.innerHTML,10)  ;
+        
+        var  elem_i = document.elementFromPoint(5, table_excel.current.clientHeight - 2 + table_excel.current.getBoundingClientRect().y);
+        limit_view = parseInt(elem_i.innerHTML,10)  ;
+      
 
- 
-  
-  var sum  = 0;
-  while (sum < table_excel_width) 
-  {
-   limit_col_view++;
-     sum = a.current.children[0].children[limit_col_view].offsetWidth + sum ; 
-   }
-   limit_col_view = limit_col_view - 1 ;
-     console.log(limit_col_view); 
-
-
-
-
-     vi_tri_click_in_array_2d_data = [0,0,0,0] ;
-     key_enter(0,0,0,0); // tô màu và focus
-
-
+        vi_tri_click_in_array_2d_data = [0,0,0,0] ;
+        key_enter(0,0,0,0); // tô màu và focus
 
 
        
@@ -770,7 +754,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
     function _onMouseEnter(event,i,j) {
   
-     
+     console.log('--------' + i+ '--' + j);
 
       if (xuat_hien_the_input === true) { console.log('so lan chay stop'); return  ;   }
 
@@ -787,7 +771,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     
 
       // react thiết lập event.buttons bằng null : không điều khiển nút chuột để tăng hiệu suất. Để thiết lập event.buttons như javascript gốc cần chạy hàm event.persist();
-      event.persist();
+          event.persist();
 
     
         if (event.buttons == 1) {
@@ -797,12 +781,14 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
         
           mien_select[2] = i ;
           mien_select[3] = j ;
+
+        
           if (mien_select[0]<= mien_select[2]) { mien_select_quy_ve[0] = mien_select[0]; mien_select_quy_ve[2] = mien_select[2]}else{ mien_select_quy_ve[0] = mien_select[2]; mien_select_quy_ve[2] = mien_select[0] }
           if (mien_select[1]<= mien_select[3]) { mien_select_quy_ve[1] = mien_select[1]; mien_select_quy_ve[3] = mien_select[3]}else{ mien_select_quy_ve[1] = mien_select[3]; mien_select_quy_ve[3] = mien_select[1] }
-          
+        
           var x_r0c0 = a.current.children[mien_select_quy_ve[0] +1 ].children[mien_select_quy_ve[1]+1].getBoundingClientRect().x;
 
-
+       
           var x_r0c1 = a.current.children[mien_select_quy_ve[2] +1 ].children[mien_select_quy_ve[3]+1+1].getBoundingClientRect().x;
 
 
@@ -833,8 +819,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
           // vẽ khung miền lựa chọn
           Object.assign(canvas_.current.style , css.canvas_) ;
         
-          console.log(mien_select);
-     
+       
 
           // khi nhấn chuột trái và di chuyển trong box canvas_ thì ẩn canvas_ đi
           // lúc này bảng tính phía sau canvas_ sẽ không bị canvas_ che nữa
@@ -1725,10 +1710,10 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                    
                       
                         // cập nhật lại dữ liệu khi scroll -- bước1
-                        for (let index = 0; index <= (limit_view - 1); index++) {
+                        for (let index = 0; index <= (limit_view ); index++) {
                         
                           a.current.children[index + 1].children[0].innerHTML = index + vi_tri_cat;
-                          for (let index_j = 0; index_j <=(limit_col_view - 1) ; index_j++) {
+                          for (let index_j = 0; index_j <=(limit_col_view ) ; index_j++) {
                             if (index === 0) { a.current.children[0].children[index_j+1].innerHTML = index_j + vi_tri_cat_col; }
                             a.current.children[index + 1].children[index_j+1].innerHTML = array_2d_data[index +vi_tri_cat][index_j + vi_tri_cat_col];
                           }
@@ -1743,11 +1728,11 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
                       
                         // cập nhật lại dữ liệu khi scroll -- bước1
-                        for (let index = 0; index <= (limit_view - 1); index++) {
+                        for (let index = 0; index <= (limit_view ); index++) {
                       
                           a.current.children[index + 1].children[0].innerHTML = index + vi_tri_cat;
                          
-                          for (let index_j = 0; index_j <=(limit_col_view - 1) ; index_j++) {
+                          for (let index_j = 0; index_j <=(limit_col_view ) ; index_j++) {
                            if (index === 0) { a.current.children[0].children[index_j+1].innerHTML = index_j + vi_tri_cat_col; }
                           
                             a.current.children[index + 1].children[index_j+1].innerHTML = array_2d_data[index +vi_tri_cat][index_j +vi_tri_cat_col];
@@ -1771,8 +1756,10 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                 
                             
                     }
-          
-          
+
+
+
+
 
   }
 
@@ -1971,9 +1958,12 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     var mouse_Y ;
     var mouse_X ;
     var myInterval ;
- 
+  
   function _onMouseMove (event) {
-
+    event.persist();
+    let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML));  
+    let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML)); 
+   
     var table_excel_scrollTop = table_excel.current.scrollTop ;
     var table_excel_scrollLeft = table_excel.current.scrollLeft ;
   clearInterval(myInterval)
@@ -1986,7 +1976,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
   let view_row_begin = a.current.children[  1 ].getBoundingClientRect().y
   let view_col_begin = a.current.children[1].children[   1 ].getBoundingClientRect().x
-
+       
+     
 
   if (
     event.buttons == 1 &&
@@ -2000,32 +1991,29 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
       table_excel.current.scrollTo(table_excel_scrollLeft + 45 ,table_excel_scrollTop  + 45 )
       table_excel_scrollTop += 45 ; 
       table_excel_scrollLeft += 45 ;
-    } , 50)
+    } , 10)
 
-    document.onmouseup = function () {
-      clearInterval(myInterval)
-    }
+  
   } else if (event.buttons == 1 && mouse_Y > limit_view_row_end) {
     myInterval = setInterval(() => {
     
       table_excel.current.scrollTop =  table_excel_scrollTop + 45;
       table_excel_scrollTop += 45 ; 
 
-    } , 50)
+    } , 10)
 
-    document.onmouseup = function () {
-      clearInterval(myInterval)
-    }
+  
+
+   
+
   } else if (event.buttons == 1 && mouse_X > limit_view_col_end) {
     myInterval = setInterval(() => {
     
       table_excel.current.scrollLeft = table_excel_scrollLeft + 45;
       table_excel_scrollLeft += 45 ;
-    } , 50)
+    } , 10)
 
-    document.onmouseup = function () {
-      clearInterval(myInterval)
-    }
+  
   }else if (
     event.buttons == 1 &&
    (mouse_Y < view_row_begin &&
@@ -2038,33 +2026,116 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
       table_excel.current.scrollTo(table_excel_scrollLeft - 45 ,   table_excel_scrollTop- 45 )
       table_excel_scrollTop -= 45 ; 
       table_excel_scrollLeft -= 45 ;
-    } , 50)
+    } , 10)
 
-    document.onmouseup = function () {
-      clearInterval(myInterval)
-    }
+   
   }else if (event.buttons == 1 && mouse_Y < view_row_begin) {
     myInterval = setInterval(() => {
     
       table_excel.current.scrollTop = table_excel_scrollTop - 45;
       table_excel_scrollTop -= 45 ; 
-    } , 50)
+    } , 10)
 
-    document.onmouseup = function () {
-      clearInterval(myInterval)
-    }
+  
   }else if (event.buttons == 1 && mouse_X < view_col_begin) {
     myInterval = setInterval(() => {
     
       table_excel.current.scrollLeft = table_excel_scrollLeft - 45;
       table_excel_scrollLeft -= 45 ;
      
-    } , 50)
+    } , 10)
 
-    document.onmouseup = function () {
-      clearInterval(myInterval)
-    }
+   
   }
+
+
+
+  document.onmouseup = function () {
+    clearInterval(myInterval)
+  }
+
+
+  document.onmousemove = function (event_window) {
+    console.log('ccccccccccccccccccccccccccc');
+    let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML));  
+    let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML)); 
+
+
+    
+   
+       
+        if (((event_window.clientX < (view_col_begin  - 1 )  )&& event_window.clientY > view_row_begin && event_window.clientY < limit_view_row_end )  ) {
+                    var  elem = document.elementFromPoint(1, event_window.clientY);
+                    if (elem.dataset.bar === 'bar') {
+                      var elem_i = parseInt(elem.innerHTML,10) - i_array_2d ;
+              
+                      if (event_window.buttons == 1) { _onMouseEnter(event, elem_i, 0) ; }
+                      
+                     }
+          }
+
+
+          if (((event_window.clientX> (table_excel.current.getBoundingClientRect().x +  table_excel.current.clientWidth) )&& event_window.clientY > view_row_begin && event_window.clientY < limit_view_row_end )  ) {
+            var  elem = document.elementFromPoint(1, event_window.clientY);
+          
+               if (elem.dataset.bar === 'bar') {
+                var elem_i = parseInt(elem.innerHTML,10) - i_array_2d ;
+
+                var elem_end = document.elementFromPoint(limit_view_col_end + 5, view_row_begin - 5); 
+                
+                var elem_j = parseInt(elem_end.innerHTML,10) - j_array_2d ;
+                
+                // console.log(elem_i);
+                // console.log(elem_j);
+                    if (event_window.buttons == 1) { _onMouseEnter(event, elem_i, elem_j) ; }
+               }
+
+         }
+
+
+         if ((event_window.clientX > (view_col_begin  + 1 )  )&& (event_window.clientX < (table_excel.current.getBoundingClientRect().x +  table_excel.current.clientWidth) ) && event_window.clientY > limit_view_row_end ) {
+          var  elem = document.elementFromPoint(1, limit_view_row_end);
+          var elem_end = document.elementFromPoint(event_window.clientX, view_row_begin - 5); 
+             if (elem.dataset.bar === 'bar' && elem_end.dataset.bar === 'bar') {
+              var elem_i = parseInt(elem.innerHTML,10) - i_array_2d ;
+              var elem_j = parseInt(elem_end.innerHTML,10) - j_array_2d ;
+              console.log('yyyyyyyyyyyyyyyyyyyyyyyyy');
+              console.log(elem);
+              console.log(elem_end);
+                  if (event_window.buttons == 1) { _onMouseEnter(event, elem_i, elem_j) ; }
+             }
+
+       }
+
+
+
+
+
+    
+    
+    
+    
+  }
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
+
 
 
 
@@ -2074,6 +2145,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     // phải thêm sự kiện _onMouseOut  ở đây vì sự kiện _onMouseMove khi di chuyển chuột vói tốc độ nhanh quá sẽ không bắt kịp do vậy thêm _onMouseOut để bắt 1 lần nữa.
     function _onMouseOut(event) { 
+  
       _onMouseMove(event) ;
     }
 
@@ -2090,7 +2162,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
         //overflow: "auto" : Khi chiều cao của box không đủ chứa text, thì thanh scroll sẽ tự động hiển thị ; Khi sử dụng thành phần này sẽ xuất hiện thanh scroll dọc
         table_excel: {  borderCollapse: "collapse",  height: `${table_excel_height}px`, width :  `${table_excel_width}px`,  overflowY: "auto",  overflowX: "auto"},
 
-        bar_reference_row : {  backgroundColor: "#d8dcd6", borderBottomStyle: "none", textAlign: "center" ,        border: "1px ridge #ccc", minWidth: "85px", height: "20px", display: "table-cell" }  ,
+        bar_reference_row : {   backgroundColor: "#d8dcd6", borderBottomStyle: "none", textAlign: "center" ,        border: "1px ridge #ccc", minWidth: "85px", height: "20px", display: "table-cell" }  ,
 
         bar_reference_col : { width: "auto" , textAlign: "center",  paddingLeft : "4px" , paddingRight : "4px",  backgroundColor: "#d8dcd6", borderBottomStyle: "none", textAlign: "center" ,        border: "1px ridge #ccc",  height: "20px", display: "table-cell" }  ,
 
@@ -2143,14 +2215,14 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
        <div  style={{ height : `${data_lenght }px` ,width : `${data_col_lenght }px`,  }}  ref={ a  }  >
                           
-                          <div style={  css.row_excel}  > <div style={ css.bar_reference_col} ></div> {array_2d_data_show_0[0].map((cell, j) => { return <div style={css.bar_reference_row} >{j }</div>})}  </div> 
+                          <div style={  css.row_excel}  > <div    style={ css.bar_reference_col} ></div> {array_2d_data_show_0[0].map((cell, j) => { return <div  data-bar="bar"  style={css.bar_reference_row} >{j }</div>})}  </div> 
                         
                           {array_2d_data_show_0.map((row, i) => {
                             return (
 
                               <div  style={  css.row_excel}    >
 
-                            <div style={ css.bar_reference_col }   >{i }</div> {row.map((cell, j) => {   
+                            <div style={ css.bar_reference_col }  data-bar="bar"  >{i }</div> {row.map((cell, j) => {   
 
                       return <div style={css.col_excel} 
                           
