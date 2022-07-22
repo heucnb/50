@@ -37,7 +37,9 @@
       var limit_view   ;
       var limit_col_view  ;
       useEffect(() => {
-     
+
+        width_bar_reference_col = a.current.children[0].children[0].clientWidth ;
+        console.log(width_bar_reference_col);
         document.body.style.margin  = "0px 0px 0px 0px" ;
 
         var  elem_j = document.elementFromPoint(table_excel.current.getBoundingClientRect().x +  table_excel.current.clientWidth - 2, table_excel.current.getBoundingClientRect().y +2);
@@ -1630,7 +1632,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
   let data_lenght = (10000 ) *click_scroll_dichuyen ; 
   let data_col_lenght = (500 ) *click_scroll_dichuyen ; 
 
-
+var width_bar_reference_col ;
  
  
   function _onScroll(event) {
@@ -1698,7 +1700,29 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
 
 
+  
+                      // update lại width_bar_reference_col  sau khi scroll
+                      width_bar_reference_col = a.current.children[0].children[0].clientWidth ;
+
+                      var sum = 0;
                       
+                      while ( a.current.children[sum + 1].children[ 0 ].getBoundingClientRect().y <= table_excel.current.clientHeight - 2 + table_excel.current.getBoundingClientRect().y) {
+
+                        sum++;
+                      }
+                     
+                      limit_view = sum - 1 ; 
+                      console.log('---------------------------------'+  limit_view);
+
+                      var sum_col = 0;
+                      
+                      while ( a.current.children[0].children[ sum_col + 1 ].getBoundingClientRect().x <= table_excel.current.getBoundingClientRect().x +  table_excel.current.clientWidth - 2) {
+
+                        sum_col++;
+                      }
+                     
+                      limit_col_view = sum_col - 1 ; 
+                      console.log('---------------------------------'+  limit_col_view);
 
                         
                     // nếu công thức chưa hoàn thành(xuất hiện thẻ input)
@@ -1759,6 +1783,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
 
 
+                  
+                   
 
 
   }
@@ -1958,196 +1984,256 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     var mouse_Y ;
     var mouse_X ;
     var myInterval ;
-  
+  var myInterval_0 ;
   function _onMouseMove (event) {
     event.persist();
+
+    var i_truyen ;
+    var j_truyen ;
+
+ 
   
   document.onmouseup = function () {
-    clearInterval(myInterval)
+    clearTimeout(myInterval_0);
+    clearTimeout(myInterval);
+   
   }
 
 
   document.onmousemove = function (event_window ) {
-    console.log('ccccccccccccccccccccccccccc');
-   // document.getElementById('hh').innerHTML =  mouse_Y ;
-    let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML));  
-    let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML)); 
-
-
-    var table_excel_scrollTop = table_excel.current.scrollTop ;
-    var table_excel_scrollLeft = table_excel.current.scrollLeft ;
-  clearInterval(myInterval)
-  mouse_Y = event_window.clientY
-  mouse_X = event_window.clientX
-
-  let limit_view_row_end = a.current.children[ limit_view + 1 ].getBoundingClientRect().y
-  
-  let limit_view_col_end = a.current.children[0].children[ limit_col_view + 1 ].getBoundingClientRect().x
-
-  let view_row_begin = a.current.children[  1 ].getBoundingClientRect().y
-  let view_col_begin = a.current.children[1].children[   1 ].getBoundingClientRect().x
-       
-     
-
-  if (
-    event_window.buttons == 1 &&
-   (mouse_Y > limit_view_row_end &&
-    mouse_X > limit_view_col_end)
-  
-  ) {
-
-    myInterval = setInterval(() => {
-     
-      table_excel.current.scrollTo(table_excel_scrollLeft + 45 ,table_excel_scrollTop  + 45 )
-      table_excel_scrollTop += 45 ; 
-      table_excel_scrollLeft += 45 ;
-    } , 50)
-
-  
-  } else if (event_window.buttons == 1 && mouse_Y > limit_view_row_end) {
-    myInterval = setInterval(() => {
-    
-      table_excel.current.scrollTop =  table_excel_scrollTop + 45;
-      table_excel_scrollTop += 45 ; 
-
-    } , 50)
-
-  
-
    
+   var table_excel_scrollTop = table_excel.current.scrollTop ;
+   var table_excel_scrollLeft = table_excel.current.scrollLeft ;
+   clearTimeout(myInterval_0);
+   clearTimeout(myInterval);
+ mouse_Y = event_window.clientY
+ mouse_X = event_window.clientX
 
-  } else if (event_window.buttons == 1 && mouse_X > limit_view_col_end) {
-    myInterval = setInterval(() => {
-    
-      table_excel.current.scrollLeft = table_excel_scrollLeft + 45;
-      table_excel_scrollLeft += 45 ;
-    } , 50)
-
+// cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài phía dưới bên phải -----------------------------------------------------------------
+ if (
+   event_window.buttons == 1 &&
+  (mouse_Y >table_excel.current.getBoundingClientRect().y +  table_excel.current.clientHeight &&
+   mouse_X > table_excel.current.getBoundingClientRect().x + table_excel.current.clientWidth)
+ 
+ ) {
+  console.log('cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài phía dưới bên phải');
   
-  }else if (
-    event_window.buttons == 1 &&
-   (mouse_Y < view_row_begin &&
-    mouse_X < view_col_begin)
+   myInterval_0 =  setTimeout(function doSomething() {
+     table_excel.current.scrollTo(table_excel_scrollLeft + 45 ,table_excel_scrollTop  + 45 )
+     table_excel_scrollTop += 45 ; 
+     table_excel_scrollLeft += 45 ;
+     myInterval =   setTimeout(doSomething, 10);
+ }, 10);
   
-  ) {
 
-    myInterval = setInterval(() => {
-     
-      table_excel.current.scrollTo(table_excel_scrollLeft - 45 ,   table_excel_scrollTop- 45 )
-      table_excel_scrollTop -= 45 ; 
-      table_excel_scrollLeft -= 45 ;
-    } , 50)
 
-   
-  }else if (event_window.buttons == 1 && mouse_Y < view_row_begin) {
-    myInterval = setInterval(() => {
-    
-      table_excel.current.scrollTop = table_excel_scrollTop - 45;
-      table_excel_scrollTop -= 45 ; 
-    } , 50)
-
+ } 
+// cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài phía dưới bên trái -----------------------------------------------------------------
+  else if (event_window.buttons == 1 && mouse_Y > (table_excel.current.getBoundingClientRect().y + table_excel.current.clientHeight  )&&  mouse_X < (table_excel.current.getBoundingClientRect().x + width_bar_reference_col)) {
   
-  }else if (event_window.buttons == 1 && mouse_X < view_col_begin) {
-    myInterval = setInterval(() => {
-    
-      table_excel.current.scrollLeft = table_excel_scrollLeft - 45;
-      table_excel_scrollLeft -= 45 ;
-     
-    } , 50)
-
-   
-  }
-
-
-
-
-
-
-
-   
-       
-        if (((mouse_X < (view_col_begin  - 1 )  )&& mouse_Y > view_row_begin && mouse_Y < limit_view_row_end )  ) {
-                    var  elem = document.elementFromPoint(1, mouse_Y);
-                    if (elem.dataset.bar === 'bar') {
-                      var elem_i = parseInt(elem.innerHTML,10) - i_array_2d ;
-              
-                      if (event_window.buttons == 1) { _onMouseEnter(event, elem_i, 0) ; }
-                      
-                     }
-          }
-
-
-          if (((mouse_X> (table_excel.current.getBoundingClientRect().x +  table_excel.current.clientWidth) )&& mouse_Y > view_row_begin && mouse_Y < limit_view_row_end )  ) {
-            var  elem = document.elementFromPoint(1, mouse_Y);
-          
-               if (elem.dataset.bar === 'bar') {
-                var elem_i = parseInt(elem.innerHTML,10) - i_array_2d ;
-
-                var elem_end = document.elementFromPoint(limit_view_col_end + 5, view_row_begin - 5); 
-                
-                var elem_j = parseInt(elem_end.innerHTML,10) - j_array_2d ;
-              
-                    if (event_window.buttons == 1) { _onMouseEnter(event, elem_i, elem_j) ; }
-               }
-
-         }
-
-
-         if ((mouse_X > (view_col_begin  + 1 )  )&& (mouse_X < (table_excel.current.getBoundingClientRect().x +  table_excel.current.clientWidth) ) && mouse_Y > limit_view_row_end ) {
-          var  elem = document.elementFromPoint(1, limit_view_row_end);
-          var elem_end = document.elementFromPoint(mouse_X, view_row_begin - 5); 
-             if (elem.dataset.bar === 'bar' && elem_end.dataset.bar === 'bar') {
-              var elem_i = parseInt(elem.innerHTML,10) - i_array_2d ;
-              var elem_j = parseInt(elem_end.innerHTML,10) - j_array_2d ;
-              
-                  if (event_window.buttons == 1) { _onMouseEnter(event, elem_i, elem_j) ; }
-             }
-
-       }
-
-
-       if ((mouse_X > (view_col_begin  + 1 )  )&& (mouse_X < (table_excel.current.getBoundingClientRect().x +  table_excel.current.clientWidth) ) && mouse_Y < view_row_begin -1 ) {
+      console.log('cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài phía dưới bên trái ');
       
-        var elem_end = document.elementFromPoint(mouse_X, view_row_begin - 5); 
-           if (elem_end.dataset.bar === 'bar') {
-          
-            var elem_j = parseInt(elem_end.innerHTML,10) - j_array_2d ;
-            
-                if (event_window.buttons == 1) { _onMouseEnter(event, 0, elem_j) ; }
-           }
+    myInterval_0 =   setTimeout(function doSomething() {
+      table_excel.current.scrollTo(table_excel_scrollLeft - 45 ,table_excel_scrollTop  + 45 )
+      table_excel_scrollTop += 45 ; 
+      table_excel_scrollLeft -= 45 ;
+      myInterval = setTimeout(doSomething, 10);
+  }, 10);
+                              
+                                                         
+                     
+ 
+  
+ 
+  } 
+   // cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài góc trên bên trái----------------------------------------------------------------------------------
+ else if (
+  event_window.buttons == 1 &&
+ (mouse_Y < (table_excel.current.getBoundingClientRect().y + 21) &&
+  mouse_X < (table_excel.current.getBoundingClientRect().x + width_bar_reference_col))
 
-     }
+) {
 
-
-
-
-
-    
-    
-    
-    
-  }
+ 
+   console.log('cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài góc trên bên trái');
+   
+  myInterval_0 =   setTimeout(function doSomething() {
+    table_excel.current.scrollTo(table_excel_scrollLeft - 45 ,   table_excel_scrollTop- 45 )
+    table_excel_scrollTop -= 45 ; 
+    table_excel_scrollLeft -= 45 ; 
+    myInterval = setTimeout(doSomething, 10);
+}, 10);
 
 
 
  
+}
+// cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài phía trên bên phải -----------------------------------------------------------------
+else if (event_window.buttons == 1 && mouse_Y < (table_excel.current.getBoundingClientRect().y + 21)&& mouse_X > table_excel.current.getBoundingClientRect().x + table_excel.current.clientWidth) {
+ 
+ console.log('cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài phía trên bên phải');
+ 
+ myInterval_0 =   setTimeout(function doSomething() {
+   table_excel.current.scrollTo(table_excel_scrollLeft + 45 ,table_excel_scrollTop  - 45 )
+   table_excel_scrollTop -= 45 ; 
+   table_excel_scrollLeft += 45 ;
+   myInterval = setTimeout(doSomething, 10);
+}, 10);
+                           
+                                                      
+                  
+
+
+
+} 
+  // cuộn thanh dọc khi vị trí mouse nằm dưới brower
+ else if (event_window.buttons == 1 && mouse_Y > (table_excel.current.getBoundingClientRect().y + table_excel.current.clientHeight  )) {
+  
+  console.log('cuộn thanh dọc khi vị trí mouse nằm dưới brower');
+  
+   myInterval_0 =   setTimeout(function doSomething() {
+     table_excel.current.scrollTop =  table_excel_scrollTop + 45;
+     table_excel_scrollTop += 45 ; 
+     myInterval = setTimeout(doSomething, 10);
+ }, 10);
+                                // setTimeout ở đây để vẽ lại chạy sau các hàm khi scroll
+                                  setTimeout(() => {
+
+                                    var index = 1;
+                      
+                                    while ( a.current.children[limit_view].children[ index + 1 ].getBoundingClientRect().x <= mouse_X && index <= limit_col_view   ) {
+              
+                                      index++;
+                                    }
+              
+              
+                                      var elem_i = limit_view  ;
+                               
+                                      var elem_j = index - 1 ;
+                                      // chỉ vẽ lại khi vị trí chuột tới ô khác tương ứng
+                                      
+                                    if (event_window.buttons == 1 && i_truyen != elem_i || j_truyen != elem_j) { i_truyen = elem_i ;j_truyen = elem_j ;    _onMouseEnter(event, elem_i, elem_j) ; }
+                                    
+                                    
+                                  }, 0);
+                                                        
+                    
+
+ 
+
+ } 
+ // cuộn thanh ngang khi vị trí mouse nằm ngoài bên phải brower
+ else if (event_window.buttons == 1 && mouse_X > (table_excel.current.getBoundingClientRect().x + table_excel.current.clientWidth) ) {
+   
+  console.log('cuộn thanh ngang khi vị trí mouse nằm ngoài bên phải brower');
+  
+   myInterval_0 =   setTimeout(function doSomething() {
+     table_excel.current.scrollLeft = table_excel_scrollLeft + 45;
+     table_excel_scrollLeft += 45 ; 
+     myInterval =  setTimeout(doSomething, 10);
+ }, 10);
+
+                       // setTimeout ở đây để vẽ lại chạy sau các hàm khi scroll
+                    setTimeout(() => {
+                      var index = 1;
+                    
+                      while ( a.current.children[index].children[ 0].getBoundingClientRect().y <= mouse_Y && index <= limit_view ) {
+  
+                        index++;
+                      }
+  
+                      
+                        var elem_i = index  - 1 ;
+                        var elem_j = limit_col_view ;
+
+                  
+                        // chỉ vẽ lại khi vị trí chuột tới ô khác tương ứng
+                        
+                        if (event_window.buttons == 1 && i_truyen != elem_i || j_truyen != elem_j) { i_truyen = elem_i ;j_truyen = elem_j ;    _onMouseEnter(event, elem_i, elem_j) ; }
+                      
+  
+                      
+                    }, 0);
+                  
+
+
+
+ 
+ }
+
+  // cuộn thanh doc khi vị trí mouse nằm ngoài bên trên brower
+ else if (event_window.buttons == 1 && mouse_Y < (table_excel.current.getBoundingClientRect().y + 21)) {
+  
+  console.log('cuộn thanh doc khi vị trí mouse nằm ngoài bên trên brower');
+  
+   myInterval_0 =   setTimeout(function doSomething() {
+     table_excel.current.scrollTop = table_excel_scrollTop - 45;
+     table_excel_scrollTop -= 45 ; 
+     myInterval =  setTimeout(doSomething, 10);
+ }, 10);
+
+                
+                    // setTimeout ở đây để vẽ lại chạy sau các hàm khi scroll
+                  setTimeout(() => {
+                    var index = 1;
+                
+                    while ( a.current.children[limit_view].children[ index + 1 ].getBoundingClientRect().x <= mouse_X) {
+    
+                      index++;
+                    }
+    
+                    
+                      var elem_i = 0  ;
+                      var elem_j = index - 1 ;
+                      // chỉ vẽ lại khi vị trí chuột tới ô khác tương ứng
+                      
+                    if (event_window.buttons == 1 && i_truyen != elem_i || j_truyen != elem_j) { i_truyen = elem_i ;j_truyen = elem_j ;    _onMouseEnter(event, elem_i, elem_j) ; }
+                    
+                  }, 0);
+               
 
 
 
 
 
+ }
+  // cuộn thanh ngang khi vị trí mouse nằm ngoài bên trái brower
+ else if (event_window.buttons == 1 && mouse_X < (table_excel.current.getBoundingClientRect().x + width_bar_reference_col)) {
+  
+   console.log('cuộn thanh ngang khi vị trí mouse nằm ngoài bên trái brower');
+   
+   myInterval_0 =  setTimeout(function doSomething() {
+     table_excel.current.scrollLeft = table_excel_scrollLeft - 45;
+     table_excel_scrollLeft -= 45 ;
+     myInterval =  setTimeout(doSomething, 10);
+      }, 10);
+
+                  // setTimeout ở đây để vẽ lại chạy sau các hàm khi scroll
+                setTimeout(() => {
+                  var index = 1;
+                
+                  while ( a.current.children[index].children[ 0].getBoundingClientRect().y <= mouse_Y) {
+  
+                    index++;
+                  }
+  
+                  
+                    var elem_i = index - 1 ;
+  
+                    // chỉ vẽ lại khi vị trí chuột tới ô khác tương ứng
+                    
+                  if (event_window.buttons == 1 && i_truyen != elem_i ) { i_truyen = elem_i ;    _onMouseEnter(event, elem_i, 0) ; }
+                  
+                }, 0);
+               
 
 
+  
+ }
 
 
-
-
-
-
-
-     
-
-
+    
+  }
 
 
 }
