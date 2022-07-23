@@ -748,6 +748,9 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     // hàm chọn miền để sau đó copy giống excel
 
     function _onMouseEnter(event,i,j) {
+
+        if (i >  limit_view - 1) { i = limit_view -1 }
+        if (j >  limit_col_view) { j = limit_col_view  }
   
      console.log('--------' + i+ '--' + j);
 
@@ -802,12 +805,12 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
           css.canvas_.top = y_r0c0 - Table_hieu_2.current.getBoundingClientRect().y + 'px' ;
 
           css.canvas_.left = x_r0c0 -  Table_hieu_2.current.getBoundingClientRect().x + 'px';
-
+          // css.canvas_.borderRight = "2px solid #00A170";
        
-          if ( ( x_r0c0 -  Table_hieu_2.current.getBoundingClientRect().x)  +  (x_r0c1 - x_r0c0 - 4)  >= table_excel_width) {
-            css.canvas_.width =( table_excel_width - (x_r0c0 -  Table_hieu_2.current.getBoundingClientRect().x )-20 )+ 'px'  ;
+          if ( ( x_r0c0 -  Table_hieu_2.current.getBoundingClientRect().x)  +  (x_r0c1 - x_r0c0 - 4)  >= table_excel.current.clientWidth) {
+            css.canvas_.width =( table_excel.current.clientWidth - (x_r0c0 -  Table_hieu_2.current.getBoundingClientRect().x ) )+ 'px'  ;
          
-
+            // css.canvas_.borderRight = "none";
           }
 
 
@@ -2100,7 +2103,7 @@ else if (event_window.buttons == 1 && mouse_Y < (table_excel.current.getBounding
                                     }
               
               
-                                      var elem_i = limit_view  ;
+                                      var elem_i = limit_view -1 ;
                                
                                       var elem_j = index - 1 ;
                                       // chỉ vẽ lại khi vị trí chuột tới ô khác tương ứng
@@ -2268,7 +2271,7 @@ else if (event_window.buttons == 1 && mouse_Y < (table_excel.current.getBounding
 
         select: { backgroundColor: "moccasin" },
         remove_select: { backgroundColor: "" },
-        canvas_ : { height : `100px` , width : `100px`, position: "absolute", top: "300px", left: "400px", display : "inline-block",  border: "2px solid #00A170" }
+        canvas_ : { height : `100px` , width : `100px`, position: "absolute", top: "300px", left: "400px", display : "inline-block",  border: "2px solid #00A170",  borderRight: '2px solid #00A170' }
 
 
       }
