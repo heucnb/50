@@ -839,7 +839,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
     function _onMouseEnter(event, x, y,i,j) {
 
-     
+     console.log(x,y,i,j);
       
     
 
@@ -879,10 +879,21 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
             
             let y = e.clientY ;
             let x = e.clientX ;
+
+            let a_1 = vi_tri_o_truoc[0];
+            let b_1 = vi_tri_o_truoc[1] ;
+         
+            if (a_1 <  0) { a_1 = 0 }
+            if (b_1 <  0) { b_1 = 0 }
+
+            if (a_1 >  limit_view - 1) { a_1 =  limit_view - 1}
+            if (b_1 >  limit_col_view) {b_1 =  limit_col_view}
       
 
+            console.log(a_1, b_1, mien_select[2], mien_select[3]);
+            if (a_1 <= mien_select[2] && b_1 <= mien_select[3]) {
 
-            if (vi_tri_o_truoc[0] <= mien_select[2] && vi_tri_o_truoc[1] <= mien_select[3]) {
+
              
               // cell đo X, Y là cell cuối lựa chọn
                Y = a.current.children[mien_select[2] +1 ].children[mien_select[3]+1].getBoundingClientRect().y ;
@@ -891,66 +902,66 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
           
           
                if (e.buttons == 1 && ( x <= X  && y <= Y  )) {
-                console.log('ve lai--- duoi phai');
-               
-               
+                console.log('ve lai trong canvas_ --- duoi phai');
+
+
              
 
-                    if ((mien_select[3]=== vi_tri_o_truoc[1])  ) {
+                    if ((mien_select[3]=== b_1)  ) {
                     
-                      _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2]-1, mien_select[3]) ;
+                      _onMouseEnter(event,a_1, b_1, mien_select[2]-1, mien_select[3]) ;
                     } 
-                    else if ((mien_select[2]=== vi_tri_o_truoc[0])) {
+                    else if ((mien_select[2]=== a_1)) {
                       
-                      _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2], mien_select[3] - 1) ;
+                      _onMouseEnter(event,a_1, b_1, mien_select[2], mien_select[3] - 1) ;
                     } 
                     
                     
                     else {
-                      _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2]-1, mien_select[3]-1) ;
+                      _onMouseEnter(event,a_1, b_1, mien_select[2]-1, mien_select[3]-1) ;
                     }
               
                
               }  else if (e.buttons == 1 && ( x <= X   )) {
 
-                console.log('ve lai--- duoi phai');
+                console.log('ve lai trong canvas_--- duoi phai');
               
                
 
-                if ((mien_select[3]=== vi_tri_o_truoc[1])  ) {
+                if ((mien_select[3]=== b_1)  ) {
                 
-                  _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2]-1, mien_select[3]) ;
+                  _onMouseEnter(event,a_1, b_1, mien_select[2]-1, mien_select[3]) ;
                 } 
-                else if ((mien_select[2]=== vi_tri_o_truoc[0])) {
+                else if ((mien_select[2]=== a_1)) {
                   
-                  _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2], mien_select[3] - 1) ;
+                  _onMouseEnter(event,a_1, b_1, mien_select[2], mien_select[3] - 1) ;
                 } 
                 
                 
                 else {
-                  _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2], mien_select[3]-1) ;
+                  _onMouseEnter(event,a_1, b_1, mien_select[2], mien_select[3]-1) ;
                 }
 
 
 
               }else if (e.buttons == 1 && ( y <= Y  )) {
 
-                console.log('ve lai--- duoi phai');
+                console.log('ve lai trong canvas_--- duoi phai');
                
-               
+              
 
-                if ((mien_select[3]=== vi_tri_o_truoc[1])  ) {
+                if ((mien_select[3]=== b_1)  ) {
                   
-                  _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2]-1, mien_select[3]) ;
+                  _onMouseEnter(event,a_1, b_1, mien_select[2]-1, mien_select[3]) ;
                 } 
-                else if ((mien_select[2]=== vi_tri_o_truoc[0])) {
+                else if ((mien_select[2]=== a_1)) {
                 
-                  _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2], mien_select[3] - 1) ;
+                  _onMouseEnter(event,a_1, b_1, mien_select[2], mien_select[3] - 1) ;
                 } 
                 
                 
                 else {
-                  _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2]-1, mien_select[3]) ;
+                  _onMouseEnter(event,a_1, b_1, mien_select[2]-1, mien_select[3]) ;
                 }
 
               }
@@ -958,7 +969,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
 
             }
-            if (vi_tri_o_truoc[0] <= mien_select[2] && vi_tri_o_truoc[1] > mien_select[3]) {
+            if (a_1 <= mien_select[2] && b_1 > mien_select[3]) {
              // cell đo X, Y là cell cuối lựa chọn cách 1 cột
               Y = a.current.children[mien_select[2] +1 ].children[mien_select[3]+1 +1].getBoundingClientRect().y ;
               X = a.current.children[mien_select[2] +1 ].children[mien_select[3]+1 +1].getBoundingClientRect().x;
@@ -966,58 +977,58 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
               
               if (e.buttons == 1 && ( x >= X && y <= Y )) {
-                          console.log('ve lai--- duoi trai');
+                          console.log('ve lai trong canvas_--- duoi trai');
                         
-                         
+                         console.log(mien_select[2], mien_select[3]+1);
               
                         // tới ô cách ô cuối theo đường chéo 1 ô
                       
 
-                        if ((mien_select[2]=== vi_tri_o_truoc[0])  ) {
+                        if ((mien_select[2]=== a_1)  ) {
                           
-                          _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2], mien_select[3]+1) ;
+                          _onMouseEnter(event,a_1, b_1, mien_select[2], mien_select[3]+1) ;
                         } 
                       
                         else {
-                          _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2]-1 , mien_select[3]+1 )  ;
+                          _onMouseEnter(event,a_1, b_1, mien_select[2]-1 , mien_select[3]+1 )  ;
                         }
                     
                               
               }else if (e.buttons == 1 && (  x >= X   )) {
 
-                                    console.log('ve lai--- duoi trai');
+                                    console.log('ve lai trong canvas_--- duoi trai');
                                             
                                   
                         
                                   // tới ô cách ô cuối theo đường chéo 1 ô
                                 
 
-                                  if ((mien_select[2]=== vi_tri_o_truoc[0])  ) {
+                                  if ((mien_select[2]=== a_1)  ) {
                                    
-                                    _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2], mien_select[3]+1) ;
+                                    _onMouseEnter(event,a_1, b_1, mien_select[2], mien_select[3]+1) ;
                                   } 
                                 
                                   else {
-                                    _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2] , mien_select[3]+1 )  ;
+                                    _onMouseEnter(event,a_1, b_1, mien_select[2] , mien_select[3]+1 )  ;
                                   }
 
 
               }else if (e.buttons == 1 && ( y <= Y  )) {
 
-                                  console.log('ve lai--- duoi trai');
+                                  console.log('ve lai trong canvas_--- duoi trai');
                                           
                               
                       
                                 // tới ô cách ô cuối theo đường chéo 1 ô
                               
 
-                                if ((mien_select[2]=== vi_tri_o_truoc[0])  ) {
+                                if ((mien_select[2]=== a_1)  ) {
                                 
-                                  _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2], mien_select[3]+1) ;
+                                  _onMouseEnter(event,a_1, b_1, mien_select[2], mien_select[3]+1) ;
                                 } 
                               
                                 else {
-                                  _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2]-1 , mien_select[3] )  ;
+                                  _onMouseEnter(event,a_1, b_1, mien_select[2]-1 , mien_select[3] )  ;
                                 }
 
 
@@ -1025,60 +1036,60 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
               
             }
 
-            if (vi_tri_o_truoc[0] > mien_select[2] && vi_tri_o_truoc[1] <= mien_select[3]) {
+            if (a_1 > mien_select[2] && b_1 <= mien_select[3]) {
                    // cell đo X, Y là cell cuối lựa chọn cách 1 dòng
                Y = a.current.children[mien_select[2] +1 +1].children[mien_select[3]+1].getBoundingClientRect().y ;
                X = a.current.children[mien_select[2] +1 +1].children[mien_select[3]+1].getBoundingClientRect().x;
              
               if (e.buttons == 1 && ( x <= X && y >= Y )) {
-                              console.log('ve lai--- tren phai');
+                              console.log('ve lai trong canvas_--- tren phai');
                              
                       
                         // tới ô cách ô cuối theo đường chéo 1 ô
                       
 
-                        if ((mien_select[3]=== vi_tri_o_truoc[1])  ) {
+                        if ((mien_select[3]=== b_1)  ) {
                           
-                          _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2], mien_select[3]-1) ;
+                          _onMouseEnter(event,a_1, b_1, mien_select[2], mien_select[3]-1) ;
                         } 
                         
                         else {
-                          _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2] +1, mien_select[3] -1)  ;
+                          _onMouseEnter(event,a_1, b_1, mien_select[2] +1, mien_select[3] -1)  ;
                         }
            
                      
              }else if (e.buttons == 1 && (  x <= X   )) {
 
-                          console.log('ve lai--- tren phai');
+                          console.log('ve lai trong canvas_--- tren phai');
                         
                   
                     // tới ô cách ô cuối theo đường chéo 1 ô
                   
 
-                    if ((mien_select[3]=== vi_tri_o_truoc[1])  ) {
+                    if ((mien_select[3]=== b_1)  ) {
                    
-                      _onMouseEnter(event, vi_tri_o_truoc[0], vi_tri_o_truoc[1],mien_select[2], mien_select[3]-1) ;
+                      _onMouseEnter(event, a_1, b_1,mien_select[2], mien_select[3]-1) ;
                     } 
                     
                     else {
-                      _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2] , mien_select[3] -1)  ;
+                      _onMouseEnter(event,a_1, b_1, mien_select[2] , mien_select[3] -1)  ;
                     }
 
 
              }else if (e.buttons == 1 && (  y >= Y   )) {
 
-                          console.log('ve lai--- tren phai');
+                          console.log('ve lai trong canvas_--- tren phai');
                        
                     // tới ô cách ô cuối theo đường chéo 1 ô
                   
 
-                    if ((mien_select[3]=== vi_tri_o_truoc[1])  ) {
+                    if ((mien_select[3]=== b_1)  ) {
                      
-                      _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2], mien_select[3]-1) ;
+                      _onMouseEnter(event,a_1, b_1, mien_select[2], mien_select[3]-1) ;
                     } 
                     
                     else {
-                      _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2] +1, mien_select[3] )  ;
+                      _onMouseEnter(event,a_1, b_1, mien_select[2] +1, mien_select[3] )  ;
                     }
 
               
@@ -1087,35 +1098,35 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
             }
 
 
-            if (vi_tri_o_truoc[0] > mien_select[2] && vi_tri_o_truoc[1] > mien_select[3]) {
+            if (a_1 > mien_select[2] && b_1 > mien_select[3]) {
                    // cell đo X, Y là cell cuối lựa chọn cách 1 dòng, 1 cột
               Y = a.current.children[mien_select[2] +1 +1].children[mien_select[3]+1+1].getBoundingClientRect().y ;
               X = a.current.children[mien_select[2] +1 +1].children[mien_select[3]+1+1].getBoundingClientRect().x;
              
              if (e.buttons == 1 && ( x >= X && y >= Y )) {
-                      console.log('ve lai--- tren trai');
+                      console.log('ve lai trong canvas_--- tren trai');
                 
               
                 // tới ô cách ô cuối theo đường chéo 1 ô
-                  _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2] +1, mien_select[3] +1)  ;
+                  _onMouseEnter(event,a_1, b_1, mien_select[2] +1, mien_select[3] +1)  ;
 
 
           
                     
             }else if (e.buttons == 1 && (  x >= X   )) {
 
-                    console.log('ve lai--- tren trai');
+                    console.log('ve lai trong canvas_--- tren trai');
                
             
               // tới ô cách ô cuối theo đường chéo 1 ô
-                _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2] , mien_select[3] +1)  ;
+                _onMouseEnter(event,a_1, b_1, mien_select[2] , mien_select[3] +1)  ;
 
             }else if (e.buttons == 1 && ( y >= Y  )) {
-                        console.log('ve lai--- tren trai');
+                        console.log('ve lai trong canvas_--- tren trai');
                    
                 
                   // tới ô cách ô cuối theo đường chéo 1 ô
-                    _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1], mien_select[2] +1, mien_select[3] )  ;
+                    _onMouseEnter(event,a_1, b_1, mien_select[2] +1, mien_select[3] )  ;
 
             }
             }
@@ -1633,29 +1644,100 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
               }
     ///////////////////////////////////////////////////////////////////////////////////////////////
   // hàm copy
+
+  var mien_copy ;
   function copy(event) {
-    var mien_copy = [...mien_select];
+     mien_copy = [...mien_select_array_2d];
 
   let text_copy = "";
-    for (let index = mien_copy[0]; index <= mien_copy[2]; index++) {
+    for (let index = mien_copy[0]; index < mien_copy[2]; index++) {
               let text_copy_row = "";
               // đầu tiên nó truyền index = mien_copy[0] xuống for sau đó nó lặp qua các cột ghép thành text dòng
               for (let index_j = mien_copy[1]; index_j < mien_copy[3]; index_j++) {
-                  text_copy_row = text_copy_row +  a.current.children[index + 1].children[index_j+1].innerHTML + "\t";
+                  text_copy_row = text_copy_row + array_2d_data[index][index_j]  + "\t";
               }
-
-              text_copy_row = text_copy_row +  a.current.children[index + 1].children[mien_copy[3]+1].innerHTML ;
+              // cuối cùng của text_copy_row không có "\t"
+              text_copy_row = text_copy_row + array_2d_data[index][mien_copy[3]]  ;
               // ghép tất cả các dòng lại tạo thành text table copy tới excel được
-              text_copy = text_copy +  text_copy_row + "\r";
+             
+                text_copy = text_copy +  text_copy_row + "\r";
+            
+             
 
     }
 
+       // cuối cùng của text_copy tại mien_copy[2] không có "\r"
+                            let text_copy_row = "";
+                            for (let index_j = mien_copy[1]; index_j < mien_copy[3]; index_j++) {
+                              text_copy_row = text_copy_row + array_2d_data[mien_copy[2]][index_j]  + "\t";
+                          }
+
+                            // cuối cùng của text_copy_row không có "\t"
+                            text_copy_row = text_copy_row + array_2d_data[mien_copy[2]][mien_copy[3]]  ;
+                            text_copy = text_copy +  text_copy_row ;
+
 
       navigator.clipboard.writeText(text_copy);
+      canvas_.current.style.borderStyle = "dashed";
+    
   }
 
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////
+  function paste(event) {
+    console.log(vi_tri_o_truoc);
+
+    navigator.clipboard.readText().then(
+
+      (clipText) => { 
+        // chuyển text từ clipboard sang array_paste
+        var array_paste ;
+        array_paste = clipText.split("\r")
+       
+        for (let index = 0; index < array_paste.length; index++) {
+          array_paste[index] =  array_paste[index].split("\t")
+
+        }
+
+        // chuyển data từ array_paste sang array_2d_data
+        array_paste.forEach((item, index)=> {  
+
+          array_paste[0].forEach((item_col, index_col)=> {  
+            array_2d_data[vi_tri_o_truoc[0] + index ][vi_tri_o_truoc[1] + index_col] = array_paste[index][index_col] ;
+           
+          });
+
+         });
+
+
+         // hiện dữ liệu lên khung nhìn
+
+         
+      let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML));  
+      let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML)); 
+
+         for (let index = 0; index <= (limit_view ); index++) {
+                      
+       
+         
+          for (let index_j = 0; index_j <=(limit_col_view ) ; index_j++) {
+           
+          
+            a.current.children[index + 1].children[index_j+1].innerHTML = array_2d_data[index +i_array_2d][index_j +j_array_2d];
+          }
+        }  
+
+
+      
+       
+        
+      }
+      
+      );
+   
+    
+  }
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
   // khi di chuyển scroll đến vị trí cuối nếu để scroll động scrollHeight sẽ tự động tăng kích thước.
@@ -1680,6 +1762,8 @@ var vi_tri_khung_nhin_truoc_scroll = [null, null] ;
  
  
   function _onScroll(event) {
+
+    console.log('_onScroll-----------------------');
    
     let  vi_tri_cat_truoc_do =  a.current.children[0 + 1].children[0].innerHTML ; // là vị trí cắt trước đó
     let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML)); 
@@ -2143,14 +2227,15 @@ var vi_tri_khung_nhin_truoc_scroll = [null, null] ;
     var myInterval ;
   var myInterval_0 ;
   var position_mouse_brower ;
+  var i_truyen ;
+  var j_truyen ;
+
   function _onMouseMove (event) {
 
     
     event.persist();
 
-    var i_truyen ;
-    var j_truyen ;
-
+ 
  
   
   document.onmouseup = function () {
@@ -2255,6 +2340,7 @@ else if (event_window.buttons == 1 && mouse_Y < (table_excel.current.getBounding
   position_mouse_brower = 'ouside_brower';
   
    myInterval_0 =   setTimeout(function doSomething() {
+
      table_excel.current.scrollTop =  table_excel_scrollTop + 45;
      table_excel_scrollTop += 45 ; 
      myInterval = setTimeout(doSomething, 10);
@@ -2514,7 +2600,7 @@ else if (event_window.buttons == 1 && mouse_Y < (table_excel.current.getBounding
         <div   onMouseMove ={(event) => { _onMouseMove(event)    }} onMouseOut ={(event) => { _onMouseOut(event)    }}  ref={ Table_hieu_2  } style={{  position: "relative"}}  > 
          
           <div>
-          <button onClick={(event)=>{ copy(event) }} > copy </button> <button id ='hh' onClick={(event)=>{  table_excel.current.scrollTo(0,90) ; }} > scroll </button>
+          <button onClick={(event)=>{ copy(event) }} > copy </button> <button  onClick={(event)=>{  paste(event)  }} > paste </button>
           </div>
 
           <div  style={{ paddingLeft : "5px", paddingTop : "5px", paddingBottom :" 5px",  backgroundColor: "#bdcebe" ,   display: "flex"}} >
@@ -2545,7 +2631,7 @@ else if (event_window.buttons == 1 && mouse_Y < (table_excel.current.getBounding
                           
                       onMouseDown={(event)=>{var _this =  a.current.children[i + 1].children[j+1]; return _onMouseDown(_this, i, j, event)}} 
 
-                      onMouseEnter={(event)=>{ _onMouseEnter(event,vi_tri_o_truoc[0], vi_tri_o_truoc[1],i,j)}  } 
+                      onMouseEnter={(event)=>{console.log('onMouseEnter gốc ban đầu');  clearTimeout(myInterval_0); clearTimeout(myInterval); let a_1 = vi_tri_o_truoc[0]; let b_1 = vi_tri_o_truoc[1] ; if (a_1 <  0) { a_1 = 0 } ; if (b_1 <  0) { b_1 = 0 } ; if (a_1 >  limit_view - 1) { a_1 =  limit_view - 1} ;  if (b_1 >  limit_col_view) {b_1 =  limit_col_view} ; _onMouseEnter(event,a_1, b_1,i,j)}  } 
                       // biến onKeyDown mặc định là false
                       onKeyDown={(event)=>{ if(onKeyDown){}else{_onKeyDown(event,i,j)}  }}
                       >   </div>
