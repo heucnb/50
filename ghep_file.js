@@ -10,18 +10,22 @@ function ghep_file(){
 
 
     // đọc tên các file trong folder
+    // cho file index.js cuối cùng
     fs.readdirSync(Folder).forEach(file => {
          
      if (path.extname(file) == ""){ fs.readdirSync(Folder + "/" + file ).forEach(file_con => { file_name  =   file_name + "," + file + "/" + file_con;}) };
-     if (path.extname(file) == ".js"){ file_name  =   file_name + "," + file };
+     if (path.extname(file) == ".js" && file !== 'index.js' ){ file_name  =   file_name + "," + file };
     
       console.log(file_name);
     });
-    file_name = file_name.split(",");
-    console.log(file_name);
-    file_name = file_name.slice(1);
-    console.log(file_name);
 
+    // tạo mảng file_name chứa tên các file
+    file_name = file_name.split(",");
+    
+    file_name = file_name.slice(1);
+    file_name.push('index.js')
+    console.log(file_name);
+  
     var fileData = [];
 
      

@@ -6,6 +6,8 @@
   <Table_hieu_2 /> 
 
   </div> ); };
+// convert string to obj: JSON.parse(string_obj);  string to array: string_aray.split(' |_| ');
+ // vd obj :  JSON.stringify(obj); number:  number.toString(); array: array.join(' |_| '); // 'Wind |_| Water'
   // *** thẻ input và button khi click sẽ làm mất sự kiện tiêu điểm của focus, thẻ div thì không. Do đó ta phải setTimeout để lấy lại tiêu điểm sau.
 
 
@@ -1844,14 +1846,14 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     console.log(text);
     let text_replace ;
     let kq ;
-    let text_chi_chua_value  = false;
+    let text_chi_chua_value_hoac_cong_thuc  = false;
     let text_cong_thuc_cell_next ;
     if (text === null) {
-      text_chi_chua_value = true ;
+      text_chi_chua_value_hoac_cong_thuc = true ;
     }else{
 
       if (text.indexOf("Data") === -1) {
-        text_chi_chua_value = true ;
+        text_chi_chua_value_hoac_cong_thuc = true ;
       } else {
          text_replace = text.replaceAll('Data', '|_|Data');
            // tạo mảng lưu trữ text công thức viết
@@ -1876,7 +1878,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                     let data_array_col = [] ;
                     for (let index_doc = 0; index_doc <= keo_ngang; index_doc++) {
                         // fill xong thì lưu vào mảng text_cong_thuc_cell_next
-                        if ( text_chi_chua_value === true ) {
+                        if ( text_chi_chua_value_hoac_cong_thuc === true ) {
 
                           data_array_col.push(text) ;
                           
@@ -1980,23 +1982,55 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                               else{
 
                                         let index_ = index_formular[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col] ;
-
+                                        console.log(formular);
+                                        console.log(vi_tri_o_truoc[0] + i_array_2d + index,vi_tri_o_truoc[1] + j_array_2d + index_col);
+                                          console.log(index_);
                                         if (index_!== null ) {
                                             // xoá công thức ở vị trí đó 
                                                 // index_formular[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col]   là vị trí index trong    formular
                                                 formular.splice( index_, 1);
                                                 index_formular[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col]= null ;
-                                          // push công thức mới vào nếu không phải là giá trị
-                                          formular.push(eval("(function(){return "+  "Data["+(vi_tri_o_truoc[0] + i_array_2d + index)+"]["+(vi_tri_o_truoc[1] + j_array_2d + index_col )+"]" +" = " + data_array_2d[index][index_col] +  ";})")  ) 
-                                          index_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col]  = formular.length - 1 ;
-                                          text_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col] =data_array_2d[index][index_col] ;
-                                          
+                                          // push công thức mới 
+                                                      if (text.slice(0,1)!=="=" && text.slice(0,1)!=="+" ) {
+
+                                                        // nếu fill ô chỉ chứa giá trị thì ghi giá trị vào Data
+                                                        Data[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col] = + data_array_2d[index][index_col] ;
+                                                        text_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col] =data_array_2d[index][index_col] ;
+                                                      
+                                                      }else if ((text.slice(0,1)==="=" && text.slice(0,1)==="+" )&& text_chi_chua_value_hoac_cong_thuc === true) {
+                                                        // nếu fill ô chứa công thức mà trong công thức không có chứa Data thì tính công thức rồi ghi vào Data
+                                                        Data[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col] = eval(data_array_2d[index][index_col] );
+                                                        text_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col] =data_array_2d[index][index_col] ;
+                                                        // nếu fill ô chứa công thức mà trong công thức chứa   Data thì push vào formular
+                                                      } else {
+                                                        formular.push(eval("(function(){return "+  "Data["+(vi_tri_o_truoc[0] + i_array_2d + index)+"]["+(vi_tri_o_truoc[1] + j_array_2d + index_col )+"]" +" = " + data_array_2d[index][index_col] +  ";})")  ) 
+                                                        index_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col]  = formular.length - 1 ;
+                                                        text_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col] =data_array_2d[index][index_col] ;
+                                                        console.log(formular);
+                                                      }
+
+                                         
                                         } else {
-                                         // push công thức mới vào nếu không phải là giá trị
-                                          formular.push(eval("(function(){return "+  "Data["+(vi_tri_o_truoc[0] + i_array_2d + index)+"]["+(vi_tri_o_truoc[1] + j_array_2d + index_col )+"]" +" = " + data_array_2d[index][index_col] +  ";})")  ) 
-                                          index_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col]  = formular.length - 1 ;
-                                          text_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col] =data_array_2d[index][index_col] ;
-                                          
+                                          // dữ liệu fill vào ô chưa viết công thức nên chỉ push công thức mới vào formular không phải xoá công thức cũ
+
+
+                                                    if (text.slice(0,1)!=="=" && text.slice(0,1)!=="+" ) {
+                                                      // nếu fill ô chỉ chứa giá trị thì ghi giá trị vào Data
+                                                      Data[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col] =+ data_array_2d[index][index_col] ;
+                                                      text_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col] =data_array_2d[index][index_col] ;
+                                                    
+                                                    }else if ((text.slice(0,1)==="=" && text.slice(0,1)==="+" )&& text_chi_chua_value_hoac_cong_thuc === true) {
+                                                        // nếu fill ô chứa công thức mà trong công thức không có chứa Data thì tính công thức rồi ghi vào Data
+                                                      Data[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col] = eval(data_array_2d[index][index_col] );
+                                                      text_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col] =data_array_2d[index][index_col] ;
+                                                    
+                                                    } else {
+                                                       // nếu fill ô chứa công thức mà trong công thức chứa   Data thì push vào formular
+                                                      formular.push(eval("(function(){return "+  "Data["+(vi_tri_o_truoc[0] + i_array_2d + index)+"]["+(vi_tri_o_truoc[1] + j_array_2d + index_col )+"]" +" = " + data_array_2d[index][index_col] +  ";})")  ) 
+                                                      index_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col]  = formular.length - 1 ;
+                                                      text_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col] =data_array_2d[index][index_col] ;
+                                                      
+                                                    }          
                                         }
                                    
                                
@@ -2005,14 +2039,17 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
                        
                      } 
-                   }     
+                   }   
+                   
+                   let _len = formular.length ;
                       // tính toán lại công thức mới ghi
-                      for (let index = 0; index < len ; index++) { formular[index](); }
+                      for (let index = len ; index < _len  ; index++) { formular[index](); }
 
                       // tính toán lại tất cả các công thức đã viết
-                      let _len = formular.length ;
+                    
                       for (let index = 0; index < _len ; index++) { formular[index](); }
                     
+                      console.log(formular);
                     // hiện thị giá trị đã tính toán lên trang web bảng tính
                     for (let index = 0; index <= (limit_view ); index++) {
                       for (let index_j = 0; index_j <=(limit_col_view ) ; index_j++) {
@@ -3016,8 +3053,6 @@ event.persist();
 
     };
     
-// convert string to obj: JSON.parse(string_obj);  string to array: string_aray.split(' |_| ');
- // vd obj :  JSON.stringify(obj); number:  number.toString(); array: array.join(' |_| '); // 'Wind |_| Water'
 
 
 const {createStore} = Redux;
