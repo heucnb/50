@@ -12,7 +12,7 @@
 
     var vi_tri_o_truoc = [null,null] ;
     var vi_tri_click_in_Data =[null,null, null, null];
-    var  key_formular = [] ;
+  
     var  formular = [];
 
     var cong_thuc_chua_hoan_thanh = "";
@@ -63,7 +63,34 @@
         vi_tri_click_in_Data = [0,0,0,0] ;
         key_enter(0,0,0,0); // tô màu và focus
 
+        mien_select_array_2d[0] =  0 ;
+        mien_select_array_2d[1] =  0 ;
+      
+        _onMouseEnter_not_event(0, 0, 0, 0) ;
+       
 
+        // canvas làm mất lắng nghe sự kiện wheel ở table_excel khi vị trí mouse ở canvas
+        // thêm sự kiện này để khi cuộn canvas table_excel di chuyển
+        canvas_.current.addEventListener("wheel", (evt) => {
+        table_excel.current.scrollTop = table_excel.current.scrollTop  + evt.deltaY ;  
+      });
+
+
+//   canvas làm mất lắng nghe sự kiện click, double click 
+// thêm sự kiện này để ẩn cavas đi
+      canvas_.current.onmousedown = function(event){
+            
+        // khi click vào canvas nếu không fill thì sẽ ẩn canvas đi
+            if (trang_thai_fill === false) {
+              console.log('ẩn canvas');
+              Object.assign(canvas_.current.style ,{display : "none"}) ;
+              turn_off_onMouseEnter = true ;
+              
+            }
+              
+         
+
+      };
        
       }, []);
 
@@ -147,6 +174,11 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                            dia_chi_o_click(i +1+ i_array_2d,j + j_array_2d,i +1 ,j) ;
                 
                     key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],i +1 ,j); // tô màu và focus
+                    mien_select_array_2d[0] = i_array_2d + i + 1 ;
+                    mien_select_array_2d[1] = j_array_2d + j ;
+                  
+                    _onMouseEnter_not_event(i +1, j, i +1, j) ;
+
                   
                     onKeyDown = false ; 
                     setTimeout(() => { onKeyDown_1_element = false ; }, 0);
@@ -319,7 +351,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                 
         
                 xuat_hien_the_input = false ; 
-                xuat_hien_mien_select = false ; 
+             
              
 
     
@@ -345,13 +377,19 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
       // chuyển text null bằng '' để slice không bị lỗi.
       if (text == null) { text = '' ; }
-
-        // khi bấm enter thì xoá ký tự công thức thừa gần focus nhất
+   // Bước 1: kiểm tra xem công thức hoàn thành chưa nếu chưa viết tiếp được.    
+// khi bấm enter thì xoá ký tự công thức thừa gần focus nhất để công thức không hoàn thành cũng tính
         let text_den_vi_tri_con_tro = text.slice(0,vi_tri_con_tro_khi_di_chuyen_trong_double_click_input) ;
+    // z chỗ này chạy khi tính toán bằng cách bấm enter    
+    // kết thúc công thức toàn bộ text co nhiều dấu chẳng hạn +9+6+++ thì xoá hết dấu + ở cuối đi
+  
     if (z=== "xoa_ky_tu_cong_thuc_thua") {
      
       console.log('text_den_vi_tri_con_tro           ' +text_den_vi_tri_con_tro)
 
+      // khi bấm enter z = xoa_ky_tu_cong_thuc_thua ta xoá 1 ký tự công thức  cuối chỗ vị trí con trỏ để công thức không hoàn thành cũng tính
+      // vd:    +9+6+(Data[10][1])+(Data[10][2]) nếu vị trí con trỏ ở (Data[10][1])+ thì ta xoá + nên công thức trở thành hoàn thành
+      // nếu vị trí con trỏ ở (Data[   thì if ở đây không chạy nhưng phía dưới sẽ có hàm kiểm tra thấy cạnh vị trí con trỏ không phải là + nên công thức trở thành hoàn thành
         if ((text_den_vi_tri_con_tro.slice(0,1)==="=" || text_den_vi_tri_con_tro.slice(0,1)==="+" )&&(    text_den_vi_tri_con_tro.slice(-1)==="+"  ||  text_den_vi_tri_con_tro.slice(-1)==="-"  ||  text_den_vi_tri_con_tro.slice(-1)==="*"  ||  text_den_vi_tri_con_tro.slice(-1)==="/"    )     )
          {
               while ((    text_den_vi_tri_con_tro.slice(-1)==="+"  ||  text_den_vi_tri_con_tro.slice(-1)==="-"  ||  text_den_vi_tri_con_tro.slice(-1)==="*"  ||  text_den_vi_tri_con_tro.slice(-1)==="/"     ) ) 
@@ -361,7 +399,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
              
           }
 
-          
+         // kết thúc công thức toàn bộ text co nhiều dấu chẳng hạn +9+6+++ thì xoá hết dấu + ở cuối đi 
         if ((text.slice(0,1)==="=" || text.slice(0,1)==="+" )&&(    text.slice(-1)==="+"  ||  text.slice(-1)==="-"  ||  text.slice(-1)==="*"  ||  text.slice(-1)==="/"    )     )
         {
              while ((    text.slice(-1)==="+"  ||  text.slice(-1)==="-"  ||  text.slice(-1)==="*"  ||  text.slice(-1)==="/"    ) ) 
@@ -374,7 +412,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
        
       
     }
-
+    // z chỗ này chạy khi tính toán bằng cách ấn chuột trái sang ô khác
     if (z=== "xoa_ky_tu_cong_thuc_thua_mouse_down") {
      
       console.log('text_den_vi_tri_con_tro           ' +text_den_vi_tri_con_tro)
@@ -385,6 +423,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
             
               {
                 text_den_vi_tri_con_tro = text_den_vi_tri_con_tro.slice(0,text_den_vi_tri_con_tro.length - 1) ;
+                vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = vi_tri_con_tro_khi_di_chuyen_trong_double_click_input - 1 ;
               }
              
           }
@@ -411,12 +450,14 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
      
       if ((text_den_vi_tri_con_tro.slice(0,1)==="=" || text_den_vi_tri_con_tro.slice(0,1)==="+" )&&(    /[\+|\-|\*|\/]/i.test("'"+text_den_vi_tri_con_tro.slice(-1)+"'") || /[\+|\-|\*|\/][\(]+/i.test("'"+text_den_vi_tri_con_tro.slice(-2)+"'")   )      ) 
       { 
+        console.log('công thức chưa hoàn thành kết thúc ở đây không tính toán');
         console.log(cong_thuc_chua_hoan_thanh); 
            return  cong_thuc_chua_hoan_thanh = [i,j,text] ;
        }
     
     
     
+      // Bước 2: tính toán
       //2.------------------kiểm tra công thức người dùng viết có bị lỗi không nếu bị lỗi thì  kết thúc hàm tính toán ở đây bằng trả về biển lỗi error true để sự kiện khác tính tiếp
       //2.------------------ nếu không lỗi thêm công thức người dùng viết vào mảng formular nơi chứa tất cả các công thức
       if (text.slice(0,1)==="=" || text.slice(0,1)==="+" ) { 
@@ -452,7 +493,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
           formular[index_]();
           // tính toán lại tất cả các công thức đã viết
           let _len = formular.length ;
-          for (let index = 0; index < _len ; index++) { formular[index](); }
+          for (let index = 0; index < _len ; index++) { if (formular[index] !== undefined) { formular[index]()} ; }
         
         // hiện thị giá trị đã tính toán lên trang web bảng tính
         for (let index = 0; index <= (limit_view ); index++) {
@@ -475,7 +516,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                 
      // tính toán lại tất cả các công thức đã viết
      let _len = formular.length ;
-     for (let index = 0; index < _len ; index++) { formular[index](); }
+     for (let index = 0; index < _len ; index++) {if (formular[index] !== undefined) { formular[index]()} ; }
       // hiện thị giá trị đã tính toán lên trang web bảng tính nếu giá trị tính toán sau khi scroll nằm trong khung nhìn
       if ( (i <= limit_view - 1 )&( i >= 0) && (j <= limit_col_view - 1 )&( j >= 0)  ) {
                                           
@@ -526,7 +567,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
           let _len = formular.length ;
           for (let index = 0; index < _len ; index++) { 
             console.log( formular[index]);
-            formular[index](); }
+            if (formular[index] !== undefined) { formular[index]()} ; }
            // hiện thị giá trị đã tính toán lên trang web bảng tính
           for (let index = 0; index <= (limit_view ); index++) {
             for (let index_j = 0; index_j <=(limit_col_view ) ; index_j++) {
@@ -567,7 +608,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                 
                 // tính toán lại tất cả các công thức đã viết
           let _len = formular.length ;
-          for (let index = 0; index < _len ; index++) { formular[index](); }
+          for (let index = 0; index < _len ; index++) { if (formular[index] !== undefined) { formular[index]()} ; }
 
 
                   // hiện thị giá trị đã tính toán lên trang web bảng tính nếu giá trị tính toán sau khi scroll nằm trong khung nhìn
@@ -615,15 +656,16 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                 console.log( "khac nhau" ) ;
 
 
-                                        // xoá công thức ở vị trí đó    
-                                      formular.splice(index_, 1);
-                                      index_formular[(i+i_array_2d)][(j+ j_array_2d )] = null ;
+                                        // xoá công thức ở vị trí đó  nhưng vẫn để lại trong index_formular vị trí index_
+                                        delete formular[index_] ;
+                                  
+                            
                                   
                                         } 
 
                         // tính toán lại tất cả các công thức đã viết
           let _len = formular.length ;
-          for (let index = 0; index < _len ; index++) { formular[index](); }
+          for (let index = 0; index < _len ; index++) { if (formular[index] !== undefined) { formular[index]()} ; }
                       // hiện thị giá trị đã tính toán lên trang web bảng tính
           for (let index = 0; index <= (limit_view ); index++) {
             for (let index_j = 0; index_j <=(limit_col_view ) ; index_j++) {
@@ -640,7 +682,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                   if (isNaN(Number(text)) == true) {
                     Data[i+i_array_2d][j + j_array_2d] = text;
                
-   // kiểm tra xem trong mảng formular có tồn tại vị trí index được lưu chưa. Nếu có thay đổi công thức ở vị trí đó.
+   // kiểm tra xem trong mảng formular có tồn tại vị trí index được lưu chưa. Nếu có xoá công thức ở vị trí đó  
    var index_; 
            
 
@@ -650,8 +692,9 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
      console.log( "khac nhau" ) ;
 
 
-                             formular.splice(index_, 1);
-                             index_formular[(i+i_array_2d)][(j+ j_array_2d )] = null ;
+                          // xoá công thức ở vị trí đó  nhưng vẫn để lại trong index_formular vị trí index_
+                          delete formular[index_] ;
+                                  
                          
                                } 
 
@@ -659,7 +702,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                    
                     // tính toán lại tất cả các công thức đã viết
           let _len = formular.length ;
-          for (let index = 0; index < _len ; index++) { formular[index](); }
+          for (let index = 0; index < _len ; index++) { if (formular[index] !== undefined) { formular[index]()} ; }
                      // hiện thị giá trị đã tính toán lên trang web bảng tính
           for (let index = 0; index <= (limit_view ); index++) {
             for (let index_j = 0; index_j <=(limit_col_view ) ; index_j++) {
@@ -690,12 +733,30 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     if (onKeyDown_1_element === false) {
 
       let i_array_2d =parseInt((a.current.children[0 +1 ].children[0].innerHTML)); 
-      let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML));           
+      let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML));  
+      
+      
       // 1. element được kích hoạt và element không ở trạng thái tính toán mà bấm phím enter sẽ xuống dòng 
       if (event.key =="Enter" ) {
-       
+
+        // nếu vị trí ô ấn enter ở cạnh limit_view thì cuộn xuống 1 ô 
+        if (i >= limit_view - 1) {
+          // ta không truyền table_excel.current.scrollTop = table_excel.current.scrollTop  * click_scroll_dichuyen 
+          // vì mỗi lần truyền và sự kiện onscroll nhận table_excel.current.scrollTop sẽ có sai số
+          // khi enter nhiều lần sẽ cộng các sai số lại nên khi làm tròn vị trí cát bị sai 1 đợn vị nên có lỗi.
+         table_excel.current.scrollTop = (i_array_2d + 1)  * click_scroll_dichuyen ;  
+          
+        }
+
+      
+
+
+         // xuống dòng không phải tính toán
         if (cong_thuc_chua_hoan_thanh === "") {
+
+         
           console.log("_onKeyPress-----enter--không ở trạng thái tính toán") ;
+         
           // Khi ấn enter mà ô đó không ở trạng thái tính toán (không có thẻ input bên trong )
 
           a.current.children[i + 1 ].children[j+1].innerHTML =Data[i + i_array_2d][j + j_array_2d] ;
@@ -705,13 +766,19 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                  dia_chi_o_click(i +1+ i_array_2d,j + j_array_2d,i +1 ,j) ;
 
           key_enter(i,j,i+1,j); // tô màu và focus
+          mien_select_array_2d[0] = i_array_2d + i  + 1;
+          mien_select_array_2d[1] = j_array_2d + j ;
+         
+          _onMouseEnter_not_event(i +1, j, i +1, j) ;
+          
+
           xuat_hien_the_input = false ;   
           onKeyDown = false ; 
           onclick_tinh_toan = false ;  
           onKeyDown_1_element = false;
         }
 
-
+      // xuống dòng không phải tính toán xuống dòng và tính toán   
         if (cong_thuc_chua_hoan_thanh !== "") {
           console.log("onKeyDown-----enter-- tính toán") ;
 
@@ -723,6 +790,11 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                  // set địa chỉ ô click  sau hành động trên
                  dia_chi_o_click(i +1+ i_array_2d,j + j_array_2d,i +1 ,j) ;
             key_enter(i,j,i+1,j); // tô màu và focus
+            mien_select_array_2d[0] = i_array_2d + i + 1;
+            mien_select_array_2d[1] = j_array_2d + j ;
+           
+            _onMouseEnter_not_event(i +1, j, i +1, j) ;
+           
             xuat_hien_the_input = false ;   
             onKeyDown = false ; 
             onKeyDown_1_element = false;
@@ -803,7 +875,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    let xuat_hien_mien_select = false ;
+   
     var mien_select = [0,0,0,0];
     var mien_select_quy_ve = [0,0,0,0];
     var mien_select_array_2d = [0,0,0,0];
@@ -813,7 +885,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
    
 // vẽ khung miền lựa chọn và nếu thoả mãn điều kiện thì vẽ biểu tượng fill
     function  _onMouseEnter_not_event (x, y,i,j, thay_doi_mien_select_array_2d){
-
+          console.log('vẽ canvas');
+          console.log(mien_select_array_2d);
       // xoá biểu tượng fill đã xuất hiện khi move mouse
       var  ctx = canvas_.current.getContext("2d");
       ctx.clearRect(0, 0, canvas_.current.width, canvas_.current.height) ;
@@ -911,7 +984,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
   // vẽ khung miền lựa chọn
           Object.assign(canvas_.current.style , css.canvas_) ;
         
-          xuat_hien_mien_select = true ;
+          console.log(mien_select_array_2d);
       
           
         }
@@ -919,7 +992,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     // hàm chọn miền để sau đó copy giống excel
 
     function _onMouseEnter(event, x, y,i,j) {
-
+      console.log('_onMouseEnter');
    
 
       if (xuat_hien_the_input === true) { console.log('so lan chay stop'); return  ;   }
@@ -1228,7 +1301,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
             
             // khi click vào canvas nếu không fill thì sẽ ẩn canvas đi
                 if (trang_thai_fill === false) {
-
+                  console.log('ẩn canvas');
                   Object.assign(canvas_.current.style ,{display : "none"}) ;
                   turn_off_onMouseEnter = true ;
                   
@@ -1373,6 +1446,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                   onKeyDown = false ;
                   console.log("_onClick---");
                   //1.----------------------------------------------------------------
+                  // nếu ô trước đó đang viết công thức thì onclick_tinh_toan đã được chuyển thành true
+                  //nên khi click vào ô khác thì sẽ phải tính toán lại ngược lại không phải tính toán lại
                   if (onclick_tinh_toan) {
                     // kiểm tra nếu ô trước đó chứa công thức hoặc công thức bị sửa thì phải tính toán. Ngược lại không phải tính toán.
                     console.log("_onClick---tinh_toan");
@@ -1401,10 +1476,11 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                                     // tô màu vào vị trí i,j
                                     key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],i ,j); // tô màu và focus
 
+                                    mien_select_array_2d[0] = i_array_2d + i ;
+                                    mien_select_array_2d[1] = j_array_2d + j ;
+                                  
                                     _onMouseEnter_not_event(i, j, i, j) ;
-                            
-                      
-    
+                                  
     
                       
                         
@@ -1570,6 +1646,11 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                                  // set địa chỉ ô click  sau hành động trên
                                  dia_chi_o_click(i +1+ i_array_2d,j + j_array_2d,i +1 ,j) ;
                           key_enter(i,j,i+1,j); // tô màu và focus
+                          mien_select_array_2d[0] = i_array_2d + i  + 1;
+                          mien_select_array_2d[1] = j_array_2d + j ;
+                         
+                          _onMouseEnter_not_event(i +1, j, i +1, j) ;
+                         
                           xuat_hien_the_input = false ;   
                           onKeyDown = false ; 
                           onclick_tinh_toan = false ;
@@ -1591,6 +1672,10 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                            dia_chi_o_click(i +1+ i_array_2d,j + j_array_2d,i +1 ,j) ;
 
                             key_enter(i,j,i+1,j); // tô màu và focus
+                            mien_select_array_2d[0] = i_array_2d + i  + 1;
+                            mien_select_array_2d[1] = j_array_2d + j ;
+                           
+                            _onMouseEnter_not_event(i +1, j, i +1, j) ;
                             xuat_hien_the_input = false ;   
                             onKeyDown = false ; 
                             onKeyDown_1_element = false;
@@ -1961,7 +2046,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
      let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML));  
      let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML)); 
-      let len = formular.length ;
+     
 
 // lặp trong mảng data_array_2d lấy công thức push vào formular
                    for (let index = 0 , len = keo_doc  ;  index <= len; index++) {
@@ -1973,31 +2058,33 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                               else{
 
                                         let index_ = index_formular[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col] ;
-                                        console.log(formular);
-                                        console.log(vi_tri_o_truoc[0] + i_array_2d + index,vi_tri_o_truoc[1] + j_array_2d + index_col);
-                                          console.log(index_);
+                                      
                                         if (index_!== null ) {
-                                            // xoá công thức ở vị trí đó 
+                                          
                                                 // index_formular[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col]   là vị trí index trong    formular
-                                                formular.splice( index_, 1);
-                                                index_formular[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col]= null ;
-                                          // push công thức mới 
+                                               
+                                            
+                                          // push công thức mới vào vị trí cũ
                                                       if (text.slice(0,1)!=="=" && text.slice(0,1)!=="+" ) {
 
                                                         // nếu fill ô chỉ chứa giá trị thì ghi giá trị vào Data
                                                         Data[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col] = + data_array_2d[index][index_col] ;
+                                                        console.log( Data[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col]);
                                                         text_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col] =data_array_2d[index][index_col] ;
-                                                      
+                                                      delete  formular[index_] ;
+                                                    
                                                       }else if ((text.slice(0,1)==="=" && text.slice(0,1)==="+" )&& text_chi_chua_value_hoac_cong_thuc === true) {
                                                         // nếu fill ô chứa công thức mà trong công thức không có chứa Data thì tính công thức rồi ghi vào Data
-                                                        Data[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col] = eval(data_array_2d[index][index_col] );
-                                                        text_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col] =data_array_2d[index][index_col] ;
-                                                        // nếu fill ô chứa công thức mà trong công thức chứa   Data thì push vào formular
+                                                        Data[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col] = eval(data_array_2d[index][index_col] );                                                     
+                                                       text_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col] =data_array_2d[index][index_col] ;
+                                                       delete  formular[index_] ;
+                                                       // nếu fill ô chứa công thức mà trong công thức chứa   Data thì push vào formular
                                                       } else {
-                                                        formular.push(eval("(function(){return "+  "Data["+(vi_tri_o_truoc[0] + i_array_2d + index)+"]["+(vi_tri_o_truoc[1] + j_array_2d + index_col )+"]" +" = " + data_array_2d[index][index_col] +  ";})")  ) 
-                                                        index_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col]  = formular.length - 1 ;
+                                                        formular[index_]  = eval("(function(){return "+  "Data["+(vi_tri_o_truoc[0] + i_array_2d + index)+"]["+(vi_tri_o_truoc[1] + j_array_2d + index_col )+"]" +" = " + data_array_2d[index][index_col] +  ";})") ;
+                                                        // tính toán lại công thức mới ghi
+                                                        formular[index_]();
                                                         text_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col] =data_array_2d[index][index_col] ;
-                                                        console.log(formular);
+                                                      
                                                       }
 
                                          
@@ -2018,6 +2105,9 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                                                     } else {
                                                        // nếu fill ô chứa công thức mà trong công thức chứa   Data thì push vào formular
                                                       formular.push(eval("(function(){return "+  "Data["+(vi_tri_o_truoc[0] + i_array_2d + index)+"]["+(vi_tri_o_truoc[1] + j_array_2d + index_col )+"]" +" = " + data_array_2d[index][index_col] +  ";})")  ) 
+                                                        // tính toán lại công thức mới ghi
+                                                      
+                                                        formular[formular.length-1]();
                                                       index_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col]  = formular.length - 1 ;
                                                       text_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col] =data_array_2d[index][index_col] ;
                                                       
@@ -2032,15 +2122,12 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                      } 
                    }   
                    
-                   let _len = formular.length ;
-                      // tính toán lại công thức mới ghi
-                      for (let index = len ; index < _len  ; index++) { formular[index](); }
-
+                       let _len = formular.length ;
+                    
                       // tính toán lại tất cả các công thức đã viết
                     
-                      for (let index = 0; index < _len ; index++) { formular[index](); }
+                      for (let index = 0; index < _len ; index++) { if (formular[index] !== undefined) { formular[index]()} ; }
                     
-                      console.log(formular);
                     // hiện thị giá trị đã tính toán lên trang web bảng tính
                     for (let index = 0; index <= (limit_view ); index++) {
                       for (let index_j = 0; index_j <=(limit_col_view ) ; index_j++) {
@@ -2072,19 +2159,26 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
   var  Data_show = Data.slice(0,limit)   ;
  var Data_show_0 = Data_show.map((item, index)=>{    return  item.slice(0, limit_col)}) ;
- 
-  let click_scroll_dichuyen = 45 ;
+ let zoom = window.devicePixelRatio;
+  let click_scroll_dichuyen = 40/zoom ;
 
   let data_lenght = (10000 ) *click_scroll_dichuyen ; 
   let data_col_lenght = (500 ) *click_scroll_dichuyen ; 
 
 var width_bar_reference_col ;
 var vi_tri_khung_nhin_truoc_scroll = [null, null] ;
- 
- 
-  function _onScroll(event) {
 
-    console.log('_onScroll-----------------------');
+ var truoc_do ;
+  function _onScroll(event) {
+    let vi_tri_cat  ;
+let vi_tri_cat_col  ;
+
+ var di_chuyen  = event.target.scrollTop  ; 
+ var di_chuyen_col =event.target.scrollLeft; 
+ console.log('_onScroll-----------------------');
+
+        vi_tri_cat = Math.round(di_chuyen/ click_scroll_dichuyen) ; 
+        vi_tri_cat_col =  Math.round(di_chuyen_col/ click_scroll_dichuyen) ; 
    
     let  vi_tri_cat_truoc_do =  a.current.children[0 + 1].children[0].innerHTML ; // là vị trí cắt trước đó
     let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML)); 
@@ -2094,40 +2188,37 @@ var vi_tri_khung_nhin_truoc_scroll = [null, null] ;
               // scrollHeight chiều cao của cả thanh scroll
                   // scrollTop khoảng cách từ top 0 đến vị trí hiện tại
                   //*******/ khi scroll nếu click khoảng cach scroll lớn hơn chiều cao của element có state height thì nó sẽ rerender lại hàm _onScroll
-                  // element có 10000 dòng row_height bằng 20 thì có 200000px mỗi 1 click scroll sẽ là 45px do đó vi_tri_cat sẽ chia cho số đó
+                  // element có 10000 dòng row_height bằng 20 thì có 200000px mỗi 1 click scroll sẽ là 40px với zoom 100% do đó vi_tri_cat sẽ chia cho số đó
               // đánh dấu vùng lựa chọn
               
 
-              var di_chuyen   ;
+           
             // dừng scroll tại vị trí muốn
-              if ( (event.target.scrollTop ) <=(data_lenght - 4500)) {
-                di_chuyen =   (event.target.scrollTop ) ; 
+              if (di_chuyen <=(data_lenght - click_scroll_dichuyen*100)) {
+                
               }
               else
               {
-                event.target.scrollTo(0, (data_lenght - 4500)) ;
-                di_chuyen = (data_lenght - 4500);
+                event.target.scrollTo(0, (data_lenght - click_scroll_dichuyen*100)) ;
+                di_chuyen = (data_lenght - click_scroll_dichuyen*100);
               }
 
-              var di_chuyen_col  ;
+             
 
                  // dừng scroll tại vị trí muốn tthanh cuộn ngang
-                 if ( (event.target.scrollLeft ) <=(data_col_lenght - 450)) {
-                  di_chuyen_col =   (event.target.scrollLeft ) ; 
+                 if ( di_chuyen_col <=(data_col_lenght - click_scroll_dichuyen*10)) {
+                 
                 }
                 else
                 {
-                  event.target.scrollLeft = (data_col_lenght - 450) ;
-                  di_chuyen_col = (data_col_lenght - 450);
+                  event.target.scrollLeft = (data_col_lenght - click_scroll_dichuyen*10) ;
+                  di_chuyen_col = (data_col_lenght - click_scroll_dichuyen*10);
                 }
-                console.log( event.target.scrollTop)
-                console.log( event.target.scrollLeft)
-
-              console.log( 'di_chuyen----------------------------------------------' +  di_chuyen + "----" + di_chuyen_col)
+               
+          
               // vị trí cắt là  a.current.children[0 + 1].children[0].innerHTML lúc sau khi render UI xong
-              let vi_tri_cat =  Math.round(di_chuyen / click_scroll_dichuyen) ; 
-              let vi_tri_cat_col =  Math.round(di_chuyen_col / click_scroll_dichuyen) ; 
-
+            
+          
 
 
 
@@ -2140,16 +2231,11 @@ var vi_tri_khung_nhin_truoc_scroll = [null, null] ;
                      
                   
                      
-                      console.log( 'vị tri row thẻ input trong khung nhìn          ' + (vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_cat_truoc_do))  )
-
-                   
+                  
                   
                      
                       let  vi_tri_cat_truoc_do_col =  a.current.children[0 ].children[0 + 1].innerHTML ; // là vị trí cắt trước đó
-                      console.log( 'vị tri col thẻ input trong khung nhìn          ' + (vi_tri_o_truoc[1]-(vi_tri_cat_col - vi_tri_cat_truoc_do_col))  )
-
-
-
+                     
                       
   
                       // update lại width_bar_reference_col  sau khi scroll
@@ -2175,36 +2261,9 @@ var vi_tri_khung_nhin_truoc_scroll = [null, null] ;
                       limit_col_view = sum_col - 1 ; 
                       console.log('---------------------------------'+  limit_col_view);
 
-                        
-                    // nếu công thức chưa hoàn thành(xuất hiện thẻ input)
 
-                    if (xuat_hien_the_input) {
-                      console.log(     'xuat_hien_the_input--' +  xuat_hien_the_input ) ;
-                    
-                    
-                   
-                      
-                        // cập nhật lại dữ liệu khi scroll và xuất hiện lại thẻ input -- bước1
-                        for (let index = 0; index <= (limit_view ); index++) {
-                        
-                          a.current.children[index + 1].children[0].innerHTML = index + vi_tri_cat;
-                          for (let index_j = 0; index_j <=(limit_col_view ) ; index_j++) {
-                            if (index === 0) { a.current.children[0].children[index_j+1].innerHTML = index_j + vi_tri_cat_col; }
-                            a.current.children[index + 1].children[index_j+1].innerHTML = Data[index +vi_tri_cat][index_j + vi_tri_cat_col];
-                          }
-                        }  
-                        // 
-                      change_input_scroll(vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_cat_truoc_do),(vi_tri_o_truoc[1]-(vi_tri_cat_col - vi_tri_cat_truoc_do_col))); 
-                            
-
-                    }
-                    else
-
-                    {
-
-                      
-                        // cập nhật lại dữ liệu khi scroll -- bước1
-                        for (let index = 0; index <= (limit_view ); index++) {
+                         // cập nhật lại dữ liệu khi scroll -- bước1
+                         for (let index = 0; index <= (limit_view ); index++) {
                       
                           a.current.children[index + 1].children[0].innerHTML = index + vi_tri_cat;
                          
@@ -2215,36 +2274,71 @@ var vi_tri_khung_nhin_truoc_scroll = [null, null] ;
                           }
                         }  
 
+                        
+                    //Bước 2:  nếu công thức chưa hoàn thành(xuất hiện thẻ input)
 
-                        // nếu sau khi scroll vị trí tô màu update nằm trong khung nhìn thì tô màu lại ngược lại thì không tô màu lại
+                    if (xuat_hien_the_input) {
+                      console.log(     'xuat_hien_the_input--' +  xuat_hien_the_input ) ;
+                      change_input_scroll(vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_cat_truoc_do),(vi_tri_o_truoc[1]-(vi_tri_cat_col - vi_tri_cat_truoc_do_col))); 
+                         
+                    }
+                    else
 
+                    {
+
+                        // Bước 2: nếu sau khi scroll vị trí tô màu update nằm trong khung nhìn thì tô màu lại ngược lại thì không tô màu lại
                         console.log('key_enter:   '+vi_tri_o_truoc[0]+'__'+vi_tri_o_truoc[1]+'__'+(vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_cat_truoc_do))+'__'+(vi_tri_o_truoc[1]-(vi_tri_cat_col - vi_tri_cat_truoc_do_col)) ) ;
-                       
-                       
-                       
                             // set địa chỉ ô click  sau hành động trên
                            dia_chi_o_click(vi_tri_o_truoc[0]+ i_array_2d,vi_tri_o_truoc[1] + j_array_2d,(vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_cat_truoc_do)) ,(vi_tri_o_truoc[1]-(vi_tri_cat_col - vi_tri_cat_truoc_do_col)) ) ;
-                       
-                        if (xuat_hien_mien_select === true ) {
-
-                          key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_cat_truoc_do),(vi_tri_o_truoc[1]-(vi_tri_cat_col - vi_tri_cat_truoc_do_col)) );
-                          xuat_hien_mien_select = true ;
-                        }else{
-
-                          key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_cat_truoc_do),(vi_tri_o_truoc[1]-(vi_tri_cat_col - vi_tri_cat_truoc_do_col)) );
-
-                        }
-
-                      
+                           key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_cat_truoc_do),(vi_tri_o_truoc[1]-(vi_tri_cat_col - vi_tri_cat_truoc_do_col)) );
                         console.log(vi_tri_click_in_Data);
                         console.log(vi_tri_o_truoc)
+                      }
 
-                        if (xuat_hien_mien_select === true ) {
+                     
+                      // bước 3 : vẽ lại muền select
 
-                          if (position_mouse_brower === 'ouside_brower') {
-                            console.log('position_mouse_brower = ouside_brower');
+
+
+                      if (position_mouse_brower === 'ouside_brower') {
+                        console.log('position_mouse_brower = ouside_brower');
+                    
+                     
+                        let x = vi_tri_o_truoc[0];
+                        let y = vi_tri_o_truoc[1] ;
+                        let i = mien_select[2] ;
+                        let j = mien_select[3] ;
+
+                        console.log(x );
+                        console.log( y );
+                        console.log(i );
+                        console.log( j);
+
+                        if (x <  0) { x = 0 }
+                        if (y <  0) { y = 0 }
+            
+                        if (x >  limit_view - 1) { x =  limit_view - 1}
+                        if (y >  limit_col_view) {y =  limit_col_view}
+                        if (i >  limit_view - 1) { i =  limit_view - 1}
+                        if (j >  limit_col_view) {j =  limit_col_view}
+
+
+                        _onMouseEnter_not_event(x, y, i ,j )  ;
+
+                     
                         
-                         
+                       }
+                       if (position_mouse_brower === undefined) {
+
+
+                            console.log('position_mouse_brower === undefined');
+                            console.log(mien_select_array_2d );
+                           
+
+                            mien_select[2] = vi_tri_o_truoc[0] +  mien_select_array_2d[2] -  mien_select_array_2d[0]  ;
+                            mien_select[3]   = vi_tri_o_truoc[1] +  mien_select_array_2d[3] -  mien_select_array_2d[1]   ;
+                           
+
                             let x = vi_tri_o_truoc[0];
                             let y = vi_tri_o_truoc[1] ;
                             let i = mien_select[2] ;
@@ -2255,90 +2349,51 @@ var vi_tri_khung_nhin_truoc_scroll = [null, null] ;
                             console.log(i );
                             console.log( j);
 
+                            if (i <  0 && x <  0) {  return   Object.assign(canvas_.current.style ,{display : "none"}) ;}
+                            if (j <  0 && y <  0) { return    Object.assign(canvas_.current.style ,{display : "none"}) ; }
+                            if (x >  limit_view - 1&& i > limit_view - 1 ) { return   Object.assign(canvas_.current.style ,{display : "none"}) ;}
+                            if (y >  limit_col_view && j > limit_col_view) {return   Object.assign(canvas_.current.style ,{display : "none"}) ; }
                             if (x <  0) { x = 0 }
                             if (y <  0) { y = 0 }
-                
-                            if (x >  limit_view - 1) { x =  limit_view - 1}
-                            if (y >  limit_col_view) {y =  limit_col_view}
-                            if (i >  limit_view - 1) { i =  limit_view - 1}
-                            if (j >  limit_col_view) {j =  limit_col_view}
-
-
-                            _onMouseEnter_not_event(x, y, i ,j )  ;
-
-                         
-                            
-                           }
-                           if (position_mouse_brower === undefined) {
-    
-    
-                                console.log('position_mouse_brower === undefined');
-                                console.log(mien_select_array_2d );
-                               
-    
-                                mien_select[2] = vi_tri_o_truoc[0] +  mien_select_array_2d[2] -  mien_select_array_2d[0]  ;
-                                mien_select[3]   = vi_tri_o_truoc[1] +  mien_select_array_2d[3] -  mien_select_array_2d[1]   ;
-                               
-
-                                let x = vi_tri_o_truoc[0];
-                                let y = vi_tri_o_truoc[1] ;
-                                let i = mien_select[2] ;
-                                let j = mien_select[3] ;
-
-                                console.log(x );
-                                console.log( y );
-                                console.log(i );
-                                console.log( j);
-
-                                if (i <  0 && x <  0) {  return   Object.assign(canvas_.current.style ,{display : "none"}) ;}
-                                if (j <  0 && y <  0) { return    Object.assign(canvas_.current.style ,{display : "none"}) ; }
-                                if (x >  limit_view - 1&& i > limit_view - 1 ) { return   Object.assign(canvas_.current.style ,{display : "none"}) ;}
-                                if (y >  limit_col_view && j > limit_col_view) {return   Object.assign(canvas_.current.style ,{display : "none"}) ; }
-                                if (x <  0) { x = 0 }
-                                if (y <  0) { y = 0 }
-                              
-                                if (  x >  0 && i <  0) { i = 0 }
-                                if (  y >  0 && j <  0) { j = 0 }
-
-
-                              
-                                if (i >  limit_view - 1) { i =  limit_view - 1}
-                                if (j >  limit_col_view) {j =  limit_col_view}
-                              _onMouseEnter_not_event(x, y,i , j, false)  ;
                           
-                           
-                           }
-                           if (position_mouse_brower === 'on_thanh_dia_chi_onMouseDown') {
-    
-    
-                            console.log('position_mouse_brower === on_thanh_dia_chi_onMouseDown');
-                            console.log(mien_select_array_2d );
-                            mien_select[2] = vi_tri_o_truoc[0] +  mien_select_array_2d[2] -  mien_select_array_2d[0]  ;
-                            mien_select[3]   = vi_tri_o_truoc[1] +  mien_select_array_2d[3] -  mien_select_array_2d[1]   ;
-                            let x = vi_tri_o_truoc[0];
-                            let y = vi_tri_o_truoc[1] ;
-                            let i = mien_select[2] ;
-                            let j = mien_select[3] ;
-                            if (x <  0) { x = 0 }
-                            if (y <  0) { y = 0 }
-                            if (i >  limit_view - 1) { i =  limit_view - 1}
-                            if (j >  limit_col_view) {j =  limit_col_view}
-                            if (i <  0) { i =  0}
-                            if (j <  0) {j =  0}
-                            console.log(x,y,i,j);
+                            if (  x >  0 && i <  0) { i = 0 }
+                            if (  y >  0 && j <  0) { j = 0 }
+
 
                           
+                            if (i >  limit_view - 1) { i =  limit_view - 1}
+                            if (j >  limit_col_view) {j =  limit_col_view}
                           _onMouseEnter_not_event(x, y,i , j, false)  ;
                       
                        
                        }
-                          
-                        }
-                        
-                     
+                       if (position_mouse_brower === 'on_thanh_dia_chi_onMouseDown') {
+
+
+                        console.log('position_mouse_brower === on_thanh_dia_chi_onMouseDown');
+                        console.log(mien_select_array_2d );
+                        mien_select[2] = vi_tri_o_truoc[0] +  mien_select_array_2d[2] -  mien_select_array_2d[0]  ;
+                        mien_select[3]   = vi_tri_o_truoc[1] +  mien_select_array_2d[3] -  mien_select_array_2d[1]   ;
+                        let x = vi_tri_o_truoc[0];
+                        let y = vi_tri_o_truoc[1] ;
+                        let i = mien_select[2] ;
+                        let j = mien_select[3] ;
+                        if (x <  0) { x = 0 }
+                        if (y <  0) { y = 0 }
+                        if (i >  limit_view - 1) { i =  limit_view - 1}
+                        if (j >  limit_col_view) {j =  limit_col_view}
+                        if (i <  0) { i =  0}
+                        if (j <  0) {j =  0}
+                        console.log(x,y,i,j);
+
+                      
+                      _onMouseEnter_not_event(x, y,i , j, false)  ;
+                  
+                   
+                   }
                       
                             
-                    }
+                
 
 
 
@@ -2423,28 +2478,32 @@ var vi_tri_khung_nhin_truoc_scroll = [null, null] ;
             }
 
             if (event.keyCode === 13) {
+
+              mien_select_array_2d[0] = vi_tri_click_in_Data[0];
+              mien_select_array_2d[1] = vi_tri_click_in_Data[1] ;
+             
               
 
                // khi enter nếu vịtrí ô viết công thức không nằm trong khung nhìn thì di chuyển đến đó sau đó tính toán      
-
+          
               if ( (i_array_2d <= vi_tri_click_in_Data[0] - limit_view   )||( i_array_2d >= vi_tri_click_in_Data[0])      ||(j_array_2d <= vi_tri_click_in_Data[1] - limit_col_view   )||( j_array_2d >= vi_tri_click_in_Data[1])  ) {
 
                           console.log('vịtrí ô viết công thức không nằm trong khung nhìn thì di chuyển đến đó sau đó tính toán');
                       
-                          
+                        
                           if (  ((i_array_2d <= vi_tri_click_in_Data[0] - limit_view   )||( i_array_2d >= vi_tri_click_in_Data[0]) )     && ((j_array_2d <= vi_tri_click_in_Data[1] - limit_col_view   )||( j_array_2d >= vi_tri_click_in_Data[1]) )  ) 
                           {
-                            table_excel.current.scroll((vi_tri_click_in_Data[1]*45 -225),(vi_tri_click_in_Data[0]*45 -675))
+                            table_excel.current.scroll((vi_tri_click_in_Data[1]*click_scroll_dichuyen ),(vi_tri_click_in_Data[0]*click_scroll_dichuyen ))
                          
                           }
                           else
                           {
                                 if ( (i_array_2d <= vi_tri_click_in_Data[0] - limit_view   )||( i_array_2d >= vi_tri_click_in_Data[0]) ){
-                                  table_excel.current.scroll((j_array_2d*45),(vi_tri_click_in_Data[0]*45 -675))
+                                  table_excel.current.scroll((j_array_2d*click_scroll_dichuyen),(vi_tri_click_in_Data[0]*click_scroll_dichuyen ))
                                
                                 } 
                                 if (  (j_array_2d <= vi_tri_click_in_Data[1] - limit_col_view   )||( j_array_2d >= vi_tri_click_in_Data[1])){
-                                  table_excel.current.scroll((vi_tri_click_in_Data[1]*45 -225),(i_array_2d *45))
+                                  table_excel.current.scroll((vi_tri_click_in_Data[1]*click_scroll_dichuyen ),(i_array_2d *click_scroll_dichuyen))
                             
 
                           }
@@ -2457,14 +2516,7 @@ var vi_tri_khung_nhin_truoc_scroll = [null, null] ;
                           thanh_dia_chi_0_on_keydown = false ;
 
                           tinh_toan(vi_tri_click_in_Data[0] - i_array_2d,vi_tri_click_in_Data[1] - j_array_2d,"xoa_ky_tu_cong_thuc_thua");
-
-                          let vi_tri_cuon =parseInt((a.current.children[0 + 1].children[0].innerHTML)); 
-                          let vi_tri_to_mau = vi_tri_click_in_Data[0] - vi_tri_cuon ;
-                          
-                          key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_to_mau,vi_tri_o_truoc[1]); // tô màu và focus
-
-                          
-                          
+                        
                                   // set địa chỉ ô click  sau hành động trên
                                   dia_chi_o_click(vi_tri_click_in_Data[0] +1 ,vi_tri_click_in_Data[1] ,vi_tri_click_in_Data[2] +1  ,vi_tri_click_in_Data[3] ) ;
                                 
@@ -2486,6 +2538,8 @@ var vi_tri_khung_nhin_truoc_scroll = [null, null] ;
               tinh_toan(vi_tri_click_in_Data[0] - i_array_2d,vi_tri_click_in_Data[1] - j_array_2d,"xoa_ky_tu_cong_thuc_thua");
     
               key_enter(vi_tri_click_in_Data[2],vi_tri_click_in_Data[3],vi_tri_click_in_Data[2]+1,vi_tri_click_in_Data[3]); // tô màu và focus
+
+              _onMouseEnter_not_event(vi_tri_click_in_Data[2]+1,vi_tri_click_in_Data[3],vi_tri_click_in_Data[2]+1,vi_tri_click_in_Data[3])
               console.log('ô tô màu'+ (vi_tri_click_in_Data[2]+1 )+ "," + vi_tri_click_in_Data[3] );
               
                      // set địa chỉ ô click  sau hành động trên
@@ -2524,7 +2578,7 @@ var vi_tri_khung_nhin_truoc_scroll = [null, null] ;
 
        console.log(vi_tri_khung_nhin_truoc_scroll[1]);
        console.log(vi_tri_khung_nhin_truoc_scroll[0] );
-        table_excel.current.scrollTo( vi_tri_khung_nhin_truoc_scroll[1]*45    ,vi_tri_khung_nhin_truoc_scroll[0]*45 )
+        table_excel.current.scrollTo( vi_tri_khung_nhin_truoc_scroll[1]*click_scroll_dichuyen    ,vi_tri_khung_nhin_truoc_scroll[0]*click_scroll_dichuyen )
 
         setTimeout(() => {  thanh_dia_chi_0.current.focus({preventScroll:true}) ;}, 0);
   console.log('scroll tới vị trí cần khi thanh địa chỉ được click');
@@ -2568,6 +2622,40 @@ event.persist();
 
         }
 
+        document.onkeydown = function (event_window ) {
+          let i_array_2d =parseInt((a.current.children[0+1].children[0].innerHTML)); 
+          let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML)); 
+
+          console.log("document lắng nghe onkeydown");
+          // vịtrí ô viết công thức không nằm trong khung nhìn thì di chuyển đến đó sau đó tính toán
+          if ( (i_array_2d <= vi_tri_click_in_Data[0] - limit_view   )||( i_array_2d >= vi_tri_click_in_Data[0])      ||(j_array_2d <= vi_tri_click_in_Data[1] - limit_col_view   )||( j_array_2d >= vi_tri_click_in_Data[1])  ) {
+
+           
+        
+          
+            if (  ((i_array_2d <= vi_tri_click_in_Data[0] - limit_view   )||( i_array_2d >= vi_tri_click_in_Data[0]) )     && ((j_array_2d <= vi_tri_click_in_Data[1] - limit_col_view   )||( j_array_2d >= vi_tri_click_in_Data[1]) )  ) 
+            {
+              table_excel.current.scroll((vi_tri_click_in_Data[1]*click_scroll_dichuyen ),(vi_tri_click_in_Data[0]*click_scroll_dichuyen ))
+          
+            }
+            else
+            {
+                  if ( (i_array_2d <= vi_tri_click_in_Data[0] - limit_view   )||( i_array_2d >= vi_tri_click_in_Data[0]) ){
+                    table_excel.current.scroll((j_array_2d*click_scroll_dichuyen),(vi_tri_click_in_Data[0]*click_scroll_dichuyen ))
+                
+                  } 
+                  if (  (j_array_2d <= vi_tri_click_in_Data[1] - limit_col_view   )||( j_array_2d >= vi_tri_click_in_Data[1])){
+                    table_excel.current.scroll((vi_tri_click_in_Data[1]*click_scroll_dichuyen ),(i_array_2d *click_scroll_dichuyen))
+              
+        
+            }
+          
+        
+            }
+          }
+        
+        }
+
         document.onmousemove = function (event_window ) {
           
           var table_excel_scrollTop = table_excel.current.scrollTop ;
@@ -2577,7 +2665,7 @@ event.persist();
           position_mouse_brower = undefined ;
         mouse_Y = event_window.clientY
         mouse_X = event_window.clientX
-
+      
 
 // vẽ biểu tượng fill
 
@@ -2646,9 +2734,9 @@ event.persist();
           console.log('cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài phía dưới bên phải');
           position_mouse_brower = 'ouside_brower';
           myInterval_0 =  setTimeout(function doSomething() {
-            table_excel.current.scrollTo(table_excel_scrollLeft + 45 ,table_excel_scrollTop  + 45 )
-            table_excel_scrollTop += 45 ; 
-            table_excel_scrollLeft += 45 ;
+            table_excel.current.scrollTo(table_excel_scrollLeft + click_scroll_dichuyen ,table_excel_scrollTop  + click_scroll_dichuyen )
+            table_excel_scrollTop += click_scroll_dichuyen ; 
+            table_excel_scrollLeft += click_scroll_dichuyen ;
             myInterval =   setTimeout(doSomething, 10);
         }, 10);
           
@@ -2661,9 +2749,9 @@ event.persist();
               console.log('cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài phía dưới bên trái ');
               position_mouse_brower = 'ouside_brower';
             myInterval_0 =   setTimeout(function doSomething() {
-              table_excel.current.scrollTo(table_excel_scrollLeft - 45 ,table_excel_scrollTop  + 45 )
-              table_excel_scrollTop += 45 ; 
-              table_excel_scrollLeft -= 45 ;
+              table_excel.current.scrollTo(table_excel_scrollLeft - click_scroll_dichuyen ,table_excel_scrollTop  + click_scroll_dichuyen )
+              table_excel_scrollTop += click_scroll_dichuyen ; 
+              table_excel_scrollLeft -= click_scroll_dichuyen ;
               myInterval = setTimeout(doSomething, 10);
           }, 10);
                                       
@@ -2685,9 +2773,9 @@ event.persist();
           console.log('cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài góc trên bên trái');
           position_mouse_brower = 'ouside_brower';
           myInterval_0 =   setTimeout(function doSomething() {
-            table_excel.current.scrollTo(table_excel_scrollLeft - 45 ,   table_excel_scrollTop- 45 )
-            table_excel_scrollTop -= 45 ; 
-            table_excel_scrollLeft -= 45 ; 
+            table_excel.current.scrollTo(table_excel_scrollLeft - click_scroll_dichuyen ,   table_excel_scrollTop- click_scroll_dichuyen )
+            table_excel_scrollTop -= click_scroll_dichuyen ; 
+            table_excel_scrollLeft -= click_scroll_dichuyen ; 
             myInterval = setTimeout(doSomething, 10);
         }, 10);
 
@@ -2701,9 +2789,9 @@ event.persist();
         console.log('cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài phía trên bên phải');
         position_mouse_brower = 'ouside_brower';
         myInterval_0 =   setTimeout(function doSomething() {
-          table_excel.current.scrollTo(table_excel_scrollLeft + 45 ,table_excel_scrollTop  - 45 )
-          table_excel_scrollTop -= 45 ; 
-          table_excel_scrollLeft += 45 ;
+          table_excel.current.scrollTo(table_excel_scrollLeft + click_scroll_dichuyen ,table_excel_scrollTop  - click_scroll_dichuyen )
+          table_excel_scrollTop -= click_scroll_dichuyen ; 
+          table_excel_scrollLeft += click_scroll_dichuyen ;
           myInterval = setTimeout(doSomething, 10);
         }, 10);
                                   
@@ -2722,8 +2810,8 @@ event.persist();
           
           myInterval_0 =   setTimeout(function doSomething() {
 
-            table_excel.current.scrollTop =  table_excel_scrollTop + 45;
-            table_excel_scrollTop += 45 ; 
+            table_excel.current.scrollTop =  table_excel_scrollTop + click_scroll_dichuyen;
+            table_excel_scrollTop += click_scroll_dichuyen ; 
             myInterval = setTimeout(doSomething, 10);
         }, 10);
                                         // setTimeout ở đây để vẽ lại chạy sau các hàm khi scroll
@@ -2777,8 +2865,8 @@ event.persist();
           position_mouse_brower = 'ouside_brower';
           
           myInterval_0 =   setTimeout(function doSomething() {
-            table_excel.current.scrollLeft = table_excel_scrollLeft + 45;
-            table_excel_scrollLeft += 45 ; 
+            table_excel.current.scrollLeft = table_excel_scrollLeft + click_scroll_dichuyen;
+            table_excel_scrollLeft += click_scroll_dichuyen ; 
             myInterval =  setTimeout(doSomething, 10);
         }, 10);
 
@@ -2829,8 +2917,8 @@ event.persist();
           console.log('cuộn thanh doc khi vị trí mouse nằm ngoài bên trên brower');
           position_mouse_brower = 'ouside_brower';
           myInterval_0 =   setTimeout(function doSomething() {
-            table_excel.current.scrollTop = table_excel_scrollTop - 45;
-            table_excel_scrollTop -= 45 ; 
+            table_excel.current.scrollTop = table_excel_scrollTop - click_scroll_dichuyen;
+            table_excel_scrollTop -= click_scroll_dichuyen ; 
             myInterval =  setTimeout(doSomething, 10);
         }, 10);
 
@@ -2877,8 +2965,8 @@ event.persist();
           console.log('cuộn thanh ngang khi vị trí mouse nằm ngoài bên trái brower');
           position_mouse_brower = 'ouside_brower';
           myInterval_0 =  setTimeout(function doSomething() {
-            table_excel.current.scrollLeft = table_excel_scrollLeft - 45;
-            table_excel_scrollLeft -= 45 ;
+            table_excel.current.scrollLeft = table_excel_scrollLeft - click_scroll_dichuyen;
+            table_excel_scrollLeft -= click_scroll_dichuyen ;
             myInterval =  setTimeout(doSomething, 10);
               }, 10);
 
