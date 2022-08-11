@@ -89,7 +89,7 @@
             
         // khi click vào canvas nếu không fill thì sẽ ẩn canvas đi
             if (trang_thai_fill === false) {
-              console.log('ẩn canvas');
+              console.log('ẩn canvas----------------');
               Object.assign(canvas_.current.style ,{display : "none"}) ;
               turn_off_onMouseEnter = true ;
               
@@ -98,6 +98,27 @@
          
 
       };
+
+
+
+// ta dùng addEventListener để lắng nghe 2 sự kiện document mousemove kích hoạt ở 2 chỗ khác nhau
+//nếu dùng  document.onmousemove = fuction thì khi sự kiện 2 ta cũng dùng document.onmousemove = fuction khác thì nó sẽ gán thành 1 sự kiện
+      document.addEventListener("mousemove", (evt) => {
+          // console.log('document--onmousemove--ở đầu');
+        
+     
+          // vịtrí ô viết công thức không nằm trong khung nhìn thì di chuyển đến đó sau đó tính toán
+          if ( (vi_tri_o_truoc[0] <= limit_view - 1 )&( vi_tri_o_truoc[0] >= 0) && (vi_tri_o_truoc[1] <= limit_col_view - 1 )&( vi_tri_o_truoc[1] >= 0)  ) {
+                                          
+            
+          }else{thanh_dia_chi_0.current.focus({preventScroll:true}) ;}
+         
+        
+       
+      });
+      
+      
+     
        
       }, []);
 
@@ -171,28 +192,41 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
               console.log("-------------------input enter")
                    
-                      
+                   console.log(onKeyDown_1_element);   
 
-                    // khi ấn enter thì công thức chưa hoàn thành cũng tính
+               //  key_enter chạy xong cho onKeyDown_1_element = false
+               // mà element cha của input cũng lắng nghe onkeydown chạy sau input lắng nghe
+               // khi element cha của input cũng lắng nghe onkeydown mà onKeyDown_1_element = false thì nó sẽ chạy
+               //  setTimeout ở đây vì khi element cha của input cũng lắng nghe onkeydown  do có setTimeout  onKeyDown_1_element vẫn đang là true  nên không chạy nữa như chúng ta muốn
+                    setTimeout(() => { 
+
+                      console.log('setTimeout---------------- để onKeyDown_1_element = true .   cuối cùng mới chuyển sang flase'); 
+
+                           // khi ấn enter thì công thức chưa hoàn thành cũng tính
                     tinh_toan(i,j,"xoa_ky_tu_cong_thuc_thua");
 
                     
-                           // set địa chỉ ô click  sau hành động trên
-                           dia_chi_o_click(i +1+ i_array_2d,j + j_array_2d,i +1 ,j) ;
-                
-                    key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],i +1 ,j); // tô màu và focus
-                    mien_select_array_2d[0] = i_array_2d + i + 1 ;
-                    mien_select_array_2d[1] = j_array_2d + j ;
-                  
-                    _onMouseEnter_not_event(i +1, j, i +1, j) ;
+                    // set địa chỉ ô click  sau hành động trên
+                    dia_chi_o_click(i +1+ i_array_2d,j + j_array_2d,i +1 ,j) ;
+         
+             key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],i +1 ,j); // tô màu và focus
+             mien_select_array_2d[0] = i_array_2d + i + 1 ;
+             mien_select_array_2d[1] = j_array_2d + j ;
+           
+             _onMouseEnter_not_event(i +1, j, i +1, j) ;
 
-                  
-                    onKeyDown = false ; 
-                    setTimeout(() => { onKeyDown_1_element = false ; }, 0);
-                    thanh_dia_chi_0_on_keydown = false ;
-                    onclick_tinh_toan = false ; 
+           
+             onKeyDown = false ; 
+                      
+                      onKeyDown_1_element = false ; 
                     
-                
+                      thanh_dia_chi_0_on_keydown = false ;
+                      onclick_tinh_toan = false ; 
+                      
+                  
+                    
+                    }, 0);
+                   
                   
           
             }
@@ -237,7 +271,13 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
               // tô màu
              
               if (row_vi_tri_add < 0 || row_vi_tri_add > limit_view - 1         ||  col_vi_tri_add < 0 || col_vi_tri_add > limit_col_view - 1)   {  
-                     console.log(vi_tri_click_in_Data);   vi_tri_o_truoc[0] = row_vi_tri_add ;   vi_tri_o_truoc[1] = col_vi_tri_add ;  
+                     console.log(vi_tri_click_in_Data); 
+                       vi_tri_o_truoc[0] = row_vi_tri_add ; 
+                         vi_tri_o_truoc[1] = col_vi_tri_add ; 
+                           // set địa chỉ ô click  sau hành động trên
+                           dia_chi_o_click(row_vi_tri_add + i_array_2d,col_vi_tri_add + j_array_2d,row_vi_tri_add  ,col_vi_tri_add) ;
+
+
                             }
               else {   
                        
@@ -593,7 +633,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
                    var array_loi_tham_chieu = []  ;
                    let vi_tri_loi_tham_chieu ;
-                   text_formular.map((item, index)=>{   item.map((j_item, index_j) =>{ if (j_item!==null) {   if (j_item.indexOf("Data["+(i+i_array_2d)+ "]["+(j + j_array_2d)+"]")!== -1) { array_loi_tham_chieu.push([index,index_j ])   }  } })   })
+                   text_formular.map((item, index)=>{   item.map((j_item, index_j) =>{ if (j_item!==null) {  console.log(j_item); if (j_item.indexOf("Data["+(i+i_array_2d)+ "]["+(j + j_array_2d)+"]")!== -1) { array_loi_tham_chieu.push([index,index_j ])   }  } })   })
                    
                    if ( (array_loi_tham_chieu.some((item,index) => { vi_tri_loi_tham_chieu = item ;  return text.indexOf("Data["+item[0]+ "]["+item[1]+"]") !== -1 }) === true) ){
 
@@ -734,9 +774,10 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     // lắng nghe các sự khiện khi thao tác với bàn phím (dùng bàn phím)
     function _onKeyDown(event,i,j) {
     
-
-    //  onKeyDown_1_element === false ở đây chỉ tắt lắng nghe sự kiện cho 1 element table cha này.  Còn để ngoài lúc render react là cho tất cả
-    
+console.log('_onKeyDown------------------------------');
+    //  onKeyDown_1_element === false tức chưa xuất hiện thẻ input
+    // khi xuất hiện thẻ input thì onKeyDown_1_element === true
+    // mục đích khi xuất hiện thẻ input thì tắt lắng nghe sự kiện _onKeyDown ở elment này
     if (onKeyDown_1_element === false) {
 
       let i_array_2d =parseInt((a.current.children[0 +1 ].children[0].innerHTML)); 
@@ -752,75 +793,27 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
           // vì mỗi lần truyền và sự kiện onscroll nhận table_excel.current.scrollTop sẽ có sai số
           // khi enter nhiều lần sẽ cộng các sai số lại nên khi làm tròn vị trí cát bị sai 1 đợn vị nên có lỗi.
          table_excel.current.scrollTop = (i_array_2d + 1)  * click_scroll_dichuyen ;  
+
           
         }
 
-      
-
-
-         // xuống dòng không phải tính toán
-        if (cong_thuc_chua_hoan_thanh === "") {
-
+        console.log("khi bấm phím enter mà không xuất hiện thẻ input thì không phải tính toán") ;
          
-          console.log("_onKeyPress-----enter--không ở trạng thái tính toán") ;
-         
-          // Khi ấn enter mà ô đó không ở trạng thái tính toán (không có thẻ input bên trong )
+       
+               // set địa chỉ ô click  sau hành động trên
+        dia_chi_o_click(i +1+ i_array_2d,j + j_array_2d,i +1 ,j) ;
 
-          a.current.children[i + 1 ].children[j+1].innerHTML =Data[i + i_array_2d][j + j_array_2d] ;
+        key_enter(i,j,i+1,j); // tô màu và focus
+        mien_select_array_2d[0] = i_array_2d + i  + 1;
+        mien_select_array_2d[1] = j_array_2d + j ;
+       
+        _onMouseEnter_not_event(i +1, j, i +1, j) ;
+        
 
-
-                 // set địa chỉ ô click  sau hành động trên
-                 dia_chi_o_click(i +1+ i_array_2d,j + j_array_2d,i +1 ,j) ;
-
-          key_enter(i,j,i+1,j); // tô màu và focus
-          mien_select_array_2d[0] = i_array_2d + i  + 1;
-          mien_select_array_2d[1] = j_array_2d + j ;
-         
-          _onMouseEnter_not_event(i +1, j, i +1, j) ;
-          
-
-          xuat_hien_the_input = false ;   
-          onKeyDown = false ; 
-          onclick_tinh_toan = false ;  
-          onKeyDown_1_element = false;
-        }
-
-      // xuống dòng không phải tính toán xuống dòng và tính toán   
-        if (cong_thuc_chua_hoan_thanh !== "") {
-          console.log("onKeyDown-----enter-- tính toán") ;
-
-         
-                      
-
-            // khi ấn enter thì công thức chưa hoàn thành cũng tính
-            tinh_toan(i,j,"xoa_ky_tu_cong_thuc_thua");
-                 // set địa chỉ ô click  sau hành động trên
-                 dia_chi_o_click(i +1+ i_array_2d,j + j_array_2d,i +1 ,j) ;
-            key_enter(i,j,i+1,j); // tô màu và focus
-            mien_select_array_2d[0] = i_array_2d + i + 1;
-            mien_select_array_2d[1] = j_array_2d + j ;
-           
-            _onMouseEnter_not_event(i +1, j, i +1, j) ;
-           
-            xuat_hien_the_input = false ;   
-            onKeyDown = false ; 
-            onKeyDown_1_element = false;
-            onclick_tinh_toan = false ; 
-            
-          
-         
-
-
-
-
-                          
-        }
-
-
-
-
-
-     
+        xuat_hien_the_input = false ;   
+        onKeyDown = false ; 
+        onclick_tinh_toan = false ;  
+        onKeyDown_1_element = false;
 
 
         
@@ -1356,22 +1349,27 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
       let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML));  
       let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML)); 
      
-      // đầu tiên nó chạy hàm 1 click khởi tạo kiem_tra = 1 do đó khi click thêm trong vòng 300 ms giây thì nó chạy hàm 2 click
+      // đầu tiên nó chạy hàm 1 click khởi tạo kiem_tra = 1 do đó khi click thêm trong vòng 300 ms giây thì kiem_tra vẫn = 1 => nó chạy hàm 2 click
     
 
       
       // 2 click _chuột trái trong vòng 300 ms giây thì chạy lại hàm _onMouseDown . Lúc này kiem_tra là 1 thuộc tính toàn cầu lưu trên dom này ( ta lưu vào kiem_tra thuộc tính của element vì nếu lưu biến toàn cục thì sẽ phải tạo mảng biến và truy cập thì phải truyền vị trí rất phức tạp)
-      // khi doubleclick xong thuộc tính kiem_tra của element này là 1 do đó khi click tiếp nó sẽ không chạy chỗ onclick nữa.
-      // nó sẽ chạy phần code cuối chỗ   setTimeout(()=>{  return _this.kiem_tra = 0   }, 300); _this.kiem_tra = 1 ; 
+      // khi doubleclick xong xuất hiện thẻ input nên _this.children[0] === "object"  nên sẽ không chạy chỗ 1 click nữa.
+   
       // nếu lúc này 2 click thì nó sẽ chạy lại _onDoubleClick
       if (_this.kiem_tra == 1) {
     
-        
+
                     
                       
                           console.log("_onDoubleClick");
                         _this.innerHTML = " <input   type='text'  />" ;
                         xuat_hien_the_input = true ;
+                      onclick_tinh_toan = true ;
+                      vi_tri_o_truoc[0] = i ;
+                      vi_tri_o_truoc[1] = j ;
+                      
+                      onKeyDown = true ;
                     
 
                       let input_ =  _this.children[0];
@@ -1394,36 +1392,24 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                           
                         input_.onmousedown =  function (event) {  setTimeout(() => {
                                                                                         vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = event.target.selectionStart ; 
-                                                                                        console.log('vi_tri_con_tro_khi_di_chuyen_trong_double_click_input                     ' + vi_tri_con_tro_khi_di_chuyen_trong_double_click_input)
+                                                                                        console.log('input trong  event double click --vi_tri_con_tro_khi_di_chuyen_trong_double_click_input------------' + vi_tri_con_tro_khi_di_chuyen_trong_double_click_input)
                                                                                       }, 0);}
 
-                
-                                                                          
-                      
-                      onclick_tinh_toan = true ;
-                      vi_tri_o_truoc[0] = i ;
-                      vi_tri_o_truoc[1] = j ;
-                      
-                      onKeyDown = true ;
+                        
+
+                           input_.focus({preventScroll:true}); 
+                           vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = input_.value.length ; 
+                           console.log('vi_tri_con_tro_khi_di_chuyen_trong_double_click_input                     ' + vi_tri_con_tro_khi_di_chuyen_trong_double_click_input) ;
+                        
+                       //   setTimeout ở đây vì  khi double click thì sẽ chạy cả 1 click trước trong đó cũng có chỗ setTimeout => setTimeout để đoạn code này chạy cuối cùng                                                          
                     
-                      
-
-
-                    //****Qúa trình chuyển từ Dom ảo react sang Dom ảo javascript thì focus thực thi ngay luôn trước khi input update value nên ta phải setTimeout */
-                    //***chú ý: code javascript chạy xong thì render UI mới chạy trừ   console .log ;    alert  cập nhật luôn sẽ làm code chạy rất chậm;    */
-              // gặp setTimeout có thời gian khác 0  thì quá trình render UI thực thi không đợi chạy hết code.
-              //  // gặp setTimeout có thời gian = 0  thì quá trình render UI phải đợi chạy hết code xong mới thực thi.
-              // không lạm dụng dùng setTimeout vì làm code chậm 
-              //===> thao túng Dom: 1 Dom không thể nhận 2 biến trạng thái trong  1 quá trình từ code javascript đến kết thúc render UI 
-              //====> muốn nhận 2 biến để xác định trạng thái thì phải rerender  2 lần trở lên thông qua setInterval (hàm setInterval gọi lại các lần sau khoảng thời gian đặt trước
-              // qua cơ chế closure javascript ).
-                      setTimeout(() => {
-                         input_.focus({preventScroll:true}); 
-                         vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = input_.value.length ; 
-                         console.log('vi_tri_con_tro_khi_di_chuyen_trong_double_click_input                     ' + vi_tri_con_tro_khi_di_chuyen_trong_double_click_input) ;
+                    //        setTimeout(() => {
+                    //      input_.focus({preventScroll:true}); 
+                    //      vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = input_.value.length ; 
+                    //      console.log('vi_tri_con_tro_khi_di_chuyen_trong_double_click_input                     ' + vi_tri_con_tro_khi_di_chuyen_trong_double_click_input) ;
                       
                         
-                    }, 0);
+                    // }, 0);
                                 
                 
                   
@@ -1434,11 +1420,10 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
       // 1 click  xuống thì chạy hàm tính toán
       // tính toán nếu chạy xong thì tô màu
       // trong khi tính toán nếu cong_thuc_chua_hoan_thanh khác ""  thì viết tiếp công thức
-    
+      // khi 1 click ta cũng tắt lắng nghe sự kiện onkedown ở element này nên ta cần gán lại sự kiện onkedown ở element này chạy ở cloure khác khi element được click để kiểm soát code dễ hơn
       if ( (_this.kiem_tra == 0 || _this.kiem_tra == undefined)&& typeof _this.children[0] != "object"  ) {
 
-                    
-        
+                
         // huỷ bỏ miền chọn cũ
        
         Object.assign(canvas_.current.style ,{display : "none"}) ;
@@ -1454,7 +1439,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                   console.log("_onClick---");
                   //1.----------------------------------------------------------------
                   // nếu ô trước đó đang viết công thức thì onclick_tinh_toan đã được chuyển thành true
-                  //nên khi click vào ô khác thì sẽ phải tính toán lại ngược lại không phải tính toán lại
+                  //nên khi click vào ô khác thì sẽ phải tính toán lại ngược lại không xuất hiện thẻ input onclick_tinh_toan == flase  không phải tính toán lại
                   if (onclick_tinh_toan) {
                     // kiểm tra nếu ô trước đó chứa công thức hoặc công thức bị sửa thì phải tính toán. Ngược lại không phải tính toán.
                     console.log("_onClick---tinh_toan");
@@ -1464,6 +1449,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                                 onKeyDown = false ; 
                                 onclick_tinh_toan = false ;
     
+                  }else{
+                    console.log("_onClick----------------- không tinh_toan");
                   }
     
                   //2.----------------------------------------------------------------------
@@ -1496,7 +1483,9 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     
                 //3.---------------------------------------------------------------------------------------
                     if (cong_thuc_chua_hoan_thanh != "") {
-                      console.log("_onClick---viet tiếp công thức");
+                      console.log("_onClick---viet tiếp công thức vào thẻ input");
+                      // viet tiếp công thức vào thẻ input nên phải  để  onKeyDown_1_element = true; để không lắng nghe sụ kiện keydown ở element cha của input
+                      onKeyDown_1_element = true;
                       console.log(cong_thuc_chua_hoan_thanh);
                     
                      
@@ -1541,13 +1530,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                               
                           var input_truoc_do = a.current.children[r + 1].children[c+1].children[0]; 
 
-                          console.log('_________________________________' + a.current.children[r + 1].children[c+1].onkeydown)
-                          // khi scroll: input trước đó đã xuất hiện lại và đang lắng nghe sự kiện onkeydown ta không dược xoá vì ở đây chỉ thiết lập input lắng nghe onkeydown thôi. nhưng element table cha không lắng nghe onkeydown  === null
-                          // không scroll: input trước đó đã xuất hiện và đang lắng nghe sự kiện onkeydown ta phải xoá sự kiện đó đi để khi ấn phím element table cha nghe trước rồi kích hoạt input nghe
-                          // input xuất hiện do textarea thì cha của nó đang lắng nghe onkeydown nhưng do ta đã khoá fuction đó bằng onKeyDown_1_element === true nên ta không được xoá input lắng nghe onkeydown
-                          if (a.current.children[r + 1].children[c+1].onkeydown === null || onKeyDown_1_element === true) { } else {input_truoc_do.onkeydown = null ;}
-                          
-                          console.log('_________________________________' + input_truoc_do.onkeydown)
+                     
                               
                                 input_truoc_do.value = text_update ;
                                 text_formular[r+i_array_2d][c + j_array_2d] =  text_update;
@@ -1613,13 +1596,6 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
                              }  
                         
-                       
-                      
-                      
-                  
-                     
-
-                        
                         onclick_tinh_toan = true ;
                         // để tắt input lắng nghe sự kiện bàn phím trên all element lúc render
                         onKeyDown = true ;
@@ -1629,85 +1605,52 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                   }
     
                                                                                           
-                // element table nhận bàn phím thì làm xuất hiện thẻ input
-              
-                //4. di chuột đến element ấn chuột trái _this xuống thì gán sự kiện onkeydown lên element đó sự kiện này chạy khi onkeydown === false tức là chạy khi dùng chuột ta khoá lắng nghe bàn phím 
-                // dùng bàn phím + chuột
+            
                   _this.onkeydown  =  function (event) {
-                  
-                  //  onKeyDown_1_element === false ở đây chỉ tắt lắng nghe sự kiện cho 1 element table cha này.  Còn để ngoài lúc render react là cho tất cả
+
+                   //  elment lắng nghe 2 sự kiện 
+                   //1.onkeydown mặc định khi khởi tạo  => tắt sự kiện này onkeydown === false
+                  //2. khi elment được click thì onkeydown === false => ta đã tắt onkeydown lúc khởi tạo rồi nên ở đây ta viết hàm này để elment nhận lại onkeydown ở cloure khác
+                              //  onKeyDown_1_element === false tức chưa xuất hiện thẻ input
+                              // khi xuất hiện thẻ input thì onKeyDown_1_element === true
+                              // mục đích khi xuất hiện thẻ input thì tắt lắng nghe sự kiện  ở elment _this.onkeydown  này  
+                              console.log(onKeyDown_1_element) ;
                     if (onKeyDown_1_element === false) {
 
                       
                       console.log("_onMouseDown_onKeyDown") ;
-                      // 1.-//nếu sau đó ấn enter thì chạy hàm không tính toán rồi xuống dòng
+                     // enter-----xuất hiện thẻ input khi double click mà không nhập gì chỉ ấn enter cũng không cần tính toán
+                     // khi nhập phím khác enter thì sẽ kích hoạt thẻ input mọi việc tiếp theo thẻ input lo
                       if (event.keyCode === 13 ) {
                            
-                      
-                        if (cong_thuc_chua_hoan_thanh === "") {
-                          console.log("_onMouseDown_onKeyDown-----enter--không tính toán") ;
-                          // Khi ấn enter mà ô đó không ở trạng thái tính toán (không có thẻ input bên trong )
-          
-                          a.current.children[i + 1].children[j+1].innerHTML =Data[i+i_array_2d][j + j_array_2d] ;
+                        console.log("enter-----không xuất hiện thẻ input không tính toán") ;
+                        console.log("enter-----xuất hiện thẻ input khi double click mà không nhập gì cũng không cần tính toán") ;
+                        a.current.children[i + 1].children[j+1].innerHTML =Data[i+i_array_2d][j + j_array_2d] ;
 
-                                 // set địa chỉ ô click  sau hành động trên
-                                 dia_chi_o_click(i +1+ i_array_2d,j + j_array_2d,i +1 ,j) ;
-                          key_enter(i,j,i+1,j); // tô màu và focus
-                          mien_select_array_2d[0] = i_array_2d + i  + 1;
-                          mien_select_array_2d[1] = j_array_2d + j ;
-                         
-                          _onMouseEnter_not_event(i +1, j, i +1, j) ;
-                         
-                          xuat_hien_the_input = false ;   
-                          onKeyDown = false ; 
-                          onclick_tinh_toan = false ;
-                          onKeyDown_1_element = false;
+                               // set địa chỉ ô click  sau hành động trên
+                               dia_chi_o_click(i +1+ i_array_2d,j + j_array_2d,i +1 ,j) ;
+                        key_enter(i,j,i+1,j); // tô màu và focus
+                        mien_select_array_2d[0] = i_array_2d + i  + 1;
+                        mien_select_array_2d[1] = j_array_2d + j ;
                        
-                        
-                        }
-
-                        if (cong_thuc_chua_hoan_thanh !== "") {
-                          console.log("onMouseDown_onKeyDown-----enter-- tính toán") ;
-
-                        
-                      
-
-                            // khi ấn enter thì công thức chưa hoàn thành cũng tính
-                            tinh_toan(i,j,"xoa_ky_tu_cong_thuc_thua");
-
-                           // set địa chỉ ô click  sau hành động trên
-                           dia_chi_o_click(i +1+ i_array_2d,j + j_array_2d,i +1 ,j) ;
-
-                            key_enter(i,j,i+1,j); // tô màu và focus
-                            mien_select_array_2d[0] = i_array_2d + i  + 1;
-                            mien_select_array_2d[1] = j_array_2d + j ;
-                           
-                            _onMouseEnter_not_event(i +1, j, i +1, j) ;
-                            xuat_hien_the_input = false ;   
-                            onKeyDown = false ; 
-                            onKeyDown_1_element = false;
-                            onclick_tinh_toan = false ; 
-                            
-                          
-                         
-                
-                
-                
-                
-                                          
-                        }
-
-                      
-          
+                        _onMouseEnter_not_event(i +1, j, i +1, j) ;
+                       
+                        xuat_hien_the_input = false ;   
+                        onKeyDown = false ; 
+                        onclick_tinh_toan = false ;
+                        onKeyDown_1_element = false;
                          
           
           
                         
                       }
-                      //2.-mối khi div table nhận 1 ký tự dữ liệu từ bàn phím thì tiến hành tạo  thẻ input, sau đó di chuyển con trỏ
-                      // tới vị trí  vi_tri_con_tro_khi_di_chuyen_trong_double_click_input, sau đó ghi ký tự đã nhấn vào
-                    
-                      
+
+
+
+
+                       // khi nhập phím khác enter thì sẽ kích hoạt thẻ input, đoạn code dưới chỉ sử lý ký tự đầu tiên khi nhận từ bàn phím mọi việc tiếp theo thẻ input lo
+
+                        //chỉ sử lý ký tự đầu tiên khi nhận từ bàn phím vì khi xuất hiện thẻ input phải tắt lắng nghe sụ kiện của element này bằng  onKeyDown_1_element = true ;
                       if (event.keyCode != 13) {
                         console.log("_onMouseDown_onKeyDown_keyCodekhac enter") ;
 
@@ -1766,7 +1709,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                         
 
                          
-                        // gán giá trị đầu tiên khi nhấn phím đó vào text_formular; các giá trị tiếp theo input đó sẽ láng nghe sự kiện onkeypress để gán tiếp
+                        // gán giá trị đầu tiên khi nhấn phím đó vào text_formular; các giá trị tiếp theo input đó sẽ láng nghe sự kiện onkeydown để gán tiếp
                         //**************** */ trong javscript thuần ghi giá trị từ bàn phím vào thẻ input sẽ diến ra sau việc lấy giá trị từ thẻ input vào biến.
                         // phải setTimeout ở đây vì phải đợi input lấy giá trị từ bàn phím mới gán vào text_formular
                         // sau đó gán giá trị khi nhấn lên input_formula
@@ -1793,8 +1736,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                       // tắt lắng nghe sự kiện onKeyDown cho div element
                       onKeyDown_1_element = true ;
                   
-                             // trước gán sự kiện keydown cho input thì ta phải tắt lắng nghe sự kiện onkedown cho 1 element table cha của input
-                                run_function_when_input_focus (input_,i,j,i_array_2d, j_array_2d);
+                          
+                       run_function_when_input_focus (input_,i,j,i_array_2d, j_array_2d);
           
 
                     }
@@ -1823,6 +1766,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     
     // hàm này không đồng bộ chạy cuối của lần click đó.
       setTimeout(()=>{  return _this.kiem_tra = 0   }, 300);
+
+
       _this.kiem_tra = 1 ;
     
               }
@@ -1871,6 +1816,9 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
   function paste(event) {
     console.log(vi_tri_o_truoc);
 
+    let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML));  
+      let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML)); 
+
     navigator.clipboard.readText().then(
 
       (clipText) => { 
@@ -1882,8 +1830,10 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
           array_paste[index] =  array_paste[index].split("\t")
           for (let index_col = 0 , len_col = array_paste[0].length ;  index_col < len_col; index_col++) {
          
-            Data[vi_tri_o_truoc[0] + index ][vi_tri_o_truoc[1] + index_col] = JSON.parse(array_paste[index][index_col]) ;
-            text_formular[vi_tri_o_truoc[0] + index ][vi_tri_o_truoc[1] + index_col] = JSON.parse(array_paste[index][index_col]) ;
+            Data[vi_tri_o_truoc[0] + index + i_array_2d ][vi_tri_o_truoc[1] + index_col + j_array_2d] = JSON.parse(array_paste[index][index_col]) ;
+            console.log(vi_tri_o_truoc[0] + index + i_array_2d,vi_tri_o_truoc[1] + index_col + j_array_2d );
+            console.log( Data[vi_tri_o_truoc[0] + index + i_array_2d ][vi_tri_o_truoc[1] + index_col + j_array_2d]);
+            text_formular[vi_tri_o_truoc[0] + index  + i_array_2d][vi_tri_o_truoc[1] + index_col + j_array_2d] = array_paste[index][index_col] ;
           }
 
         }
@@ -1892,8 +1842,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
          // hiện dữ liệu lên khung nhìn
 
          
-      let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML));  
-      let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML)); 
+      
 
          for (let index = 0; index <= (limit_view ); index++) {
                       
@@ -2522,7 +2471,14 @@ let vi_tri_cat_col  ;
                           
                           thanh_dia_chi_0_on_keydown = false ;
 
-                          tinh_toan(vi_tri_click_in_Data[0] - i_array_2d,vi_tri_click_in_Data[1] - j_array_2d,"xoa_ky_tu_cong_thuc_thua");
+                           // nếu ô trước đó đang viết công thức thì onclick_tinh_toan đã được chuyển thành true
+                  //nên khi enter thì sẽ phải tính toán lại ngược lại không phải tính toán lại
+                  if (onclick_tinh_toan) {
+                    tinh_toan(vi_tri_click_in_Data[0] - i_array_2d,vi_tri_click_in_Data[1] - j_array_2d,"xoa_ky_tu_cong_thuc_thua");
+                  }
+
+                       
+                          
                         
                                   // set địa chỉ ô click  sau hành động trên
                                   dia_chi_o_click(vi_tri_click_in_Data[0] +1 ,vi_tri_click_in_Data[1] ,vi_tri_click_in_Data[2] +1  ,vi_tri_click_in_Data[3] ) ;
@@ -2574,21 +2530,18 @@ let vi_tri_cat_col  ;
       position_mouse_brower = 'on_thanh_dia_chi_onMouseDown' ;
       console.log(   "thanh_dia_chi_onMouseDown");
       console.log(   vi_tri_click_in_Data);
-      console.log(   vi_tri_o_truoc);
     
 
       // khi ấn chuột trái vào thanh địa chỉ nếu vị trí tô màu không nằm trong khung nhìn thì cuộn để vị trí tô màu nằm trong khung nhìn
-
-      // khi xuất hiện thẻ input sau đó cuộn scroll rồi click vào thanh địa chỉ thì vi_tri_click_in_Data[2], vi_tri_click_in_Data[3]
-      // chỉ thay đổi trong phạm vi giới hạn trong khung nhìn nên hàm if dưới không chạy
-      if ( (vi_tri_click_in_Data[2] > limit_view -1 )||( vi_tri_click_in_Data[2] < 0)  ||  (vi_tri_click_in_Data[3] > limit_col_view -1 )||( vi_tri_click_in_Data[3] < 0) ) {
+      // nếu xuất hiện thẻ input để viết công thức thì không cuộn
+      if ( ((vi_tri_click_in_Data[2] > limit_view -1 )||( vi_tri_click_in_Data[2] < 0)  ||  (vi_tri_click_in_Data[3] > limit_col_view -1 )||( vi_tri_click_in_Data[3] < 0)) && xuat_hien_the_input === false  ){
 
        console.log(vi_tri_khung_nhin_truoc_scroll[1]);
        console.log(vi_tri_khung_nhin_truoc_scroll[0] );
         table_excel.current.scrollTo( vi_tri_khung_nhin_truoc_scroll[1]*click_scroll_dichuyen    ,vi_tri_khung_nhin_truoc_scroll[0]*click_scroll_dichuyen )
 
         setTimeout(() => {  thanh_dia_chi_0.current.focus({preventScroll:true}) ;}, 0);
-  console.log('scroll tới vị trí cần khi thanh địa chỉ được click');
+         console.log('scroll tới vị trí cần khi thanh địa chỉ được click');
   
  
       }
@@ -2629,41 +2582,11 @@ event.persist();
 
         }
 
-        document.onkeydown = function (event_window ) {
-          let i_array_2d =parseInt((a.current.children[0+1].children[0].innerHTML)); 
-          let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML)); 
-
-          console.log("document lắng nghe onkeydown");
-          // vịtrí ô viết công thức không nằm trong khung nhìn thì di chuyển đến đó sau đó tính toán
-          if ( (i_array_2d <= vi_tri_click_in_Data[0] - limit_view   )||( i_array_2d >= vi_tri_click_in_Data[0])      ||(j_array_2d <= vi_tri_click_in_Data[1] - limit_col_view   )||( j_array_2d >= vi_tri_click_in_Data[1])  ) {
-
-           
-        
-          
-            if (  ((i_array_2d <= vi_tri_click_in_Data[0] - limit_view   )||( i_array_2d >= vi_tri_click_in_Data[0]) )     && ((j_array_2d <= vi_tri_click_in_Data[1] - limit_col_view   )||( j_array_2d >= vi_tri_click_in_Data[1]) )  ) 
-            {
-              table_excel.current.scroll((vi_tri_click_in_Data[1]*click_scroll_dichuyen ),(vi_tri_click_in_Data[0]*click_scroll_dichuyen ))
-          
-            }
-            else
-            {
-                  if ( (i_array_2d <= vi_tri_click_in_Data[0] - limit_view   )||( i_array_2d >= vi_tri_click_in_Data[0]) ){
-                    table_excel.current.scroll((j_array_2d*click_scroll_dichuyen),(vi_tri_click_in_Data[0]*click_scroll_dichuyen ))
-                
-                  } 
-                  if (  (j_array_2d <= vi_tri_click_in_Data[1] - limit_col_view   )||( j_array_2d >= vi_tri_click_in_Data[1])){
-                    table_excel.current.scroll((vi_tri_click_in_Data[1]*click_scroll_dichuyen ),(i_array_2d *click_scroll_dichuyen))
-              
-        
-            }
-          
-        
-            }
-          }
-        
-        }
+      
 
         document.onmousemove = function (event_window ) {
+
+          // console.log('document++++++++++onmousemove');
           
           var table_excel_scrollTop = table_excel.current.scrollTop ;
           var table_excel_scrollLeft = table_excel.current.scrollLeft ;
