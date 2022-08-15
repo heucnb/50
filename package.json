@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "babel": "./node_modules/.bin/babel ./static/index_ghep_file.js > ./static/index_product_babel.js",
+
     "_comment": "để restart nodemon trong win 10 wsl phải thêm --legacy-watch",
     "ghep_file": "nodemon ghep_file.js --legacy-watch --watch static/fontend  --watch ghep_file.js  ",
-    "dev": "nodemon index.js index --legacy-watch --watch backend  --watch index.js  ",
-    "product": "nodemon index.js index_product --legacy-watch  "
+    "dev": "nodemon index.js index --legacy-watch --watch backend  --watch index.js  "
+ 
   },
   "keywords": [],
   "author": "",

@@ -6,14 +6,15 @@
   var Data = new Array(10000).fill(null).map((i)=> i = new Array(500).fill(null)) ;
   var  text_formular = new Array(10000).fill(null).map((i)=> i = new Array(500).fill(null)) ;
   var  index_formular = new Array(10000).fill(null).map((i)=> i = new Array(500).fill(null)) ;
-  
+  var  formular = [];
+
   function Table_hieu_2(props) {
-  
+  let myname = 'Table_hieu_2-' ;
 
     var vi_tri_o_truoc = [null,null] ;
     var vi_tri_click_in_Data =[null,null, null, null];
   
-    var  formular = [];
+  
 
     var cong_thuc_chua_hoan_thanh = "";
    var onKeyDown_1_element = false;
@@ -26,7 +27,7 @@
   var table_excel =  useRef(null) ;
       var a =  useRef(null) ;
      var canvas_ = useRef(null) ;
-     var Table_hieu_2 = useRef(null) ;
+     var ref_0 = useRef(null) ;
       var thanh_dia_chi_0 =  useRef(null);
       var thanh_dia_chi_1 =  useRef(null);
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,10 +98,8 @@
 // ta dùng addEventListener để lắng nghe 2 sự kiện document mousemove kích hoạt ở 2 chỗ khác nhau
 //nếu dùng  document.onmousemove = fuction thì khi sự kiện 2 ta cũng dùng document.onmousemove = fuction khác thì nó sẽ gán thành 1 sự kiện
       document.addEventListener("mousemove", (evt) => {
-          // console.log('document--onmousemove--ở đầu');
-        
-     
-          // vịtrí ô viết công thức không nằm trong khung nhìn thì di chuyển đến đó sau đó tính toán
+         
+          // vịtrí ô viết công thức không nằm trong khung nhìn thì focus tại thanh công thức
           if ( (vi_tri_o_truoc[0] <= limit_view - 1 )&( vi_tri_o_truoc[0] >= 0) && (vi_tri_o_truoc[1] <= limit_col_view - 1 )&( vi_tri_o_truoc[1] >= 0)  ) {
                                           
             
@@ -111,7 +110,7 @@
       });
       
       
-     
+   
        
       }, []);
 
@@ -929,12 +928,12 @@ console.log('_onKeyDown------------------------------');
           css.canvas_.height = (y_r1c0 - y_r0c0 - 4) + 'px'  ;
 
 
-          css.canvas_.top = y_r0c0 - Table_hieu_2.current.getBoundingClientRect().y + 'px' ;
+          css.canvas_.top = y_r0c0 - ref_0.current.getBoundingClientRect().y + 'px' ;
 
-          css.canvas_.left = x_r0c0 -  Table_hieu_2.current.getBoundingClientRect().x + 'px';
+          css.canvas_.left = x_r0c0 -  ref_0.current.getBoundingClientRect().x + 'px';
           // css.canvas_.borderRight = "2px solid #00A170";
        
-          if ( ( x_r0c0 -  Table_hieu_2.current.getBoundingClientRect().x)  +  (x_r0c1 - x_r0c0 - 4)  >= table_excel.current.clientWidth) {
+          if ( ( x_r0c0 -  ref_0.current.getBoundingClientRect().x)  +  (x_r0c1 - x_r0c0 - 4)  >= table_excel.current.clientWidth) {
             css.canvas_.width =( table_excel.current.clientWidth - (x_r0c0 -  table_excel.current.getBoundingClientRect().x ) )+ 'px'  ;
          
             // css.canvas_.borderRight = "none";
@@ -1320,6 +1319,8 @@ console.log('_onKeyDown------------------------------');
     let vi_tri_con_tro_khi_di_chuyen_trong_double_click_input ;
 
     function _onMouseDown(_this, i, j,event) {
+
+     
       // nếu trạng thái fill tồn tại thì kết thúc fuction
       if (trang_thai_fill === true) {
           return ;
@@ -2198,7 +2199,7 @@ let vi_tri_cat_col  ;
                       }
                      
                       limit_view = sum - 1 ; 
-                      console.log('---------------------------------'+  limit_view);
+                   
 
                       var sum_col = 0;
                       
@@ -2208,7 +2209,7 @@ let vi_tri_cat_col  ;
                       }
                      
                       limit_col_view = sum_col - 1 ; 
-                      console.log('---------------------------------'+  limit_col_view);
+                  
 
 
                          // cập nhật lại dữ liệu khi scroll -- bước1
@@ -2242,7 +2243,24 @@ let vi_tri_cat_col  ;
                            key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_cat_truoc_do),(vi_tri_o_truoc[1]-(vi_tri_cat_col - vi_tri_cat_truoc_do_col)) );
                         console.log(vi_tri_click_in_Data);
                         console.log(vi_tri_o_truoc)
+
+
                       }
+
+
+                      console.log("---------/////////////////////////////////////////////////////////////--------------------------");
+
+                      console.log(vi_tri_o_truoc);
+   
+                      // bước 4 
+                          // vịtrí ô viết công thức không nằm trong khung nhìn thì focus tại thanh công thức
+                         if ( (vi_tri_o_truoc[0] <= limit_view - 1 )&( vi_tri_o_truoc[0] >= 0) && (vi_tri_o_truoc[1] <= limit_col_view - 1 )&( vi_tri_o_truoc[1] >= 0)  ) {
+                         }else{
+                           console.log("---------/////////////////////////////////////////////////////////////--------------------------");
+                           thanh_dia_chi_0.current.focus({preventScroll:true}) ;}
+                       
+                                     
+                               
 
                      
                       // bước 3 : vẽ lại muền select
@@ -2258,10 +2276,8 @@ let vi_tri_cat_col  ;
                         let i = mien_select[2] ;
                         let j = mien_select[3] ;
 
-                        console.log(x );
-                        console.log( y );
-                        console.log(i );
-                        console.log( j);
+                        console.log(x ,y,i,j);
+                       
 
                         if (x <  0) { x = 0 }
                         if (y <  0) { y = 0 }
@@ -2293,10 +2309,7 @@ let vi_tri_cat_col  ;
                             let i = mien_select[2] ;
                             let j = mien_select[3] ;
 
-                            console.log(x );
-                            console.log( y );
-                            console.log(i );
-                            console.log( j);
+                            console.log(x ,y,i,j);
 
                             if (i <  0 && x <  0) {  return   Object.assign(canvas_.current.style ,{display : "none"}) ;}
                             if (j <  0 && y <  0) { return    Object.assign(canvas_.current.style ,{display : "none"}) ; }
@@ -2340,8 +2353,9 @@ let vi_tri_cat_col  ;
                   
                    
                    }
-                      
-                            
+
+
+                 
                 
 
 
@@ -2974,26 +2988,43 @@ event.persist();
 
         select: { backgroundColor: "moccasin" },
         remove_select: { backgroundColor: "" },
-        canvas_ : {  position: "absolute", display : "inline-block",  border: "2px solid #00A170",  borderRight: '2px solid #00A170' }
-
+        canvas_ : {  position: "absolute", display : "inline-block",  border: "2px solid #00A170",  borderRight: '2px solid #00A170' },
+      
 
       }
     }
 
     var css = css();
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+    function pseudo() {
+      var _class = [
+         ['.black',':hover',' {  color: hotpink ; border: 2px solid red; }'] ,
 
- 
+
+
+         ] ;
+
+     
+        let mySheet = document.getElementById("style").sheet ; var obj = {}; let len = _class.length ; for (let index = 0; index < len; index++) { let x = _class[index][0].slice(1) ; sheet_style(  '.' + myname + x  + _class[index][1],  _class[index][2], mySheet )  ; obj[x] =myname + x ; } return obj ;
+    }
+
+
+    var pseudo = pseudo() ;
+
+
+
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // bắt sự kiện onMouseMove  và onMouseOut ở đây chứ không để ở table_excel vì có ưu điểm
 // sự kiện cha lắng nghe onMouseMove  không bị thẻ con canvas che mất nên toạ độ nhận được chính xác và nhạy (nhanh) hơn để ở table_excel
 // để ở table_excel bị canvas che mất nên ra khỏi canvas mới nhận toạ độ và kích hoạt lắng nghe sự kiện nên chậm. Khi người dùng dùng chuột với tốc độ cực kỳ nhanh nó sẽ khồng lắng nghe kịp
 // ta thêm sụ kiện onMouseOut để bắt tiếp 1 lần nữa => di chuyển chuột siêu nhanh vẫn lắng nghe kịp
       return (
       
-        <div   onMouseMove ={(event) => { _onMouseMove(event)    }} onMouseOut ={(event) => { _onMouseOut(event)    }}  ref={ Table_hieu_2  } style={{  position: "relative"}}  > 
+        <div   onMouseMove ={(event) => { _onMouseMove(event)    }} onMouseOut ={(event) => { _onMouseOut(event)    }}  ref={ ref_0  } style={{  position: "relative"}}  > 
          
           <div>
-          <button onClick={(event)=>{ copy(event) }} > copy </button> <button  onClick={(event)=>{  paste(event)  }} > paste </button><button  onClick={(event)=>{  fill(event)  }} > fill </button> <button  onClick={(event)=>{  canvas_.current.getContext("2d").clearRect(0, 0, 500, 500) ;  }} > clear </button>
+          <button onClick={(event)=>{ copy(event) }} > copy </button> <button  onClick={(event)=>{  paste(event)  }} > paste </button><button  onClick={(event)=>{  fill(event)  }} > fill </button> <button   className={ pseudo.black}  onClick={(event)=>{    }} > clear </button>
           </div>
 
           <div  style={{ paddingLeft : "5px", paddingTop : "5px", paddingBottom :" 5px",  backgroundColor: "#bdcebe" ,   display: "flex"}} >

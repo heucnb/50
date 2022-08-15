@@ -1,5 +1,12 @@
 ﻿const express = require("express");
 var fs = require("fs");
+
+var react =  '<script  >'+ fs.readFileSync('./static/CDN'+ '/' + 'react.development.js', 'utf8') + '</script>' ;
+var react_dom =  '<script  >'+ fs.readFileSync('./static/CDN'+ '/' + 'react-dom.development.js', 'utf8') + '</script>' ;
+var index_ghep_file =  '<script  >'+   fs.readFileSync('./static'+ '/' + 'index_ghep_file.js', 'utf8') + '</script>' ;
+var index_html =  fs.readFileSync('./'+ '/' + 'index.html', 'utf8') ;
+var all_file = index_html + react + react_dom + index_ghep_file ;
+
 const path = require('path');
 const dotenv = require("dotenv");
 dotenv.config();
@@ -24,7 +31,11 @@ app.use(express.json());
     file_name = file_name.split(",");
     file_name = file_name.slice(1);
 var model = [];
-app.get("/", function (req, res) { var file = process.argv[2]; if (file == "") { file = "index" ; } if (file != "") { file = file + ".html"; } fs.readFile(file, function (err, data) { res.writeHead(200, { "Content-Type": "text/html" }); res.write(data); return res.end(); }); });
+app.get("/", function (req, res) {
+
+        res.write(all_file); 
+        return res.end();
+});
 
 for (let index = 0; index < file_name.length; index++) {
   console.log(file_name[index]);

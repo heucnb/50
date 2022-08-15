@@ -1,11 +1,11 @@
 const express = require("express");
-
+let babel = require('@babel/core');
 const app = express();
-var fs = require("fs");
+const fs = require('fs');
 const path = require('path');
 function ghep_file(){
     const Folder = './static/fontend';
-    const fs = require('fs');
+   
     var file_name = "";
 
 
@@ -44,13 +44,29 @@ function ghep_file(){
       }
     
     
-      fs.writeFile('./static/index_ghep_file.js', file, { flag: 'w+' }, err => {});
-    
-  
+    // convert string jsx của react thành javascript với babel
+
+             
+
+               babel.transform(
+                    file,
+                    {
+                    babelrc: true,
+                    filename: '.babelrc'
+                    },
+                    function(err, result) {
+                    fs.writeFile('./static/index_ghep_file.js', result.code, { flag: 'w+' }, err => {});
+                    
+                    }
+               )
+               
+               
 };
 ghep_file();
 
 app.listen(7000, () => console.log("Khi có sự thay đổi ở fontend sẽ ghép các file lại thành file index_ghep_file.js----" + 7000));
+
+// chạy command line trong node js
 //------
 // const { exec } = require("child_process");
 
