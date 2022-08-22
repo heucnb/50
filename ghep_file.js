@@ -8,9 +8,9 @@ function ghep_file(){
    
     var file_name = "";
 
-
+     //  fs.readdirSync(Folder)  đọc tên các file trong folder
     // đọc tên các file trong folder
-    // cho file index.js cuối cùng
+   
     fs.readdirSync(Folder).forEach(file => {
          
      if (path.extname(file) == ""){ fs.readdirSync(Folder + "/" + file ).forEach(file_con => { file_name  =   file_name + "," + file + "/" + file_con;}) };
@@ -23,6 +23,7 @@ function ghep_file(){
     file_name = file_name.split(",");
     
     file_name = file_name.slice(1);
+     // cho file index.js cuối cùng
     file_name.push('index.js')
     console.log(file_name);
   

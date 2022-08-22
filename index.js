@@ -1,13 +1,12 @@
 ﻿const express = require("express");
-var fs = require("fs");
 
-var react =  '<script  >'+ fs.readFileSync('./static/CDN'+ '/' + 'react.development.js', 'utf8') + '</script>' ;
-var react_dom =  '<script  >'+ fs.readFileSync('./static/CDN'+ '/' + 'react-dom.development.js', 'utf8') + '</script>' ;
-var index_ghep_file =  '<script  >'+   fs.readFileSync('./static'+ '/' + 'index_ghep_file.js', 'utf8') + '</script>' ;
+var fs = require("fs");
+// lưu file index.html vào ram
 var index_html =  fs.readFileSync('./'+ '/' + 'index.html', 'utf8') ;
-var all_file = index_html + react + react_dom + index_ghep_file ;
 
 const path = require('path');
+
+// Với việc sử dụng .env : Giấu các thông tin bí mật (username, password) trong file .env, không được commit thông qua git thông thường. Tận dụng để chuyển qua lại giữa các môi trường ứng với mục đích sử dụng khác nhau.
 const dotenv = require("dotenv");
 dotenv.config();
 var mysql = require("mysql");
@@ -16,11 +15,34 @@ var con = mysql.createConnection({ host: process.env.host, user: process.env.use
 const app = express();
 const port = process.env.port;
 //vd: truy cập file /static/product_index.js trên url gõ localhost/product_index.js
-app.use(express.static(__dirname + "/static"));
+
+var options = {
+  etag: true,
+  redirect: true,
+  setHeaders: function (res, _path, stat) {
+
+    // _path là các string src có trong file index.html mà chưa bị cache được brower gửi lên sever để lấy dữ liệu
+    // _path.includes('index_ghep_file.js')  kiểm tra trong string _path có chứa string 'index_ghep_file.js' nếu có trả về true
+    // max-age tính bằng giây  604800 là 1 tuần
+    res.set({
+
+        'Cache-Control' :  (_path.includes('index_ghep_file.js')) ? 'no-store' : 'public, max-age=604800'
+      });
+  }
+}
+
+
+
+
+
+
+app.use(express.static((__dirname + "/static") , options   )  );
+
+
 // nhận body post từ axios
 app.use(express.urlencoded({extended: true }));
 app.use(express.json());
-
+      // readdirSync(Folder)  : đọc Folder sẽ được tên các file
     // tao array Url vào [] file_name
     const Folder = './backend';
     var file_name = "";
@@ -33,21 +55,29 @@ app.use(express.json());
 var model = [];
 app.get("/", function (req, res) {
 
-        res.write(all_file); 
+        res.write(index_html); 
         return res.end();
 });
 
+app.get('/hh.html',function(req,res){
+  const data = fs.readFileSync('./static/hh.html', 'utf8');
+ 
+  res.write(data); 
+  return res.end();
+
+});
+
+
+//  model[index] là fuction khớp với file_name[index]    
+// vd: model[index]  là  function (req, res, con) { return  res.send(req.body["id"].toString()); }
+// vd: app.all(  "/decrement"  , function (req, res) {    model[index](req, res, con); }); 
 for (let index = 0; index < file_name.length; index++) {
   console.log(file_name[index]);
 
- // ở đây có hàm res.send rồi fuction sau đó chỉ cần return value trả về thôi+
- 
  model.push( require("./backend" + file_name[index] + ".js"));
-  console.log(model[index]); 
-  
+
  app.all(file_name[index], function (req, res) {    model[index](req, res, con); });
 
 }
 
-//console.log(process.env);
 app.listen(port, () => console.log("Backend server live on " + port));

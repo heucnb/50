@@ -34,12 +34,18 @@
       var limit_view   ;
       var limit_col_view  ;
       useEffect(() => {
-
+        document.body.style.zoom = "100%";
+    
+// ngăn cản zoom bằng ctr
+// phải truyền thêm thuộc tính  {passive: false}  mới ngăn cản được
+        document.body.addEventListener(  "wheel",   (e )=>{ if(e.ctrlKey === true) { e.preventDefault(); } }   ,    {passive: false});
         
 
         width_bar_reference_col = a.current.children[0].children[0].clientWidth ;
         console.log(width_bar_reference_col);
         document.body.style.margin  = "20px 20px 20px 20px" ;
+
+        console.log(table_excel.current.clientHeight);
 
         var sum = 0;
                       
@@ -2096,6 +2102,170 @@ console.log('_onKeyDown------------------------------');
 
 
 //  vd: chạy fuction fill        console.log(fill('1 + (Data[600][10]) + (Data[1][20])', 4, 3))
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function fill_2(event) {
+
+  console.log(mien_select_array_2d);
+
+  let keo_doc ;
+  let keo_ngang ;
+ let kiem_tra = kieu_fill === 21 ;
+        if (kiem_tra) {
+          keo_doc = 0 ;
+          keo_ngang = mien_select_array_2d[3] - mien_select_array_2d[1]   ;
+
+        } else {
+          keo_ngang = 0 ;
+          keo_doc = mien_select_array_2d[2] - mien_select_array_2d[0] ;
+        }
+          
+
+  
+ let keo = keo_doc + keo_ngang ;
+console.log(keo_doc, keo_ngang , keo);
+  let data_array_2d = [] ;
+
+let x = 0 ; 
+let y = 0 ;
+  for (let index = 0; index <= keo; index++) {
+      if (kiem_tra ) {  x = index }else{ y = index }  ;    
+             
+  let text = text_formular[vi_tri_click_in_Data[0 ] + x ][vi_tri_click_in_Data[1] +  y ]
+  console.log(text);
+  let text_replace ;
+  let kq ;
+  let text_chi_chua_value_hoac_cong_thuc  = false;
+  let text_cong_thuc_cell_next ;
+  if (text === null) {
+    text_chi_chua_value_hoac_cong_thuc = true ;
+  }else{
+
+    if (text.indexOf("Data") === -1) {
+      text_chi_chua_value_hoac_cong_thuc = true ;
+    } else {
+       text_replace = text.replaceAll('Data', '|_|Data');
+         // tạo mảng lưu trữ text công thức viết
+     kq = text_replace.split('|_|')  ;
+    }
+
+
+  }
+
+
+  for (let index_ngang = 0; index_ngang <= keo_doc; index_ngang++) {
+                  let data_array_col = [] ;
+                  for (let index_doc = 0; index_doc <= keo_ngang; index_doc++) {
+                      // fill xong thì lưu vào mảng text_cong_thuc_cell_next
+                      if ( text_chi_chua_value_hoac_cong_thuc === true ) {
+
+                        data_array_col.push(text) ;
+                        
+                      } else {
+                        text_cong_thuc_cell_next = kq.map(i => {
+                        
+
+                          // trong mảng kq tiến hành fill từng item nếu thoả mãn điều kiện
+                          // trước tiên kiểm tra item có thoả mãn điều kiện không
+                          // hàm match trả về 1 phần item thoả mãn điều kiện
+                          // i_row là:                 (Data$[0]
+                          // i_col là phần còn lại:    $[1])
+                          let i_row = i.match(/.*Data\$?\[[0-9]+\]/i) ;
+                          //  x(?!y)	Chỉ khớp x nếu ngay sau x không phải là y
+                          let i_col = i.match(/\$?\[[0-9]+\](?!\[).*/i) ;
+                            
+                            //  i_col[0] =   i_col[0].slice(1) ;
+                          // nếu không match được thì i_row === null
+                          // néu item chứa Data tức macth được trả về mảng khác null thì tiến hành fill 
+                          if (i_row != null) {
+                              // kiểm tra trước row có ký tự $ không
+                              let co_dinh_row = /\$/i.test(i_row[0])
+                              // kiểm tra trước cột có kí tự $ không
+                              let co_dinh_col = /\$/i.test(i_col[0])
+                            
+
+                              if (co_dinh_col === false) {
+
+
+                                // đâ thoả mãn điều kiện tiến hành fill    
+
+                                  let text_moi = i_col[0].match(/[0-9]+/i)[0] * 1 + index_doc
+
+                                  let i_col_replace = i_col[0].replace(/[0-9]+/i, text_moi)
+
+                                  i_col = i_col_replace
+                              }
+
+                              if (co_dinh_col === true) {
+                                  i_col = i_col
+                              }
+
+                              // trước ròng không có ký tự $ thì fill +1 dòng
+                              if (co_dinh_row === false) {
+
+                                  // đâ thoả mãn điều kiện tiến hành fill  
+                                  let text_moi = i_row[0].match(/[0-9]+/i)[0] * 1 + index_ngang
+                              
+
+                                  let i_replace = i_row[0].replace(/[0-9]+/i, text_moi) + i_col
+
+                                  return i_replace
+                              }
+
+                              if (co_dinh_row === true) {
+                                  return i_row + i_col
+                              }
+                          } else {
+                              return i
+                          }
+                      })
+
+
+                          // text_cong_thuc_cell_next.join('') là fill xong 1 cell
+                          // lặp qua các cell theo cột đẩy vào mảng data_array_col
+                          data_array_col.push(text_cong_thuc_cell_next.join(''))
+
+                        
+                      }
+                     
+
+
+                        
+                  }
+
+   
+
+        // lặp qua các cell theo dòng đẩy vào mảng data_array_2d
+        data_array_2d.push(data_array_col) ;
+
+     
+        }
+
+
+
+
+
+
+
+        
+    
+  }
+
+
+
+ 
+
+
+ 
+      console.log(data_array_2d);
+
+   
+
+
+
+}
+
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // khi di chuyển scroll đến vị trí cuối nếu để scroll động scrollHeight sẽ tự động tăng kích thước.
@@ -2109,6 +2279,7 @@ console.log('_onKeyDown------------------------------');
 
   var  Data_show = Data.slice(0,limit)   ;
  var Data_show_0 = Data_show.map((item, index)=>{    return  item.slice(0, limit_col)}) ;
+ // ở zoom 100 % 1 click scroll ở chrome di chuyển 40 pixcel 
  let zoom = window.devicePixelRatio;
   let click_scroll_dichuyen = 40/zoom ;
 
@@ -2118,7 +2289,7 @@ console.log('_onKeyDown------------------------------');
 var width_bar_reference_col ;
 var vi_tri_khung_nhin_truoc_scroll = [null, null] ;
 
- var truoc_do ;
+
   function _onScroll(event) {
     let vi_tri_cat  ;
 let vi_tri_cat_col  ;
@@ -2168,18 +2339,14 @@ let vi_tri_cat_col  ;
           
               // vị trí cắt là  a.current.children[0 + 1].children[0].innerHTML lúc sau khi render UI xong
             
-          
-
-
-
-                        a.current.style.paddingTop =  di_chuyen+'px';
-                        a.current.style.height =(data_lenght - di_chuyen) +'px';
-                        a.current.style.paddingLeft = (di_chuyen_col  ) +'px';
-
-                          a.current.style.width =(data_col_lenght - di_chuyen_col) +'px'; 
-
-                     
-                  
+          // khi scroll xong thì thay đổi top, left width, height của a để viewport vẫn vậy     
+                          Object.assign(a.current.style ,
+                            { 
+                            paddingTop : di_chuyen+'px' ,
+                            height : (data_lenght - di_chuyen) +'px',
+                            paddingLeft : (di_chuyen_col  ) +'px' ,
+                            width : (data_col_lenght - di_chuyen_col) +'px'
+                          }) ;
                      
                   
                   
@@ -2582,7 +2749,12 @@ event.persist();
           position_mouse_brower = undefined ;
           trang_thai_fill = false ;
           if (kieu_fill === 1 ) {
+            console.log('------------------------fill kieu 1');
             fill();
+          }
+          if (kieu_fill > 20 ) {
+            console.log('------------------------fill kieu 2');
+            fill_2();
           }
          
 
@@ -2626,7 +2798,7 @@ event.persist();
           
         }else{
           // vẽ khi vị trí mouse nằm ở góc cuối miền lựa chọn
-          if ((mouse_X >   x_r0c1  - 14)&& (mouse_X <=x_r0c1 )   && (mouse_Y >   y_r1c0  - 14)&& (mouse_Y <=y_r1c0 ) &&  event_window.buttons !== 1 ) {
+          if ((mouse_X >   x_r0c1  - 14)&& (mouse_X <=x_r0c1 )   && (mouse_Y >   y_r1c0  - 14)&& (mouse_Y <=y_r1c0 ) &&  event_window.buttons !== 1    &&  ((mien_select_array_2d[1]===  mien_select_array_2d[3]) ||  (mien_select_array_2d[0]===  mien_select_array_2d[2]))) {
           
            
           
@@ -2641,10 +2813,20 @@ event.persist();
                 trang_thai_fill = true  ;
                 if ( mien_select_array_2d[0]===  mien_select_array_2d[2] &&  mien_select_array_2d[1]===  mien_select_array_2d[3] ) {
                  kieu_fill = 1 ;
+                 console.log('ve-------------------move-- kieu_fill = 1');
                
                 } else {
-                  kieu_fill = 2 ;
-                 
+
+                            if (mien_select_array_2d[1]===  mien_select_array_2d[3]) { 
+                              kieu_fill = 21 ;
+                              console.log('ve-------------------move-- kieu_fill = 21');
+
+                            } else { 
+                              kieu_fill = 22 ;
+                              console.log('ve-------------------move-- kieu_fill = 22');
+                              
+                            }
+                  
                 }
        
           
