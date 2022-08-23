@@ -1,0 +1,38 @@
+/* Set a style for all buttons */
+ /* mặc định của button
+  width 100% nghĩa là The width of your <button> is actually padding + margin + width = 100 %
+ */
+ /* Mặc định button textAlign : center */
+button {
+    background-color: #04AA6D;
+    color: white;
+   
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin: 0px;
+    padding: 4px;
+    opacity: 0.9;
+  }
+  
+  button:hover {
+    opacity:1;
+  }
+
+  /* Full-width input fields */
+  /* mặc định của input
+  width 100% nghĩa là The width of your <input> is actually có width = 100%  chưa tính margin, width
+  Do vậy ta phải set padding 0  ; hoặc  box-sizing: border-box; để chuẩn cách tính toán chiều rộng của các thẻ */
+  input[type=text], input[type=password] {
+    box-sizing: border-box;
+    width: 100% ;
+   margin: 0px;
+padding: 4px;
+    border: none;
+    background: #f1f1f1;
+  }
+  
+  input[type=text]:focus, input[type=password]:focus {
+    background-color: #ddd;
+    outline: none;
+  }

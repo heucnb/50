@@ -43,23 +43,26 @@ function ghep_file(){
       for (let index = 0; index < fileData.length; index++) {
            file = file + fileData[index];   
       }
+
+
+      fs.writeFile('./static/index_ghep_file.js', file, { flag: 'w+' }, err => {});
     
     
     // convert string jsx của react thành javascript với babel
 
              
 
-               babel.transform(
-                    file,
-                    {
-                    babelrc: true,
-                    filename: '.babelrc'
-                    },
-                    function(err, result) {
-                    fs.writeFile('./static/index_ghep_file.js', result.code, { flag: 'w+' }, err => {});
+               // babel.transform(
+               //      file,
+               //      {
+               //      babelrc: true,
+               //      filename: '.babelrc'
+               //      },
+               //      function(err, result) {
+               //      fs.writeFile('./static/index_ghep_file.js', result.code, { flag: 'w+' }, err => {});
                     
-                    }
-               )
+               //      }
+               // )
                
                
 };

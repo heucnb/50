@@ -11,6 +11,9 @@
   function Table_hieu_2(props) {
   let myname = 'Table_hieu_2-' ;
 
+
+      
+
     var vi_tri_o_truoc = [null,null] ;
     var vi_tri_click_in_Data =[null,null, null, null];
   
@@ -34,6 +37,7 @@
       var limit_view   ;
       var limit_col_view  ;
       useEffect(() => {
+        
         document.body.style.zoom = "100%";
     
 // ngăn cản zoom bằng ctr
@@ -1878,6 +1882,7 @@ console.log('_onKeyDown------------------------------');
     console.log(text);
     let text_replace ;
     let kq ;
+    //text_chi_chua_value_hoac_cong_thuc : +,+ bình  thường nhưng không có string Data trong text đó
     let text_chi_chua_value_hoac_cong_thuc  = false;
     let text_cong_thuc_cell_next ;
     if (text === null) {
@@ -1909,12 +1914,15 @@ console.log('_onKeyDown------------------------------');
     for (let index_ngang = 0; index_ngang <= keo_doc; index_ngang++) {
                     let data_array_col = [] ;
                     for (let index_doc = 0; index_doc <= keo_ngang; index_doc++) {
-                        // fill xong thì lưu vào mảng text_cong_thuc_cell_next
+                        //text_chi_chua_value_hoac_cong_thuc : +,+ bình  thường nhưng không có string Data trong text đó
+                        // thì fill giống giá trị
                         if ( text_chi_chua_value_hoac_cong_thuc === true ) {
 
                           data_array_col.push(text) ;
                           
                         } else {
+                          // nếu text có string Data trong text đó tiến hành fill như sau
+                            // fill xong thì lưu vào mảng text_cong_thuc_cell_next
                           text_cong_thuc_cell_next = kq.map(i => {
                           
 
@@ -2008,20 +2016,30 @@ console.log('_onKeyDown------------------------------');
                    for (let index = 0 , len = keo_doc  ;  index <= len; index++) {
                    
                      for (let index_col = 0 , len_col = keo_ngang  ;  index_col <= len_col; index_col++) {
+                          // bỏ qua cell đầu tiên
                               if (index === 0 && index_col === 0) {
                               
                               }
                               else{
-
+                                          // index_  là thứ tự công thức đó trong  formular
                                         let index_ = index_formular[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col] ;
-                                      
+                                        // index_!== null  tức là ta fill vào ô đã có công thức rồi
                                         if (index_!== null ) {
                                           
                                                 // index_formular[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col]   là vị trí index trong    formular
                                                
                                             
                                           // push công thức mới vào vị trí cũ
-                                                      if (text.slice(0,1)!=="=" && text.slice(0,1)!=="+" ) {
+                                                       if (text === null) {
+
+                                                          // nếu fill ô chỉ chứa giá trị là null thì ghi giá trị vào Data
+                                                          Data[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col] = null;
+                                                          console.log( Data[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col]);
+                                                          text_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col] = null ;
+                                                        delete  formular[index_] ;
+
+                                                       }
+                                                       else if (text.slice(0,1)!=="=" && text.slice(0,1)!=="+" ) {
 
                                                         // nếu fill ô chỉ chứa giá trị thì ghi giá trị vào Data
                                                         Data[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col] = + data_array_2d[index][index_col] ;
@@ -2047,8 +2065,12 @@ console.log('_onKeyDown------------------------------');
                                         } else {
                                           // dữ liệu fill vào ô chưa viết công thức nên chỉ push công thức mới vào formular không phải xoá công thức cũ
 
+                                                    if (text === null) {
+                                                       // nếu fill ô chỉ chứa giá trị là null thì ghi giá trị vào Data
+                                                     
 
-                                                    if (text.slice(0,1)!=="=" && text.slice(0,1)!=="+" ) {
+                                                    }
+                                                    else if  (text.slice(0,1)!=="=" && text.slice(0,1)!=="+" ) {
                                                       // nếu fill ô chỉ chứa giá trị thì ghi giá trị vào Data
                                                       Data[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col] =+ data_array_2d[index][index_col] ;
                                                       text_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col] =data_array_2d[index][index_col] ;
@@ -2087,6 +2109,7 @@ console.log('_onKeyDown------------------------------');
                     // hiện thị giá trị đã tính toán lên trang web bảng tính
                     for (let index = 0; index <= (limit_view ); index++) {
                       for (let index_j = 0; index_j <=(limit_col_view ) ; index_j++) {
+                     
                         a.current.children[index + 1].children[index_j+1].innerHTML = Data[index +i_array_2d][index_j +j_array_2d];
                       }
                     }  
@@ -2109,39 +2132,46 @@ function fill_2(event) {
 
   let keo_doc ;
   let keo_ngang ;
+  let n_fill ;
  let kiem_tra = kieu_fill === 21 ;
         if (kiem_tra) {
           keo_doc = 0 ;
           keo_ngang = mien_select_array_2d[3] - mien_select_array_2d[1]   ;
-
+          n_fill = mien_select_array_2d[2] - mien_select_array_2d[0] ;
         } else {
           keo_ngang = 0 ;
           keo_doc = mien_select_array_2d[2] - mien_select_array_2d[0] ;
+          n_fill = mien_select_array_2d[3] - mien_select_array_2d[1]   ;
         }
           
 
   
- let keo = keo_doc + keo_ngang ;
-console.log(keo_doc, keo_ngang , keo);
+
   let data_array_2d = [] ;
 
 let x = 0 ; 
 let y = 0 ;
-  for (let index = 0; index <= keo; index++) {
+
+let text_chi_chua_value_hoac_cong_thuc =[] ;
+
+// thực hiện hàm fill    n   lần
+  for (let index = 0; index <= n_fill; index++) {
+
+// tiến hành fill từng  cột cell một
       if (kiem_tra ) {  x = index }else{ y = index }  ;    
              
-  let text = text_formular[vi_tri_click_in_Data[0 ] + x ][vi_tri_click_in_Data[1] +  y ]
+    let text = text_formular[vi_tri_click_in_Data[0 ] + x ][vi_tri_click_in_Data[1] +  y ] ;
   console.log(text);
   let text_replace ;
   let kq ;
-  let text_chi_chua_value_hoac_cong_thuc  = false;
+   text_chi_chua_value_hoac_cong_thuc[index]  = false;
   let text_cong_thuc_cell_next ;
-  if (text === null) {
-    text_chi_chua_value_hoac_cong_thuc = true ;
+  if (   text  === null) {
+    text_chi_chua_value_hoac_cong_thuc[index] = true ;
   }else{
 
     if (text.indexOf("Data") === -1) {
-      text_chi_chua_value_hoac_cong_thuc = true ;
+      text_chi_chua_value_hoac_cong_thuc[index] = true ;
     } else {
        text_replace = text.replaceAll('Data', '|_|Data');
          // tạo mảng lưu trữ text công thức viết
@@ -2156,7 +2186,7 @@ let y = 0 ;
                   let data_array_col = [] ;
                   for (let index_doc = 0; index_doc <= keo_ngang; index_doc++) {
                       // fill xong thì lưu vào mảng text_cong_thuc_cell_next
-                      if ( text_chi_chua_value_hoac_cong_thuc === true ) {
+                      if ( text_chi_chua_value_hoac_cong_thuc[index] === true ) {
 
                         data_array_col.push(text) ;
                         
@@ -2240,26 +2270,146 @@ let y = 0 ;
      
         }
 
-
-
-
-
-
-
-        
-    
   }
 
 
-
- 
-
-
- 
       console.log(data_array_2d);
 
    
+      let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML));  
+      let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML)); 
+      
+ 
+ // lặp trong mảng data_array_2d lấy công thức push vào formular
+ 
 
+                    for (let index = 0 ,  len = data_array_2d.length ;  index < len; index++) {
+                      console.log('-----------' + index);
+                      for (  let index_col  = 0 ,  len_col = data_array_2d[0].length  ;   index_col < len_col; index_col++) {
+
+                        // nếu kiểu fill 21 thì bỏ qua cột đầu tiên
+                        if (kiem_tra === true &&  index_col === 0 ) 
+                        { 
+
+                         }
+                         // nếu kiểu fill 22 thì bỏ qua dòng đầu tiên
+                        else if (kiem_tra === false &&  index === 0){
+
+                        }
+                        else{
+                            // index_  là thứ tự công thức đó trong  formular
+                            let index_ = index_formular[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col] ;
+                            console.log(vi_tri_o_truoc[0] + i_array_2d + index,  vi_tri_o_truoc[1] + j_array_2d + index_col);
+                            console.log('+++++++++++++' + index_);
+                            // index_!== null  tức là ta fill vào ô đã có công thức rồi
+                            if (index_!== null ) {
+                              
+                                    // index_formular[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col]   là vị trí index trong    formular
+                                   
+                                
+                              // push công thức mới vào vị trí cũ
+                                           if (data_array_2d[index][index_col] === null) {
+
+                                              // nếu fill ô chỉ chứa giá trị là null thì ghi giá trị vào Data
+                                              Data[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col] = null;
+                                              console.log( Data[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col]);
+                                              text_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col] = null ;
+                                            delete  formular[index_] ;
+
+                                            console.log('aaaaaaaaaaaaaaaaaaaaaaaa');
+
+                                           }
+                                           else if (data_array_2d[index][index_col].slice(0,1)!=="=" && data_array_2d[index][index_col].slice(0,1)!=="+" ) {
+
+                                            // nếu fill ô chỉ chứa giá trị thì ghi giá trị vào Data
+                                            Data[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col] = + data_array_2d[index][index_col] ;
+                                            console.log( Data[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col]);
+                                            text_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col] =data_array_2d[index][index_col] ;
+                                          delete  formular[index_] ;
+                                          console.log('bbbbbbbbbbbbbbbbbbbbbbbbb');
+                                        
+                                          }else {
+
+                                                        if ((data_array_2d[index][index_col].slice(0,1)==="=" && data_array_2d[index][index_col].slice(0,1)==="+" )) {
+                                                          // nếu fill ô chứa công thức mà trong công thức không có chứa Data thì tính công thức rồi ghi vào Data
+                                                          Data[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col] = eval(data_array_2d[index][index_col] );                                                     
+                                                        text_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col] =data_array_2d[index][index_col] ;
+                                                        delete  formular[index_] ;
+                                                        // nếu fill ô chứa công thức mà trong công thức chứa   Data thì push vào formular
+                                                        console.log('ccccccccccccccccccccccccccc');
+                                                        } else {
+                                                          formular[index_]  = eval("(function(){return "+  "Data["+(vi_tri_o_truoc[0] + i_array_2d + index)+"]["+(vi_tri_o_truoc[1] + j_array_2d + index_col )+"]" +" = " + data_array_2d[index][index_col] +  ";})") ;
+                                                          // tính toán lại công thức mới ghi
+                                                          formular[index_]();
+                                                          text_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col] =data_array_2d[index][index_col] ;
+                                                          console.log('dddddddddddddddddddddddddddd');
+                                                        }
+
+                                          }
+
+                             
+                            } else {
+                              // dữ liệu fill vào ô chưa viết công thức nên chỉ push công thức mới vào formular không phải xoá công thức cũ
+                                         console.log(index, index_col);
+                                         console.log('----------' + data_array_2d[index][index_col]  );
+                                        if (data_array_2d[index][index_col] === null) {
+                                           // nếu fill ô chỉ chứa giá trị là null thì ghi giá trị vào Data
+                                         
+                                           console.log('11111111111111111111111111111111111');
+
+                                        }
+                                        else if  (data_array_2d[index][index_col].slice(0,1)!=="=" && data_array_2d[index][index_col].slice(0,1)!=="+" ) {
+                                          // nếu fill ô chỉ chứa giá trị thì ghi giá trị vào Data
+                                          Data[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col] =+ data_array_2d[index][index_col] ;
+                                          text_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col] =data_array_2d[index][index_col] ;
+                                          console.log('22222222222222222222222222222222');
+                                        }else {
+
+
+
+                                                                  if ((data_array_2d[index][index_col].slice(0,1)==="=" && data_array_2d[index][index_col].slice(0,1)==="+" )) {
+                                                                    // nếu fill ô chứa công thức mà trong công thức không có chứa Data thì tính công thức rồi ghi vào Data
+                                                                  Data[vi_tri_o_truoc[0] + i_array_2d + index][vi_tri_o_truoc[1] + j_array_2d + index_col] = eval(data_array_2d[index][index_col] );
+                                                                  text_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col] =data_array_2d[index][index_col] ;
+                                                                  console.log('33333333333333333333333333333333333');
+                                                                } else {
+                                                                  // nếu fill ô chứa công thức mà trong công thức chứa   Data thì push vào formular
+                                                                  formular.push(eval("(function(){return "+  "Data["+(vi_tri_o_truoc[0] + i_array_2d + index)+"]["+(vi_tri_o_truoc[1] + j_array_2d + index_col )+"]" +" = " + data_array_2d[index][index_col] +  ";})")  ) 
+                                                                    // tính toán lại công thức mới ghi
+                                                                  
+                                                                    formular[formular.length-1]();
+                                                                  index_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col]  = formular.length - 1 ;
+                                                                  text_formular[vi_tri_o_truoc[0] + i_array_2d + index ][vi_tri_o_truoc[1] + j_array_2d + index_col] =data_array_2d[index][index_col] ;
+                                                                  console.log('44444444444444444444444');
+                                                                }     
+
+
+                                        }     
+                            }
+                          
+                          }  ;  
+
+                            
+ 
+                        
+                      } 
+                    }   
+                    
+                        let _len = formular.length ;
+                     
+                       // tính toán lại tất cả các công thức đã viết
+                     
+                       for (let index = 0; index < _len ; index++) { if (formular[index] !== undefined) { formular[index]()} ; }
+                     
+                     // hiện thị giá trị đã tính toán lên trang web bảng tính
+                     for (let index = 0; index <= (limit_view ); index++) {
+                       for (let index_j = 0; index_j <=(limit_col_view ) ; index_j++) {
+                      
+                         a.current.children[index + 1].children[index_j+1].innerHTML = Data[index +i_array_2d][index_j +j_array_2d];
+                       }
+                     }  
+ 
+ 
 
 
 }
@@ -3205,8 +3355,11 @@ event.persist();
       
         <div   onMouseMove ={(event) => { _onMouseMove(event)    }} onMouseOut ={(event) => { _onMouseOut(event)    }}  ref={ ref_0  } style={{  position: "relative"}}  > 
          
-          <div>
-          <button onClick={(event)=>{ copy(event) }} > copy </button> <button  onClick={(event)=>{  paste(event)  }} > paste </button><button  onClick={(event)=>{  fill(event)  }} > fill </button> <button   className={ pseudo.black}  onClick={(event)=>{    }} > clear </button>
+          <div style={{   display: "flex", }} >
+          <div style={{ border: "1px solid #00A170" , padding : '2px', margin : '2px 2px 2px 0px'}}  className={ pseudo.black} onClick={(event)=>{ copy(event) }} > copy </div> 
+          <div style={{ border: "1px solid #00A170" ,  padding : '2px', margin : '2px'}}  className={ pseudo.black} onClick={(event)=>{  paste(event)  }} > paste </div>
+          <div  style={{ border: "1px solid #00A170" ,  padding : '2px',  margin : '2px'}} className={ pseudo.black}  onClick={(event)=>{  fill(event)  }} > fill </div> 
+          <div  style={{ border: "1px solid #00A170" ,  padding : '2px',   margin : '2px'}} className={ pseudo.black}  onClick={(event)=>{    }} > clear </div>
           </div>
 
           <div  style={{ paddingLeft : "5px", paddingTop : "5px", paddingBottom :" 5px",  backgroundColor: "#bdcebe" ,   display: "flex"}} >

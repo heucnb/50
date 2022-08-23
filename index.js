@@ -26,7 +26,7 @@ var options = {
     // max-age tính bằng giây  604800 là 1 tuần
     res.set({
 
-        'Cache-Control' :  (_path.includes('index_ghep_file.js')) ? 'no-store' : 'public, max-age=604800'
+        'Cache-Control' :  (_path.includes('index_ghep_file.js')||_path.includes('styles.css') ) ? 'no-store' : 'public, max-age=604800'
       });
   }
 }
@@ -53,10 +53,20 @@ app.use(express.json());
     file_name = file_name.split(",");
     file_name = file_name.slice(1);
 var model = [];
-app.get("/", function (req, res) {
+app.use( function (req, res) {
 
+  console.log(req.path);
+  let string_path = req.path ;
+  // lấy string đầu tiên có /a và đừng sau là bất kì ký tự gì
+ let path_match =  string_path.match(/\/.*/) ;
+ console.log(path_match[0]);
+      if (string_path === path_match[0]) {
         res.write(index_html); 
         return res.end();
+        
+      }
+
+      
 });
 
 app.get('/hh.html',function(req,res){
